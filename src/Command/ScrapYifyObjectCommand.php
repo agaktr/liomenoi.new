@@ -62,7 +62,7 @@ class ScrapYifyObjectCommand extends Command
             ++$currentPage;
 
 
-            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 40,0);
+            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 5,0);
 
             $objectsMap = [];
             foreach ($objects as $object) {
