@@ -27,24 +27,24 @@ trait EntityRepositoryTrait
             ->getSingleScalarResult();
     }
 
-    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
-    {
-
-        var_dump($criteria);
-
-        $this->createWhereClause($criteria);
-
-        /** @var EntityRepository $this */
-        return $this->createQueryBuilder('e')
-            ->where($this->where)
-            ->setParameters($this->whereParams)
-            ->orderBy('e.'.$orderBy[0], $orderBy[1])
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
-            ->getQuery()
-//            ->setResultCache(new RedisAdapter(new Client()))
-            ->getResult();
-    }
+//    public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
+//    {
+//
+////        var_dump($criteria);
+//
+//        $this->createWhereClause($criteria);
+//
+//        /** @var EntityRepository $this */
+//        return $this->createQueryBuilder('e')
+//            ->where($this->where)
+//            ->setParameters($this->whereParams)
+//            ->orderBy('e.'.$orderBy[0], $orderBy[1])
+//            ->setMaxResults($limit)
+//            ->setFirstResult($offset)
+//            ->getQuery()
+////            ->setResultCache(new RedisAdapter(new Client()))
+//            ->getResult();
+//    }
 
     //function to create the where clause
     //based on criteria
