@@ -160,7 +160,7 @@ class ScrapperService
             var_dump($this->urls[$id]);
 
             if ($content === '') {
-               throw new ErrorException('Empty content');
+               throw new ErrorException($id);
             }
 
             $dom = new DomDocument();
