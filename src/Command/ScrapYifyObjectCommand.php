@@ -110,6 +110,7 @@ class ScrapYifyObjectCommand extends Command
                 $magnet->setQuality($magnetLink['quality']);
                 $magnet->setSize($magnetLink['size']);
                 $magnet->setMagnet($magnetLink['magnet']);
+                $magnet->setMovie($movie);
             }
         }
 
