@@ -59,7 +59,7 @@ class ScrapYifyCommand extends Command
             $io->title('Doing page '.$currentPage.' of '.($currentPage + 5));
 
             for ($i = $currentPage; $i < $currentPage + 5; $i++) {
-                $currentPage = $i;
+//                $currentPage = $i;
                 $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
             }
 
