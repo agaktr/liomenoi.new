@@ -111,6 +111,8 @@ class ScrapperService
 
         $index = 0;
 
+        var_dump($this->urls);
+
         foreach ($this->urlContent as $id=>$content) {
 
             var_dump($this->urls[$id]);
