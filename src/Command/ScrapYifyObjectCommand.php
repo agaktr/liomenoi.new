@@ -123,7 +123,7 @@ class ScrapYifyObjectCommand extends Command
                 }
             }
 
-            $objectsMap[$id]->setFetched(true);
+            $objectsMap[$objectId]->setFetched(true);
 
             $this->em->flush();
 
