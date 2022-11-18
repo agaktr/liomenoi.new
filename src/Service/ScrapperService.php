@@ -152,21 +152,14 @@ class ScrapperService
             $element = $this->getElementByClass($dom, 'rating-row',true);
             $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
-            //main data
-            $element = $this->getElementByClass($dom, 'modal-download',true);
-            $tmpFinder = new DomXPath($element);
-
             //torrents
             $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
 
-//            $torrentClassname="modal-torrent";
-//            $torrentElements = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $torrentClassname ')]");
-
             foreach ($torrentElements as $k=>$torrentElement) {
 
-                $tmpElDom = new DomDocument();
-                $tmpElDom->appendChild($tmpElDom->importNode($torrentElement, true));
-                $tmpElFinder = new DomXPath($tmpElDom);
+//                $tmpElDom = new DomDocument();
+//                $tmpElDom->appendChild($tmpElDom->importNode($torrentElement, true));
+                $tmpElFinder = new DomXPath($torrentElement);
 
                 $qualityClassname="modal-quality";
                 $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
@@ -196,6 +189,14 @@ class ScrapperService
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
             return $newDom;
         }
-        return $elements;
+
+        $return = [];
+        foreach ($elements as $k=>$element) {
+            $newDom = new DomDocument();
+            $newDom->appendChild($newDom->importNode($element, true));
+            $return[$k] = $newDom;
+        }
+
+        return $return;
     }
 }
