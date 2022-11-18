@@ -30,6 +30,8 @@ trait EntityRepositoryTrait
     public function findBy(array $criteria, ?array $orderBy = null, $limit = null, $offset = null)
     {
 
+        var_dump($criteria);
+
         $this->createWhereClause($criteria);
 
         /** @var EntityRepository $this */

@@ -51,6 +51,7 @@ class ScrapYifyObjectCommand extends Command
 
         $objects = $this->em->getRepository(YifyObject::class)->findAll();
 
+        var_dump($objects);
 
         foreach ($objects as $object) {
 
