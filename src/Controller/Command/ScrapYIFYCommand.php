@@ -13,7 +13,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ScrapYIFYCommand extends Command
 {
-    protected static $defaultName = 'ScrapYIFY';
+    protected static $defaultName = 'app:ScrapYIFY';
     protected static $defaultDescription = 'This command scraps objects from YIFY so we can get the torrents.';
 
     private EntityManagerInterface $em;
