@@ -55,9 +55,6 @@ class ScrapperService
     public function initSlugs()
     {
         $this->get();
-
-        var_dump($this->urlContent);
-
         $this->scrapSlugs();
     }
 
@@ -108,6 +105,8 @@ class ScrapperService
 
         $start = microtime(true);
 
+        $index = 0;
+
         foreach ($this->urlContent as $id=>$content) {
 
             $dom = new DomDocument();
@@ -130,9 +129,11 @@ class ScrapperService
                 $yearClassname="browse-movie-year";
                 $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
 
-                $this->scrappedContent[$k]['title'] = $titleElement->nodeValue;
-                $this->scrappedContent[$k]['slug'] = $titleElement->getAttribute('href');
-                $this->scrappedContent[$k]['year'] = $yearElement->nodeValue;
+                $this->scrappedContent[$index]['title'] = $titleElement->nodeValue;
+                $this->scrappedContent[$index]['slug'] = $titleElement->getAttribute('href');
+                $this->scrappedContent[$index]['year'] = $yearElement->nodeValue;
+
+                $index++;
             }
         }
 
