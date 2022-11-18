@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin/yify/object")
+ * @Route("/admin/yify")
  */
 class YifyObjectController extends AptoAbstractController
 {
