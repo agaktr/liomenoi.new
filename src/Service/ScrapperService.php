@@ -55,6 +55,9 @@ class ScrapperService
     public function initSlugs()
     {
         $this->get();
+
+        var_dump($this->urlContent);
+
         $this->scrapSlugs();
     }
 
