@@ -72,7 +72,7 @@ class ScrapYifyObjectCommand extends Command
             $this->scrapper->initObjects();
 
 
-            $results = $this->scrapper->getScrappedContent();.
+            $results = $this->scrapper->getScrappedContent();
 
             var_dump($results);
             foreach ($results as $id => $content) {
