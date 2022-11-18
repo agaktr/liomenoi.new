@@ -217,7 +217,6 @@ class ScrapperService
         $finder = new DomXPath($dom);
         $elements = $finder->query("//*[contains(concat(' ', normalize-space(@title), ' '), ' $titleName ')]");
 
-        var_dump($elements);
         if ($single) {
             $newDom = new DomDocument();
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
