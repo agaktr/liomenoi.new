@@ -121,9 +121,9 @@ class ScrapYifyObjectCommand extends Command
                     $magnet->setMagnet($magnetLink['magnet']);
                     $magnet->setMovie($movie);
                 }
-            }
 
-            $objectsMap[$objectId]->setFetched(true);
+                $objectsMap[$objectId]->setFetched(true);
+            }
 
             $this->em->flush();
 
