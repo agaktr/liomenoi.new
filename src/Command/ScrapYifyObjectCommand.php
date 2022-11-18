@@ -66,6 +66,14 @@ class ScrapYifyObjectCommand extends Command
 
             $objectsMap = [];
             foreach ($objects as $object) {
+
+                if (strpos($object->getSlug(), '%') !== false) {
+                    $this->em->remove($object);
+                    $this->em->flush();
+                    $io->title('%% deleting '.$object->getId());
+                    continue;
+                }
+
                 $objectsMap[$object->getId()] = $object;
                 $this->urls[$object->getId()] = 'https://yts.do'.$object->getSlug();
             }
@@ -79,6 +87,7 @@ class ScrapYifyObjectCommand extends Command
                 $this->em->remove($objectsMap[$e->getMessage()]);
                 $this->em->flush();
                 unset($objectsMap[$e->getMessage()]);
+                unset($this->urls[$object->getId()]);
                 $io->title('deleting '.$e->getMessage());
                 continue;
             } catch (\Exception $e) {
