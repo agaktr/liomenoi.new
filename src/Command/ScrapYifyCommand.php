@@ -57,6 +57,8 @@ class ScrapYifyCommand extends Command
             $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
         }
 
+        var_dump($this->urls);
+
         $this->scrapper->setUrls($this->urls);
 
         $this->scrapper->initSlugs();
