@@ -128,6 +128,8 @@ class ScrapYifyObjectCommand extends Command
 
             $io->success($content);
 
+            unset($this->urls);
+
         }
 
         return Command::SUCCESS;
