@@ -151,12 +151,11 @@ class ScrapperService
 //            $imdbFinder = new DomXPath($dom);
 //            $classname="rating-row";
 //            $element = $imdbFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
+//            $tmpDom = new DomDocument();
+//            $tmpDom->appendChild($tmpDom->importNode($element, true));
+
             $element = $this->getElementByClass($dom, 'rating-row',true);
-
-
-            $tmpDom = new DomDocument();
-            $tmpDom->appendChild($tmpDom->importNode($element, true));
-            $this->scrappedContent[$id]['imdb'] = $tmpDom->getElementsByTagName('a')[0]->getAttribute('href');
+            $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
 
             $finder = new DomXPath($dom);
@@ -200,7 +199,9 @@ class ScrapperService
         $finder = new DomXPath($dom);
         $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
         if ($single) {
-            return $elements->item(0);
+            $newDom = new DomDocument();
+            $newDom->appendChild($newDom->importNode($elements->item(0), true));
+            return $newDom;
         }
         return $elements;
     }
