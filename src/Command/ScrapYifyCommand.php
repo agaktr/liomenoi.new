@@ -64,7 +64,7 @@ class ScrapYifyCommand extends Command
             }
             $currentPage = $currentPage + 5;
             var_dump($i);
-            die();
+//            die();
             $this->scrapper->setUrls($this->urls);
 
             $this->scrapper->initSlugs();
