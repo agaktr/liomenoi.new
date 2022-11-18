@@ -61,10 +61,13 @@ class ScrapYifyCommand extends Command
             $object->setTitle($scrap['title']);
             $object->setYear($scrap['year']);
             $object->setSlug($scrap['slug']);
+
+            $this->em->persist($object);
         }
 
+        $this->em->flush();
 
-        $content = sprintf('ScrapYIFY: %s objects added. DONE Time: %s', count([]),date('Y-m-d H:i:s',time()));
+        $content = sprintf('ScrapYIFY: %s objects added. DONE Time: %s', count($this->scrapper->getScrappedContent()),json_encode($this->scrapper->getPerformance()));
 
         $io->success($content);
 
