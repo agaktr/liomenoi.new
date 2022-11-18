@@ -57,12 +57,17 @@ class ScrapYifyCommand extends Command
 
         foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
-            $object = new YifyObject();
+            $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
+
+            if (!$object) {
+                $object = new YifyObject();
+                $this->em->persist($object);
+            }
+
             $object->setTitle($scrap['title']);
             $object->setYear($scrap['year']);
             $object->setSlug($scrap['slug']);
-
-            $this->em->persist($object);
+            $object->setFetched(false);
         }
 
         $this->em->flush();
