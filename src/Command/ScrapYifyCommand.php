@@ -62,7 +62,7 @@ class ScrapYifyCommand extends Command
 //                $currentPage = $i;
                 $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
             }
-
+            var_dump($i);
             die();
             $this->scrapper->setUrls($this->urls);
 
