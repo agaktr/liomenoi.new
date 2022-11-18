@@ -68,12 +68,19 @@ class ScrapYifyObjectCommand extends Command
             foreach ($objects as $object) {
 
                 if (
-                    strpos($object->getSlug(), '%') !== false ||
-                    strpos($object->getSlug(), '_') !== false
+                    strpos($object->getSlug(), '%') !== false
                 ) {
                     $this->em->remove($object);
                     $this->em->flush();
                     $io->title('%% deleting '.$object->getId());
+                    continue;
+                }
+                if (
+                    strpos($object->getSlug(), '_') !== false
+                ) {
+                    $this->em->remove($object);
+                    $this->em->flush();
+                    $io->title('__ deleting '.$object->getId());
                     continue;
                 }
 
