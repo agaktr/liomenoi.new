@@ -56,6 +56,9 @@ class MovieController extends AptoAbstractController
      */
     public function show(Movie $movie): Response
     {
+
+        $this->isApi = true;
+
         return $this->render('movie/show.html.twig', [
             'movie' => $movie,
         ]);
