@@ -55,7 +55,7 @@ class ScrapYifyObjectCommand extends Command
 
         while($currentPage < 99999999){
 
-            sleep(1);
+//            sleep(1);
 
             $io->title('Doing page '.$currentPage);
 
