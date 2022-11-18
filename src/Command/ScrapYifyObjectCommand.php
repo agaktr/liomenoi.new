@@ -71,11 +71,10 @@ class ScrapYifyObjectCommand extends Command
 
         }
 
-        var_dump($this->scrapper->getScrappedContent());
         $added = $updated = 0;
         $addedMagnet = $updatedMagnet = 0;
 
-        foreach ($results as $movieData) {
+        foreach ($results as $objectId => $movieData) {
 
             /** @var Movie $movie */
             $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['data']->getSlug()]);
@@ -113,6 +112,8 @@ class ScrapYifyObjectCommand extends Command
                 $magnet->setMovie($movie);
             }
         }
+
+        $objectsMap[$id]->setFetched(true);
 
         $this->em->flush();
 
