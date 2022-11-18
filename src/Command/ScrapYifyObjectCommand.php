@@ -116,6 +116,7 @@ class ScrapYifyObjectCommand extends Command
                 $movie->setTitle($movieData['data']->getTitle());
                 $movie->setYear($movieData['data']->getYear());
 
+                var_dump($movieData['magnet']);
                 foreach ($movieData['magnet'] as $magnetLink) {
 
                     /** @var Magnet $magnet */
