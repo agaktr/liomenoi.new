@@ -23,7 +23,7 @@ class YifyObjectController extends AptoAbstractController
     public function index(Request $request,YifyObjectRepository $yifyObjectRepository): Response
     {
 
-        $this->handleFilterForm($request);
+//        $this->handleFilterForm($request);
 
         $total = $yifyObjectRepository->count($this->criteria);
         $entities = $yifyObjectRepository->findBy($this->criteria,$this->orderBy,self::PER_PAGE,$this->offset);
