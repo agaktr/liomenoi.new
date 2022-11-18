@@ -1,0 +1,12 @@
+{% extends 'theme/base.front.html.twig' %}
+
+{% trans_default_domain 'login' %}
+
+{% block title %}{% trans %}Log in!{% endtrans %}{% endblock %}
+
+{% block body %}
+    {{ include('theme/_base.security.html.twig',{
+        'formTemplate': include('theme/components/_form.login.html.twig'),
+    }) }}
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<!-- Sidebar -->
+<div class="h-[calc(100vh-40px)] w-60 shadow-md bg-white absolute transition-transform transform active" id="sidenav">
+    <ul class="relative px-1">
+        {% if is_granted('ROLE_USER') %}
+            {% for k,menu in constant('BACK_MENU_TOP', APP_SERVICE) %}
+                {{ include(menu)  }}
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <hr class="my-2">
+    <ul class="relative px-1">
+        {% if is_granted('ROLE_ADMIN') %}
+            {% for k,menu in constant('BACK_MENU_BOTTOM', APP_SERVICE) %}
+                {{ include(menu)  }}
+            {% endfor %}
+        {% endif %}
+    </ul>
+    <div class="text-center bottom-0 absolute w-full">
+        <hr class="m-0">
+        <p class="py-2 text-sm text-gray-700">Made by <a class="text-blue-800" href="https://apto.gr" target="_blank">apto.gr</a></p>
+    </div>
+</div>

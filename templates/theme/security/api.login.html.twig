@@ -1,0 +1,26 @@
+
+{% trans_default_domain 'login' %}
+
+<form method="post" class="" {{ stimulus_controller('login') }} data-url="{{ path('app_api_login') }}">
+
+    <h1 class="">{% trans %}Please sign in{% endtrans %} AJAX</h1>
+    <label for="inputUsername">{% trans %}Username{% endtrans %}</label>
+    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" autocomplete="email" required autofocus>
+    <label for="inputPassword">{% trans %}Password{% endtrans %}</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+{#    <input type="hidden" name="_csrf_token"#}
+{#           value="{{ csrf_token('authenticate') }}"#}
+{#    >#}
+
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" name="_remember_me">{% trans %}Remember me{% endtrans %}
+        </label>
+    </div>
+
+    <button class="" type="submit" {{ stimulus_action('login','login') }}>
+        {% trans %}Sign in{% endtrans %}
+    </button>
+
+</form>

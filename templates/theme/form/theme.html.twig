@@ -1,0 +1,123 @@
+{# templates/form/theme.html.twig #}
+{#{% use 'tailwind_2_layout.html.twig' %}#}
+{% use 'form_div_layout.html.twig' %}
+
+
+{% block form_start %}
+    {% set attr  = attr|merge({ class: attr.class|default(attr|default('
+        mb-6
+    ')) }) %}
+    {{ parent() }}
+{% endblock form_start %}
+
+{% block form_row %}
+    {% set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('
+        form-group
+        mb-6
+    '))}) %}
+    {{ parent() }}
+{% endblock form_row %}
+
+{% block form_label %}
+    {% set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('
+        form-label
+        inline-block
+        mb-2
+        text-gray-700
+        text-left
+        w-full
+    '))}) %}
+    {{ parent() }}
+{% endblock form_label %}
+
+{%- block widget_attributes -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('
+        form-control
+        block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+    '))
+        ~ (disabled ? ' '
+        ~ widget_disabled_class|default('
+            border-gray-300
+            text-gray-500
+        '))
+        ~ (errors|length ? ' '
+        ~ widget_errors_class|default('
+            border-red-700
+        ')) }) -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{% block textarea_widget %}
+    {% set attr = attr|merge({ class: attr.class|default('
+        form-textarea
+        block
+        w-full
+        px-3
+        py-1.5
+        text-base
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        m-0
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+    ')}) %}
+    {{ parent() }}
+{% endblock textarea_widget %}
+
+{% block submit_widget %}
+    {% set attr = attr|merge({ class: attr.class|default('
+        w-full
+        px-6
+        py-2.5
+        bg-blue-600
+        text-white
+        font-medium
+        text-xs
+        leading-tight
+        uppercase
+        rounded
+        shadow-md
+        hover:bg-blue-700 hover:shadow-lg
+        focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+        active:bg-blue-800 active:shadow-lg
+        transition
+        duration-150
+        ease-in-out
+    ')}) %}
+
+    {{ parent() }}
+{% endblock submit_widget %}
+
+{% block choice_widget_collapsed  %}
+    {% set attr = attr|merge({ class: attr.class|default('
+        form-multiselect
+        block
+        w-full
+        mt-1
+    ')}) %}
+    {{ parent() }}
+{% endblock choice_widget_collapsed  %}
+
+{%- block checkbox_widget -%}
+    {% set attr = attr|merge({ class: attr.class|default('
+        form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer
+    ')}) %}
+    {{ parent() }}
+{%- endblock checkbox_widget -%}

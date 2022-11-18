@@ -1,0 +1,11 @@
+{% extends 'theme/base.back.html.twig' %}
+
+{% block title %}Verify{% endblock %}
+
+{% block body %}
+
+
+    {{ include('theme/_base.security.html.twig',{
+        'formTemplate': include('theme/components/_verify.html.twig'),
+    }) }}
+{% endblock %}

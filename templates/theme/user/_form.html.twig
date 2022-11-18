@@ -1,0 +1,22 @@
+{% form_theme form 'theme/form/theme.html.twig' %}
+
+{{ form_start(form) }}
+
+    {{ form_widget(form._token) }}
+
+    <div class="grid grid-cols-2 gap-4">
+        {{ form_row(form.username) }}
+        {{ form_row(form.email) }}
+        {{ form_row(form.roles) }}
+        {{ form_row(form.isVerified) }}
+    </div>
+    {{ form_row(form.plainPassword) }}
+
+    <h6 class="text-gray-500 font-semibold text-sm py-2 px-4 block w-full whitespace-nowrap bg-transparent">
+        Profile Settings
+    </h6>
+    <hr class="h-0 my-2 border border-solid border-t-0 border-gray-700 opacity-25">
+
+    {{ form_widget(form.save) }}
+
+{{ form_end(form) }}

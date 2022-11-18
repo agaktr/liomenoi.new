@@ -1,0 +1,10 @@
+{% extends 'theme/base.front.html.twig' %}
+
+{% block title %}Password Reset Email Sent{% endblock %}
+
+{% block body %}
+
+    {{ include('_base.security.html.twig',{
+        'formTemplate': include('theme/components/_check_email.html.twig'),
+    }) }}
+{% endblock %}

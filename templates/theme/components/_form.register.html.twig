@@ -1,0 +1,171 @@
+{% trans_default_domain 'register' %}
+{{ form_start(registrationForm) }}
+
+    {{ form_widget(registrationForm._token) }}
+
+    <div class="flex flex-row items-center justify-center lg:justify-start">
+        <p class="text-lg mb-0 mr-4">
+            {% trans %}Register with{% endtrans %}
+        </p>
+        <a
+                href="{{ path('hwi_oauth_service_redirect', {'service': 'facebook' }) }}"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                class="w-10 h-10 inline-block p-3 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+        >
+            <!-- Facebook -->
+            <i class="fa-brands fa-facebook-f w-4 h-4 leading-4 text-base text-center"></i>
+        </a>
+
+        <a
+                href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                class="w-10 h-10 inline-block p-3 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+        >
+            <!-- Google -->
+            <i class="fa-brands fa-google w-4 h-4 leading-4 text-base text-center"></i>
+        </a>
+
+        <a
+                href="{{ path('hwi_oauth_service_redirect', {'service': 'apple' }) }}"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                class="w-10 h-10 inline-block p-3 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out mx-1"
+        >
+            <!-- Apple text-xl because of fontAwesome -->
+            <i class="fa-brands fa-apple w-4 h-4 leading-4 text-xl text-center"></i>
+        </a>
+    </div>
+
+    <div
+            class="flex items-center my-4 before:flex-1 before:border-t before:border-gray-300 before:mt-0.5 after:flex-1 after:border-t after:border-gray-300 after:mt-0.5"
+    >
+        <p class="text-center font-semibold mx-4 mb-0">
+            {% trans %}Or{% endtrans %}
+        </p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <div class="mb-6 form-group">
+            <label for="registration_form_firstName" class="form-label inline-block mb-2 text-gray-700">{% trans %}First Name{% endtrans %}</label>
+            <input
+                    type="text"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    id="registration_form_firstName"
+                    name="registration_form[firstName]"
+                    placeholder="{% trans %}First Name{% endtrans %}"
+                    maxlength="180"
+            />
+        </div>
+        <div class="mb-6 form-group">
+            <label for="registration_form_lastName" class="form-label inline-block mb-2 text-gray-700">{% trans %}Last Name{% endtrans %}</label>
+            <input
+                    type="text"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    id="registration_form_lastName"
+                    name="registration_form[lastName]"
+                    placeholder="{% trans %}Last Name{% endtrans %}"
+                    maxlength="180"
+            />
+        </div>
+
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+
+        <!-- Email input -->
+        <div class="mb-6 form-group">
+            <label for="registration_form_email" class="form-label inline-block mb-2 text-gray-700">{% trans %}Email{% endtrans %}<span class="text-red-900">*</span></label>
+            <input
+                    type="email"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    id="registration_form_email"
+                    name="registration_form[email]"
+                    placeholder="{% trans %}Email{% endtrans %}"
+                    required="required"
+                    maxlength="180"
+            />
+        </div>
+
+        <!-- Username input -->
+        <div class="mb-6 form-group">
+            <label for="{{ registrationForm.username.vars.id }}" class="form-label inline-block mb-2 text-gray-700">{% trans %}Username{% endtrans %}<span class="text-red-900">*</span></label>
+            <input
+                    type="text"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    id="{{ registrationForm.username.vars.id }}"
+                    name="{{ registrationForm.username.vars.full_name }}"
+                    placeholder="{% trans %}Username{% endtrans %}"
+                    required="required"
+            />
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Password input -->
+        <div class="mb-6 form-group">
+            <label for="{{ registrationForm.plainPassword.children.first.vars.id }}" class="form-label inline-block mb-2 text-gray-700">{% trans %}Password{% endtrans %}<span class="text-red-900">*</span></label>
+            <input
+                    type="password"
+                    id="{{ registrationForm.plainPassword.children.first.vars.id }}"
+                    name="{{ registrationForm.plainPassword.children.first.vars.full_name }}"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="{% trans %}Password{% endtrans %}"
+                    required="required"
+            />
+        </div>
+        <div class="mb-6 form-group">
+            <label for="{{ registrationForm.plainPassword.children.second.vars.id }}" class="form-label inline-block mb-2 text-gray-700">{% trans %}Repeat Password{% endtrans %}<span class="text-red-900">*</span></label>
+            <input
+                    type="password"
+                    id="{{ registrationForm.plainPassword.children.second.vars.id }}"
+                    name="{{ registrationForm.plainPassword.children.second.vars.full_name }}"
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="{% trans %}Repeat Password{% endtrans %}"
+                    required="required"
+            />
+        </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-2">
+        <div class="form-group form-check">
+            <input
+                    type="checkbox"
+                    class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                    id="{{ registrationForm.agreeTerms.vars.id }}"
+                    name="{{ registrationForm.agreeTerms.vars.full_name }}"
+                    required="required"
+            />
+            <label class="form-check-label inline-block text-gray-800" for="{{ registrationForm.agreeTerms.vars.id }}">
+                {% trans %}Agree Terms{% endtrans %}<span class="text-red-900">*</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="text-center lg:text-left">
+        <p class="text-sm mt-0 pt-1 mb-2">
+            <span class="text-red-900">*</span> {% trans %}Required fields{% endtrans %}
+        </p>
+        <button
+                type="submit"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);"
+        >
+            {% trans %}Register{% endtrans %}
+        </button>
+
+
+        <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+            {% trans %}Already having an account?{% endtrans %}
+            <a
+                    href="{{ path('app_login') }}"
+                    class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+            >{% trans %}Login{% endtrans %}</a
+            >
+        </p>
+    </div>
+{{ form_end(registrationForm,{'render_rest': false}) }}

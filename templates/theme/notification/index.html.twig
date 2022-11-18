@@ -1,0 +1,58 @@
+{% extends 'theme/base.back.html.twig' %}
+
+{% block title %}Notification Index{% endblock %}
+
+{% block body %}
+    <section {{ stimulus_controller('modal') }}>
+        <div class="text-gray-800 px-4 md:px-12 mx-auto">
+            <div class="flex flex-col rounded-lg shadow-lg py-10 mt-16 md:py-12 px-4 md:px-6">
+                <div class="overflow-x-auto w-full mx-auto">
+                    <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="overflow-x-auto">
+
+                            <h2 class="text-3xl font-semibold leading-normal mt-0 mb-5 text-gray-800">
+                                Notification Index
+                            </h2>
+
+                            <a href="{{ path('app_notification_new') }}" class="inline-block mb-4 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Create Notification</a>
+
+                            <table class="min-w-full">
+                                <thead class="border-b bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Id</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Name</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Content</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Status</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for notification in notifications.items %}
+                                    <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ notification.id }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ notification.name }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ notification.content }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ notification.seen|length }}/{{ notification.users|length }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            <a href="{{ path('app_notification_edit', {'id': notification.id}) }}" class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-500 text-white rounded">Edit</a>
+                                            {{ include('theme/notification/_delete_form.html.twig') }}
+
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                        <td colspan="6" class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {{ pagination(notifications) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('theme/components/_modal.delete.html.twig') }}
+    </section>
+{% endblock %}

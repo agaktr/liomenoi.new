@@ -1,0 +1,70 @@
+{% extends 'theme/base.back.html.twig' %}
+
+{% block title %}User Index{% endblock %}
+
+{% block body %}
+    <section  {{ stimulus_controller('modal') }}>
+        <div class="text-gray-800 px-4 md:px-12 mx-auto">
+            <div class="flex flex-col rounded-lg shadow-lg py-10 mt-16 md:py-12 px-4 md:px-6">
+                <div class="overflow-x-auto w-full mx-auto">
+                    <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                        <div class="overflow-x-auto">
+
+                            <h2 class="text-3xl font-semibold leading-normal mt-0 mb-5 text-gray-800">
+                                User Index
+                            </h2>
+
+                            <a href="{{ path('app_user_new') }}" class="inline-block mb-4 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Create User</a>
+
+                            {{ filters(form) }}
+
+                            <table class="min-w-full">
+                                <thead class="border-b bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Id</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Username</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Email</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Role</th>
+{#                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Password</th>#}
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Verified</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Created</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Updated</th>
+                                    <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for user in entities.items %}
+                                    <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ user.id }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.username }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.email }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.roles ? user.roles[0] }}</td>
+{#                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.password }}</td>#}
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"><span class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold {{ user.isVerified ? 'bg-green-500' : 'bg-red-600' }} text-white rounded-full">{{ user.isVerified ? 'Yes' : 'No' }}</span></td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.created|date('d/m/Y H:i:s') }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{{ user.updated|date('d/m/Y H:i:s') }}</td>
+                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                            {% if is_granted('ROLE_ALLOWED_TO_SWITCH') %}
+                                            <a href="{{ path('app_dashboard') }}?_switch_user={{ user.userIdentifier }}" class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-green-600 text-white rounded">Login</a>
+                                            {% endif %}
+                                            <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-500 text-white rounded">Edit</a>
+                                            {{ include('theme/user/_delete_form.html.twig') }}
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
+                                        <td colspan="6" class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">no records found</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {{ pagination(entities) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{ include('theme/components/_modal.delete.html.twig') }}
+    </section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'theme/base.front.html.twig' %}
+{% trans_default_domain 'login' %}
+{% block body %}
+    <section class="h-full gradient-form bg-gray-200 md:h-screen">
+        <div class="m-auto container py-12 px-6 h-full">
+            <div class="flex justify-center items-center flex-wrap h-full g-6 text-gray-800">
+                <div class="xl:w-10/12">
+                    <div class="block bg-white shadow-lg rounded-lg">
+                        <div class="lg:flex lg:flex-wrap g-0">
+                            <div class="lg:w-6/12 px-4 md:px-0">
+                                <div class="md:p-12 md:mx-6">
+                                    <div class="text-center">
+                                        <img
+                                                class="mx-auto w-48"
+                                                src="{{ asset('build/images/logo.webp') }}"
+                                                alt="logo"
+                                                width="192"
+                                                height="132"
+                                        />
+                                        <h1 class="text-xl font-semibold mt-1 mb-12 pb-1">{% trans %}Welcome to {Company}{% endtrans %}</h1>
+                                    </div>
+                                    {{ formTemplate|raw }}
+                                </div>
+                            </div>
+                            <div
+                                    class="lg:w-6/12 flex items-center lg:rounded-r-lg rounded-b-lg lg:rounded-bl-none"
+                                    style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);"
+                            >
+                                <div class="text-white px-4 py-6 md:p-12 md:mx-6">
+                                    <h4 class="text-xl font-semibold mb-6">Maybe a company headline?</h4>
+                                    <p class="text-sm">
+                                        Or better delete these lines and add a background image to the div above instead of a gradient.
+                                        Why should we care for more translations? Or even better: Just leave the gradient.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

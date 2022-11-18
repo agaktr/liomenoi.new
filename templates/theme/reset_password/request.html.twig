@@ -1,0 +1,9 @@
+{% extends 'theme/base.front.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    {{ include('_base.security.html.twig',{
+        'formTemplate': include('theme/components/_form.request.reset.html.twig'),
+    }) }}
+{% endblock %}

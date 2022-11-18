@@ -1,0 +1,32 @@
+{% extends 'theme/base.back.html.twig' %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <section class="text-gray-800">
+        <div class="container text-gray-800 px-4 md:px-12 text-center mx-auto">
+            <div class="block rounded-lg shadow-lg py-10 mt-16 md:py-12 px-4 md:px-6">
+                <h2 class="text-3xl font-bold text-gray-800">Edit User</h2>
+                <div class="max-w-[700px] mx-auto mt-8">
+                    <h6 class="
+  text-gray-500
+  font-semibold
+  text-sm
+  py-2
+  px-4
+  block
+  w-full
+  whitespace-nowrap
+  bg-transparent
+">
+                        User Settings
+                    </h6>
+                    <hr class="h-0 my-2 border border-solid border-t-0 border-gray-700 opacity-25">
+                    {{ include('theme/user/_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+{% endblock %}

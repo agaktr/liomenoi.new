@@ -1,0 +1,19 @@
+body {
+
+  #sidenav{
+
+    transform: translateX(-15rem);
+  }
+
+  &.sidenav-active{
+
+    main{
+      margin-left: 15rem;
+      width: calc(100% - 15rem);
+    }
+
+    #sidenav{
+      transform: translateX(0);
+    }
+  }
+}

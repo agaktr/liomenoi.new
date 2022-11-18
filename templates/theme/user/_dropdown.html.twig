@@ -1,0 +1,102 @@
+<div class="dropdown relative"
+        {{ stimulus_controller('dropdown') }}
+>
+    <a class="dropdown-toggle flex items-center hidden-arrow rounded-full"
+       href="#"
+       id="dropdownMenuButton2"
+       role="button"
+
+       {{ stimulus_action('dropdown','click') }}
+{#       data-bs-toggle="dropdown" #}
+{#       aria-expanded="false"#}
+    >
+        {{ source('@public_path'~'/build/images/user-default.svg') }}
+
+    </a>
+
+    <ul class="
+    dropdown-menu
+    min-w-max
+    absolute
+    hidden
+    bg-white
+    text-base
+    z-50
+    float-left
+    py-2
+    list-none
+    text-left
+    rounded-lg
+    shadow-lg
+    mt-1
+    hidden
+    m-0
+    bg-clip-padding
+    border-none
+    left-auto
+    right-0
+  " aria-labelledby="dropdownMenuButton2">
+        <h6 class="
+  text-gray-500
+  font-semibold
+  text-sm
+  py-2
+  px-4
+  block
+  w-full
+  whitespace-nowrap
+  bg-transparent
+">
+            Logged in as, {{ app.user.username }}
+        </h6>
+        <hr class="h-0 my-2 border border-solid border-t-0 border-gray-700 opacity-25">
+
+        <li>
+            <a class="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      " href="{{ path('app_dashboard_settings') }}">Settings</a>
+        </li>
+        <li>
+            <a class="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      " href="{{ path('app_logout') }}">Logout</a>
+        </li>
+        {% if is_granted('IS_IMPERSONATOR') %}
+        <li>
+            <a class="
+        dropdown-item
+        text-sm
+        py-2
+        px-4
+        font-normal
+        block
+        w-full
+        whitespace-nowrap
+        bg-transparent
+        text-gray-700
+        hover:bg-gray-100
+      " href="{{ impersonation_exit_path(path('app_user_index') ) }}">Exit impersonation</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>

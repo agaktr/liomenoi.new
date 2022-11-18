@@ -1,0 +1,9 @@
+twig:
+#    cache: true
+    default_path: '%kernel.project_dir%/templates'
+    paths:
+        "%kernel.project_dir%/public": public_path
+
+when@test:
+    twig:
+        strict_variables: true

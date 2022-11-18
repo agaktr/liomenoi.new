@@ -1,0 +1,9 @@
+Register: Register
+'You should agree to our terms.': 'You should agree to our terms.'
+'Please enter a password': 'Please enter a password'
+Password: Password
+'Agree terms': 'Agree terms'
+'Please Confirm your Email': '__Please Confirm your Email'
+'Invalid email address': '__Invalid email address'
+'Registration successful. Please check your email to verify your account.': '__Registration successful. Please check your email to verify your account.'
+'Your password should be at least {{ limit }} characters': '__Your password should be at least {{ limit }} characters'

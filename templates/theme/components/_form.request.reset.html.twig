@@ -1,0 +1,51 @@
+{% trans_default_domain 'login' %}
+{{ form_start(requestForm) }}
+
+    {{ form_widget(requestForm._token) }}
+
+    <div class="flex flex-row items-center justify-center lg:justify-start">
+        <h2 class="text-2xl mb-0 mr-4 mb-4">
+            {% trans %}Reset Password{% endtrans %}
+        </h2>
+    </div>
+
+
+    <!-- Email input -->
+    <div class="mb-6">
+        <label for="{{ requestForm.email.vars.id }}" class="form-label inline-block mb-2 text-gray-700">{% trans %}Email or Username{% endtrans %}</label>
+        <input
+                type="text"
+                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="{{ requestForm.email.vars.id }}"
+                name="{{ requestForm.email.vars.full_name }}"
+                placeholder="{% trans %}Email or Username{% endtrans %}"
+        />
+    </div>
+
+    <div class="text-center lg:text-left">
+        <button
+                type="submit"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="light"
+                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                style="background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);"
+        >
+            {% trans %}Send password reset email{% endtrans %}
+        </button>
+
+
+        <p class="text-sm mt-2 pt-1 mb-0">
+            {% trans %}Enter your username or email address, and we will send you a link to reset your password.{% endtrans %}
+        </p>
+
+        <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+            {% trans %}Here by mistake?{% endtrans %}
+            <a
+                    href="{{ path('app_login') }}"
+                    class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+            >{% trans %}Login{% endtrans %}</a
+            >
+        </p>
+    </div>
+
+{{ form_end(requestForm,{'render_rest': false}) }}

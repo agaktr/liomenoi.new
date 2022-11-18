@@ -1,0 +1,16 @@
+{% trans_default_domain 'login' %}
+<p class="text-sm font-semibold mt-2 pt-1 mb-0">
+    If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
+</p>
+<p class="text-sm font-semibold mt-2 pt-1 mb-0">
+    This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+</p>
+<p class="text-sm mt-2 pt-1 mb-0">If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+<p class="text-sm font-semibold mt-2 pt-1 mb-0">
+    {% trans %}That's all.{% endtrans %}
+    <a
+            href="{{ path('app_login') }}"
+            class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out"
+    >{% trans %}Back to Login{% endtrans %}</a
+    >
+</p>

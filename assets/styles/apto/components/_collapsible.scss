@@ -1,0 +1,9 @@
+.collapsible {
+
+  .collapse{
+    display: block;
+    transition: height 0.35s ease;
+    overflow: hidden;
+    height: 0;
+  }
+}

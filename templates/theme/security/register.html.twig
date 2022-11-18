@@ -1,0 +1,10 @@
+{% extends 'theme/base.front.html.twig' %}
+{% trans_default_domain 'register' %}
+{% block title %}{% trans %}Register{% endtrans %}{% endblock %}
+
+{% block body %}
+
+    {{ include('theme/_base.security.html.twig',{
+        'formTemplate': include('theme/components/_form.register.html.twig'),
+    }) }}
+{% endblock %}
