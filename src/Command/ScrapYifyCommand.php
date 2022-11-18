@@ -53,39 +53,45 @@ class ScrapYifyCommand extends Command
 
         $currentPage = 1;
 
-        for ($i = $currentPage; $i < $currentPage + 5; $i++) {
-            $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
-        }
+        while ($currentPage < 20) {
 
-        $this->scrapper->setUrls($this->urls);
+            $io->title('Doing page '.$currentPage.' of '.($currentPage + 5));
 
-        $this->scrapper->initSlugs();
-
-        $added = $updated = 0;
-
-        foreach ($this->scrapper->getScrappedContent() as $scrap) {
-
-            $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
-
-            if (!$object) {
-                ++$added;
-                $object = new YifyObject();
-                $this->em->persist($object);
-            }else{
-                ++$updated;
+            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
+                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
             }
 
-            $object->setTitle($scrap['title']);
-            $object->setYear($scrap['year']);
-            $object->setSlug($scrap['slug']);
-            $object->setFetched(false);
+            $this->scrapper->setUrls($this->urls);
+
+            $this->scrapper->initSlugs();
+
+            $added = $updated = 0;
+
+            foreach ($this->scrapper->getScrappedContent() as $scrap) {
+
+                $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
+
+                if (!$object) {
+                    ++$added;
+                    $object = new YifyObject();
+                    $this->em->persist($object);
+                }else{
+                    ++$updated;
+                }
+
+                $object->setTitle($scrap['title']);
+                $object->setYear($scrap['year']);
+                $object->setSlug($scrap['slug']);
+                $object->setFetched(false);
+            }
+
+            $this->em->flush();
+
+            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
+
+            $io->success($content);
+
         }
-
-        $this->em->flush();
-
-        $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
-
-        $io->success($content);
 
         return Command::SUCCESS;
     }
