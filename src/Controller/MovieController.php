@@ -44,6 +44,7 @@ class MovieController extends AptoAbstractController
             return $this->redirectToRoute('app_movie_index', [], Response::HTTP_SEE_OTHER);
         }
 
+
         return $this->renderForm('movie/new.html.twig', [
             'movie' => $movie,
             'form' => $form,
