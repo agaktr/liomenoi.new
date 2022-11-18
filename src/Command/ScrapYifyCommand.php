@@ -51,6 +51,12 @@ class ScrapYifyCommand extends Command
 
         $io->title('Starting to scrap YIFY');
 
+        $currentPage = 1;
+
+        for ($i = $currentPage; $i < $currentPage + 5; $i++) {
+            $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
+        }
+
         $this->scrapper->setUrls($this->urls);
 
         $this->scrapper->initSlugs();
