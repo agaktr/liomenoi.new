@@ -59,7 +59,7 @@ class ScrapYifyObjectCommand extends Command
             ++$currentPage;
 
 
-            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 10,0);
+            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 25,0);
 
             $objectsMap = [];
             foreach ($objects as $object) {
@@ -69,7 +69,11 @@ class ScrapYifyObjectCommand extends Command
 
             $this->scrapper->setUrls($this->urls);
 
-            $this->scrapper->initObjects();
+            try {
+                $this->scrapper->initObjects();
+            } catch (\Exception $e) {
+                continue;
+            }
 
 
             $results = $this->scrapper->getScrappedContent();
