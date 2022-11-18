@@ -47,6 +47,7 @@ class ScrapYifyObjectCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Starting to scrap YIFY');
+        $io->title('Starting to scrap YIFY');
 
         $objects = $this->em->getRepository(YifyObject::class)->findAll();
 
