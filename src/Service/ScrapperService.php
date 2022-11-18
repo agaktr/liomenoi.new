@@ -80,8 +80,7 @@ class ScrapperService
         $mh = curl_multi_init();
 
         $config['useragent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0';
-        $dir                   = dirname(__FILE__);
-        $config['cookie_file'] = $dir . '/cookies/' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
+
 
         foreach ($this->urls as $id => $url) {
             $multiCurl[$id] = curl_init();
