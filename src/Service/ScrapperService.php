@@ -158,6 +158,8 @@ class ScrapperService
 
             var_dump($this->urls[$id]);
 
+            var_dump($content);
+
             $dom = new DomDocument();
             @$dom->loadHTML($content);
 
