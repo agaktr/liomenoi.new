@@ -39,6 +39,11 @@ class Movie
      */
     private $magnets;
 
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
@@ -111,6 +116,18 @@ class Movie
                 $magnet->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Movie;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use DateTime;
@@ -62,16 +63,19 @@ class ScrapYifyObjectCommand extends Command
         $this->scrapper->initObjects();
 
         var_dump($this->scrapper->getScrappedContent());
+        $added = $updated = 0;
 
-//        foreach ($this->scrapper->getScrappedContent() as $scrap) {
-//
+        foreach ($this->scrapper->getScrappedContent() as $movieData) {
+
+            $object = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['slug']]);
+
 //            $object = new YifyObject();
 //            $object->setTitle($scrap['title']);
 //            $object->setYear($scrap['year']);
 //            $object->setSlug($scrap['slug']);
 //
 //            $this->em->persist($object);
-//        }
+        }
 //
 //        $this->em->flush();
 
