@@ -174,9 +174,9 @@ class ScrapperService
                 $magnetClassname="magnet-download";
                 $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
 
-                $this->scrappedContent[$id][$k]['quality'] = $qualityElement->nodeValue;
-                $this->scrappedContent[$id][$k]['type'] = $qualitySizeElements->item(0)->nodeValue;
-                $this->scrappedContent[$id][$k]['size'] = $qualitySizeElements->item(1)->nodeValue;
+                $this->scrappedContent[$id][$k]['quality'] = trim($qualityElement->nodeValue);
+                $this->scrappedContent[$id][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
+                $this->scrappedContent[$id][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
                 $this->scrappedContent[$id][$k]['magnet'] = $magnetElement->getAttribute('href');
             }
 
