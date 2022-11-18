@@ -72,6 +72,7 @@ class ScrapYifyObjectCommand extends Command
             try {
                 $this->scrapper->initObjects();
             } catch (\Exception $e) {
+                $io->title('retry '.$currentPage);
                 continue;
             }
 
