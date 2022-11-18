@@ -51,14 +51,14 @@ class ScrapYifyObjectCommand extends Command
 
         $objects = $this->em->getRepository(YifyObject::class)->findAll();
 
-        var_dump($objects);
+
 
         foreach ($objects as $object) {
 
             $this->urls[] = 'https://yts.do'.$object->getSlug();
         }
 
-        $this->scrapper->setUrls($this->urls);
+        $this->scrapper->setUrls([$this->urls[0]]);
 
         $this->scrapper->initObjects();
 
