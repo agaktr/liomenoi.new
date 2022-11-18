@@ -79,12 +79,14 @@ class ScrapperService
         // multi handle
         $mh = curl_multi_init();
 
+        $config['useragent'] = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0';
 
         foreach ($this->urls as $id => $url) {
             $multiCurl[$id] = curl_init();
             curl_setopt($multiCurl[$id], CURLOPT_URL, $url);
             curl_setopt($multiCurl[$id], CURLOPT_HEADER, 0);
             curl_setopt($multiCurl[$id], CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($multiCurl[$id], CURLOPT_USERAGENT, $config['useragent']);
             curl_multi_add_handle($mh, $multiCurl[$id]);
         }
 
