@@ -30,7 +30,7 @@ class YifyObjectController extends AptoAbstractController
         $total = $yifyObjectRepository->count($this->criteria);
         $entities = $yifyObjectRepository->findBy($this->criteria,$this->orderBy,self::PER_PAGE,$this->offset);
 
-        return $this->renderForm($this->entityName.'/index.html.twig', [
+        return $this->renderForm('yify_object/index.html.twig', [
             'entities' => [
                 'items'=>$entities,
                 'total' => $total,
