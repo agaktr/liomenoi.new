@@ -55,6 +55,7 @@ class ScrapYifyCommand extends Command
 
         while ($currentPage < 20) {
 
+            var_dump($currentPage);
             $io->title('Doing page '.$currentPage.' of '.($currentPage + 5));
 
             for ($i = $currentPage; $i < $currentPage + 5; $i++) {
@@ -62,6 +63,7 @@ class ScrapYifyCommand extends Command
                 $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
             }
 
+            die();
             $this->scrapper->setUrls($this->urls);
 
             $this->scrapper->initSlugs();
