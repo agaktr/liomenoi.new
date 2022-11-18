@@ -74,7 +74,6 @@ class ScrapYifyObjectCommand extends Command
 
             $results = $this->scrapper->getScrappedContent();
 
-            var_dump($results);
             foreach ($results as $id => $content) {
 
                 $results[$id]['data'] = $objectsMap[$id];
