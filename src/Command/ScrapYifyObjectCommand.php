@@ -13,9 +13,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ScrapYifyCommand extends Command
+class ScrapYifyObjectCommand extends Command
 {
-    protected static $defaultName = 'ScrapYify';
+    protected static $defaultName = 'ScrapYifyObject';
     protected static $defaultDescription = 'This command scraps objects from YIFY so we can get the torrents.';
 
     private EntityManagerInterface $em;
@@ -27,9 +27,6 @@ class ScrapYifyCommand extends Command
 
         $this->em = $entityManager;
         $this->scrapper = $scrapperService;
-
-        $this->urls[] = 'https://yts.do/browse-movies?page=1';
-
 
         parent::__construct();
     }
@@ -51,21 +48,28 @@ class ScrapYifyCommand extends Command
 
         $io->title('Starting to scrap YIFY');
 
-        $this->scrapper->setUrls($this->urls);
+        $objects = $this->em->getRepository(YifyObject::class)->findBy([],[],5);
 
-        $this->scrapper->initSlugs();
+        foreach ($objects as $object) {
 
-        foreach ($this->scrapper->getScrappedContent() as $scrap) {
-
-            $object = new YifyObject();
-            $object->setTitle($scrap['title']);
-            $object->setYear($scrap['year']);
-            $object->setSlug($scrap['slug']);
-
-            $this->em->persist($object);
+            $this->urls[] = 'https://yts.do'.$object->getSlug();
         }
 
-        $this->em->flush();
+        $this->scrapper->setUrls($this->urls);
+
+        $this->scrapper->initObjects();
+
+//        foreach ($this->scrapper->getScrappedContent() as $scrap) {
+//
+//            $object = new YifyObject();
+//            $object->setTitle($scrap['title']);
+//            $object->setYear($scrap['year']);
+//            $object->setSlug($scrap['slug']);
+//
+//            $this->em->persist($object);
+//        }
+//
+//        $this->em->flush();
 
         $content = sprintf('ScrapYIFY: %s objects added. DONE Time: %s', count($this->scrapper->getScrappedContent()),json_encode($this->scrapper->getPerformance()));
 
