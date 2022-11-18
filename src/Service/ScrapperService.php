@@ -148,6 +148,15 @@ class ScrapperService
             $dom = new DomDocument();
             @$dom->loadHTML($content);
 
+            $imdbFinder = new DomXPath($dom);
+            $classname="rating-row";
+            $element = $imdbFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
+
+            $tmpDom = new DomDocument();
+            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            $this->scrappedContent[$id]['imdb'] = $tmpDom->getElementsByTagName('a')[0]->getAttribute('href');
+
+
             $finder = new DomXPath($dom);
             $classname="modal-download";
             $element = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
@@ -179,6 +188,7 @@ class ScrapperService
                 $this->scrappedContent[$id][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
                 $this->scrappedContent[$id][$k]['magnet'] = $magnetElement->getAttribute('href');
             }
+
 
         }
 
