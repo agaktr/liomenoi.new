@@ -111,11 +111,7 @@ class ScrapperService
 
         $index = 0;
 
-        var_dump($this->urls);
-
         foreach ($this->urlContent as $id=>$content) {
-
-            var_dump($this->urls[$id]);
 
             $dom = new DomDocument();
             @$dom->loadHTML($content);
@@ -156,6 +152,8 @@ class ScrapperService
 //
 //die();
         foreach ($this->urlContent as $id=>$content) {
+
+            var_dump($this->urls[$id]);
 
             $dom = new DomDocument();
             @$dom->loadHTML($content);
