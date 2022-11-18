@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\YifyObject;
+use App\Traits\EntityRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,6 +17,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class YifyObjectRepository extends ServiceEntityRepository
 {
+
+    use EntityRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, YifyObject::class);
