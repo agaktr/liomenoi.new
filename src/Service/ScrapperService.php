@@ -148,23 +148,19 @@ class ScrapperService
             $dom = new DomDocument();
             @$dom->loadHTML($content);
 
-//            $imdbFinder = new DomXPath($dom);
-//            $classname="rating-row";
-//            $element = $imdbFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
-//            $tmpDom = new DomDocument();
-//            $tmpDom->appendChild($tmpDom->importNode($element, true));
-
+            //imdb
             $element = $this->getElementByClass($dom, 'rating-row',true);
             $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
 
-            $finder = new DomXPath($dom);
-            $classname="modal-download";
-            $element = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
-
-            $tmpDom = new DomDocument();
-            $tmpDom->appendChild($tmpDom->importNode($element, true));
-            $tmpFinder = new DomXPath($tmpDom);
+//            $finder = new DomXPath($dom);
+//            $classname="modal-download";
+//            $element = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
+//
+//            $tmpDom = new DomDocument();
+//            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            $element = $this->getElementByClass($dom, 'modal-download',true);
+            $tmpFinder = new DomXPath($element);
 
             $torrentClassname="modal-torrent";
             $torrentElements = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $torrentClassname ')]");
