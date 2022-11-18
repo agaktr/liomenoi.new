@@ -148,9 +148,11 @@ class ScrapperService
             $dom = new DomDocument();
             @$dom->loadHTML($content);
 
-            $imdbFinder = new DomXPath($dom);
-            $classname="rating-row";
-            $element = $imdbFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
+//            $imdbFinder = new DomXPath($dom);
+//            $classname="rating-row";
+//            $element = $imdbFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
+            $element = $this->getElementByClass($dom, 'rating-row',true);
+
 
             $tmpDom = new DomDocument();
             $tmpDom->appendChild($tmpDom->importNode($element, true));
@@ -183,15 +185,23 @@ class ScrapperService
                 $magnetClassname="magnet-download";
                 $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
 
-                $this->scrappedContent[$id][$k]['quality'] = trim($qualityElement->nodeValue);
-                $this->scrappedContent[$id][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
-                $this->scrappedContent[$id][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
-                $this->scrappedContent[$id][$k]['magnet'] = $magnetElement->getAttribute('href');
+                $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->nodeValue);
+                $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
+                $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
+                $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
             }
-
-
         }
 
         $this->performance['scrap'] = microtime(true) - $start;
+    }
+
+    public function getElementByClass($dom, $classname, $single = false)
+    {
+        $finder = new DomXPath($dom);
+        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+        if ($single) {
+            return $elements->item(0);
+        }
+        return $elements;
     }
 }
