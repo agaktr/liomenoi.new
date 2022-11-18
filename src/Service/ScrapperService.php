@@ -222,6 +222,11 @@ class ScrapperService
 
         if ($single) {
             $newDom = new DomDocument();
+
+            if (null === $elements->item(0)) {
+                throw new \Exception('No rating found');
+            }
+
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
             return $newDom;
         }
