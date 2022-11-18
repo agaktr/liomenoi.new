@@ -63,7 +63,6 @@ class ScrapperService
         $this->get();
         $this->scrapObjects();
 
-        var_dump($this->scrappedContent);
     }
 
     private function get()
