@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Magnet;
 use App\Entity\Movie;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
@@ -53,8 +54,9 @@ class ScrapYifyObjectCommand extends Command
 
 
 
+        $objectsMap = [];
         foreach ($objects as $object) {
-
+            $objectsMap[$object->getId()] = $object;
             $this->urls[$object->getId()] = 'https://yts.do'.$object->getSlug();
         }
 
@@ -62,24 +64,58 @@ class ScrapYifyObjectCommand extends Command
 
         $this->scrapper->initObjects();
 
+        $results = $this->scrapper->getScrappedContent();
+        foreach ($results as $id => $content) {
+
+            $results[$id]['data'] = $objectsMap[$id];
+
+        }
+
         var_dump($this->scrapper->getScrappedContent());
         $added = $updated = 0;
+        $addedMagnet = $updatedMagnet = 0;
 
-        foreach ($this->scrapper->getScrappedContent() as $movieData) {
+        foreach ($results as $movieData) {
 
-            $object = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['slug']]);
+            /** @var Movie $movie */
+            $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['slug']]);
 
-//            $object = new YifyObject();
-//            $object->setTitle($scrap['title']);
-//            $object->setYear($scrap['year']);
-//            $object->setSlug($scrap['slug']);
-//
-//            $this->em->persist($object);
+            if (!$movie) {
+                ++$added;
+                $movie = new Movie();
+                $this->em->persist($movie);
+            }else{
+                ++$updated;
+            }
+
+            $movie->setImdb($movieData['imdb']);
+            $movie->setSlug($movieData['data']->getSlug());
+            $movie->setTitle($movieData['data']->getTitle());
+            $movie->setYear($movieData['data']->getYear());
+
+            foreach ($movieData['magnet'] as $magnetLink) {
+
+                /** @var Magnet $magnet */
+                $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['slug' => $movieData['slug']]);
+
+                if (!$magnet) {
+                    ++$addedMagnet;
+                    $magnet = new Magnet();
+                    $this->em->persist($magnet);
+                }else{
+                    ++$updatedMagnet;
+                }
+
+                $magnet->setType($magnetLink['type']);
+                $magnet->setQuality($magnetLink['quality']);
+                $magnet->setSize($magnetLink['size']);
+                $magnet->setMagnet($movieData['magnet']);
+            }
         }
-//
-//        $this->em->flush();
 
-        $content = sprintf('ScrapYIFY: %s objects added. DONE Time: %s', count($this->scrapper->getScrappedContent()),json_encode($this->scrapper->getPerformance()));
+        $this->em->flush();
+
+        $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. %s magnets added. %s magnets updated. DONE Time: %s', $added,$updated,$addedMagnet,$updatedMagnet,json_encode($this->scrapper->getPerformance()));
 
         $io->success($content);
 
