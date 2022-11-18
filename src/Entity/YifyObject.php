@@ -32,6 +32,11 @@ class YifyObject
      */
     private $slug;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $fetched;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class YifyObject
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function isFetched(): ?bool
+    {
+        return $this->fetched;
+    }
+
+    public function setFetched(bool $fetched): self
+    {
+        $this->fetched = $fetched;
 
         return $this;
     }
