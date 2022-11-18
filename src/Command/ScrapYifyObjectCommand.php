@@ -55,12 +55,14 @@ class ScrapYifyObjectCommand extends Command
 
         while($currentPage < 99999999){
 
+            sleep(1);
+
             $io->title('Doing page '.$currentPage);
 
             ++$currentPage;
 
 
-            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 25,0);
+            $objects = $this->em->getRepository(YifyObject::class)->findBy(['fetched' => false],[ 'id' => 'ASC'], 1000,0);
 
             $objectsMap = [];
             foreach ($objects as $object) {
