@@ -50,6 +50,7 @@ class ScrapYifyObjectCommand extends Command
 
         $objects = $this->em->getRepository(YifyObject::class)->findAll();
 
+
         foreach ($objects as $object) {
 
             $this->urls[] = 'https://yts.do'.$object->getSlug();
