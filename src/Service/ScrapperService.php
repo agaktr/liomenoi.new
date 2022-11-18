@@ -167,7 +167,7 @@ class ScrapperService
                 $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
 
                 $magnetElement = $this->getElementByClass($torrentElement, 'modal-quality',true);
-
+var_dump($magnetElement);
 //                $magnetClassname="magnet-download";
 //                $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
 
