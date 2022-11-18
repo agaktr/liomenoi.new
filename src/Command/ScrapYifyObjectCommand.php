@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\YifyObject;
+use App\Repository\YifyObjectRepository;
 use App\Service\ScrapperService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,7 +50,7 @@ class ScrapYifyObjectCommand extends Command
         $io->title('Starting to scrap YIFY');
         $io->title('Starting to scrap YIFY');
 
-//        $objects = $this->em->getRepository(YifyObject::class)->findAll();
+        $objects = $this->em->getRepository(YifyObjectRepository::class)->findAll();
         $objects = [];
         var_dump($objects);
 
