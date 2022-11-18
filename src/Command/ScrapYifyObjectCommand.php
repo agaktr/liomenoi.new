@@ -78,7 +78,7 @@ class ScrapYifyObjectCommand extends Command
         foreach ($results as $movieData) {
 
             /** @var Movie $movie */
-            $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['slug']]);
+            $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['data']->getSlug()]);
 
             if (!$movie) {
                 ++$added;
@@ -96,7 +96,7 @@ class ScrapYifyObjectCommand extends Command
             foreach ($movieData['magnet'] as $magnetLink) {
 
                 /** @var Magnet $magnet */
-                $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['slug' => $movieData['slug']]);
+                $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink['magnet']]);
 
                 if (!$magnet) {
                     ++$addedMagnet;
@@ -109,7 +109,7 @@ class ScrapYifyObjectCommand extends Command
                 $magnet->setType($magnetLink['type']);
                 $magnet->setQuality($magnetLink['quality']);
                 $magnet->setSize($magnetLink['size']);
-                $magnet->setMagnet($movieData['magnet']);
+                $magnet->setMagnet($magnetLink['magnet']);
             }
         }
 
