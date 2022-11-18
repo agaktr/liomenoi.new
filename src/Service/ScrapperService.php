@@ -161,20 +161,19 @@ class ScrapperService
 //                $tmpElDom->appendChild($tmpElDom->importNode($torrentElement, true));
                 $tmpElFinder = new DomXPath($torrentElement);
 
-                $qualityElement = $this->getElementByClass($torrentElement, 'modal-quality',true);
+                $qualityClassname="modal-quality";
+                $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
 
                 $qualitySizeClassname="quality-size";
                 $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
 
-                $magnetElement = $this->getElementByClass($torrentElement, 'magnet-download',true);
-var_dump($magnetElement);
-//                $magnetClassname="magnet-download";
-//                $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
+                $magnetClassname="magnet-download";
+                $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
 
-                $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->textContent);
+                $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->nodeValue);
                 $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
                 $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
-                $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->g('href');
+                $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
             }
         }
 
