@@ -51,7 +51,7 @@ class ScrapYifyCommand extends Command
 
         $io->title('Starting to scrap YIFY');
 
-        $currentPage = 1;
+        $currentPage = 1250;
 
         while ($currentPage < 2500) {
 
