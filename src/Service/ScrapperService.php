@@ -157,6 +157,7 @@ class ScrapperService
 //die();
         foreach ($this->urlContent as $id=>$content) {
 
+            var_dump($id);
             var_dump($this->urls[$id]);
 
             if ($content === '') {
