@@ -8,6 +8,7 @@ use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use ErrorException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,6 +72,12 @@ class ScrapYifyObjectCommand extends Command
 
             try {
                 $this->scrapper->initObjects();
+            }catch (ErrorException $e) {
+
+                var_dump($e->getMessage());
+
+                $io->title('retry '.$currentPage);
+                continue;
             } catch (\Exception $e) {
                 $io->title('retry '.$currentPage);
                 continue;
