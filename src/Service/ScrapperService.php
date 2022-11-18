@@ -152,18 +152,15 @@ class ScrapperService
             $element = $this->getElementByClass($dom, 'rating-row',true);
             $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
-
-//            $finder = new DomXPath($dom);
-//            $classname="modal-download";
-//            $element = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")[0];
-//
-//            $tmpDom = new DomDocument();
-//            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            //main data
             $element = $this->getElementByClass($dom, 'modal-download',true);
             $tmpFinder = new DomXPath($element);
 
-            $torrentClassname="modal-torrent";
-            $torrentElements = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $torrentClassname ')]");
+            //torrents
+            $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
+
+//            $torrentClassname="modal-torrent";
+//            $torrentElements = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $torrentClassname ')]");
 
             foreach ($torrentElements as $k=>$torrentElement) {
 
