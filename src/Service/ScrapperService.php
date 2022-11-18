@@ -146,15 +146,16 @@ class ScrapperService
         $start = microtime(true);
 
         var_dump($this->urlContent);
-
-die();
+//
+//die();
         foreach ($this->urlContent as $id=>$content) {
 
             $dom = new DomDocument();
             @$dom->loadHTML($content);
 
             //imdb
-            $element = $this->getElementByClass($dom, 'rating-row',true);
+//            $element = $this->getElementByClass($dom, 'rating-row',true);
+            $element = $this->getRating($dom, 'IMDb Rating',true);
             $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
             //torrents
@@ -190,6 +191,26 @@ die();
     {
         $finder = new DomXPath($dom);
         $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+        if ($single) {
+            $newDom = new DomDocument();
+            $newDom->appendChild($newDom->importNode($elements->item(0), true));
+            return $newDom;
+        }
+
+        $return = [];
+        foreach ($elements as $k=>$element) {
+            $newDom = new DomDocument();
+            $newDom->appendChild($newDom->importNode($element, true));
+            $return[$k] = $newDom;
+        }
+
+        return $return;
+    }
+
+    public function getRating($dom, $titleName, $single = false)
+    {
+        $finder = new DomXPath($dom);
+        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@title), ' '), ' $titleName ')]");
         if ($single) {
             $newDom = new DomDocument();
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
