@@ -55,13 +55,18 @@ class ScrapYifyCommand extends Command
 
         $this->scrapper->initSlugs();
 
+        $added = $updated = 0;
+
         foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
             $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
 
             if (!$object) {
+                ++$added;
                 $object = new YifyObject();
                 $this->em->persist($object);
+            }else{
+                ++$updated;
             }
 
             $object->setTitle($scrap['title']);
@@ -72,7 +77,7 @@ class ScrapYifyCommand extends Command
 
         $this->em->flush();
 
-        $content = sprintf('ScrapYIFY: %s objects added. DONE Time: %s', count($this->scrapper->getScrappedContent()),json_encode($this->scrapper->getPerformance()));
+        $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
 
         $io->success($content);
 
