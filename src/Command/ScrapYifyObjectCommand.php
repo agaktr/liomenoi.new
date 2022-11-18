@@ -58,7 +58,7 @@ class ScrapYifyObjectCommand extends Command
             $this->urls[$object->getId()] = 'https://yts.do'.$object->getSlug();
         }
 
-        $this->scrapper->setUrls([$this->urls[0]]);
+        $this->scrapper->setUrls(array_slice($this->urls,0,1));
 
         $this->scrapper->initObjects();
 
