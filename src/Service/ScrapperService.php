@@ -147,7 +147,7 @@ class ScrapperService
 
         var_dump($this->urlContent);
 
-
+die();
         foreach ($this->urlContent as $id=>$content) {
 
             $dom = new DomDocument();
