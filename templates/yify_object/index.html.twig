@@ -29,13 +29,13 @@
                                         Id
                                     </th>
                                     <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Column1
+                                        Title
                                     </th>
                                     <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        Column2
+                                        Year
                                     </th>
                                     <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">
-                                        User
+                                        Slug
                                     </th>
                                     <th scope="col" class="whitespace-nowrap text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                         Actions
@@ -49,13 +49,13 @@
                                             {{ entity_item.id }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {{ entity_item.column1 }}
+                                            {{ entity_item.title }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {{ entity_item.column2 }}
+                                            {{ entity_item.year }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                            {{ entity_item.user.userIdentifier }}
+                                            {{ entity_item.slug }}
                                         </td>
                                         <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                             <a href="{{ path('app_'~entity_name~'_edit', {'id': entity_item.id}) }}" class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-500 text-white rounded">Edit</a>
