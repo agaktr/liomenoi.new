@@ -40,7 +40,7 @@ trait EntityRepositoryTrait
             ->setMaxResults($limit)
             ->setFirstResult($offset)
             ->getQuery()
-            ->setResultCache(new RedisAdapter(new Client()))
+//            ->setResultCache(new RedisAdapter(new Client()))
             ->getResult();
     }
 
