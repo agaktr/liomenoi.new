@@ -145,6 +145,9 @@ class ScrapperService
 
         $start = microtime(true);
 
+        var_dump($this->urlContent);
+
+
         foreach ($this->urlContent as $id=>$content) {
 
             $dom = new DomDocument();
