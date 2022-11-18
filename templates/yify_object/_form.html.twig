@@ -1,0 +1,28 @@
+{% form_theme form 'theme/form/theme.html.twig' %}
+{#Version 0#}
+{{ form(form) }}
+
+{#Version 1#}
+{#{{ form_start(form) }}#}
+
+{#    {{ form_widget(form) }}#}
+
+{#{{ form_end(form) }}#}
+
+{#Version 2#}
+{#{{ form_start(form) }}#}
+
+{#    {{ form_widget(form._token) }}#}
+
+{#    {{ form_row(form.name) }}#}
+{#    {{ form_row(form.content) }}#}
+
+{#    <div class="grid grid-cols-2 gap-4">#}
+
+{#        {{ form_row(form.users) }}#}
+{#        {{ form_row(form.seen) }}#}
+{#    </div>#}
+
+{#    {{ form_widget(form.save) }}#}
+
+{#{{ form_end(form) }}#}

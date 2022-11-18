@@ -41,7 +41,9 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "voku/html-compress-twig": "^4.0" ,
-        "ext-json": "*"
+        "ext-json": "*" ,
+      "ext-curl": "*" ,
+        "ext-dom": "*"
     },
     "config": {
         "allow-plugins": {

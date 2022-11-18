@@ -1,0 +1,16 @@
+{% set entity_name = _self|extractEntityNameByPath %}
+<form class="inline" method="post"
+      action="{{ path('app_'~entity_name~'_delete', {'id': entity_item.id}) }}"
+        {{ stimulus_controller('delete_modal') }}
+        {{ stimulus_action('delete_modal','submit') }}
+>
+    <input type="hidden" name="_token"
+           value="{{ csrf_token('delete' ~ entity_item.id) }}">
+    <button
+            {{ stimulus_action('modal','open') }}
+            data-modal-target="#deleteModal"
+            class="text-xs inline-block py-1 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-red-600 text-white rounded"
+    >
+        Delete
+    </button>
+</form>
