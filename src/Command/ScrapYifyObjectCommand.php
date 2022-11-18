@@ -74,9 +74,10 @@ class ScrapYifyObjectCommand extends Command
                 $this->scrapper->initObjects();
             }catch (ErrorException $e) {
 
+                $this->em->remove($objectsMap[$e->getMessage()]);
+                $this->em->flush();
                 var_dump($e->getMessage());
-
-                $io->title('retry '.$currentPage);
+                $io->title('deleting '.$e->getMessage());
                 continue;
             } catch (\Exception $e) {
                 $io->title('retry '.$currentPage);
