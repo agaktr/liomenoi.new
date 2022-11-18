@@ -62,6 +62,8 @@ class ScrapYifyObjectCommand extends Command
 
         $this->scrapper->initObjects();
 
+        var_dump($this->scrapper->getScrappedContent());
+
 //        foreach ($this->scrapper->getScrappedContent() as $scrap) {
 //
 //            $object = new YifyObject();

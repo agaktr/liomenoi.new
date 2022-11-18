@@ -62,7 +62,6 @@ class ScrapperService
     {
         $this->get();
         $this->scrapObjects();
-
     }
 
     private function get()
