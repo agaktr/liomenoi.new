@@ -48,7 +48,7 @@ class ScrapYifyObjectCommand extends Command
 
         $io->title('Starting to scrap YIFY');
 
-        $objects = $this->em->getRepository(YifyObject::class)->findBy([],[],5);
+        $objects = $this->em->getRepository(YifyObject::class)->findAll();
 
         foreach ($objects as $object) {
 
