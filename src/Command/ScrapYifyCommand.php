@@ -28,7 +28,7 @@ class ScrapYifyCommand extends Command
         $this->em = $entityManager;
         $this->scrapper = $scrapperService;
 
-        $this->urls[] = 'https://yts.do/browse-movies?page=1';
+//        $this->urls[] = 'https://yts.do/browse-movies?page=1';
 
 
         parent::__construct();
