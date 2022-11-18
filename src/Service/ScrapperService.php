@@ -161,7 +161,7 @@ class ScrapperService
 //                $tmpElDom->appendChild($tmpElDom->importNode($torrentElement, true));
                 $tmpElFinder = new DomXPath($torrentElement);
 
-                $qualityElement = $this->getElementByClass($tmpElFinder, 'modal-quality',true);
+                $qualityElement = $this->getElementByClass($torrentElement, 'modal-quality',true);
 //                $qualityClassname="modal-quality";
 //                $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
 
