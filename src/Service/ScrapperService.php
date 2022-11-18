@@ -145,7 +145,6 @@ class ScrapperService
 
         $start = microtime(true);
 
-        var_dump($this->urlContent);
 //
 //die();
         foreach ($this->urlContent as $id=>$content) {
