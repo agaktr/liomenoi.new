@@ -74,10 +74,10 @@ class Movie
      */
     private $runtime;
 
-//    /**
-//     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="movies")
-//     */
-//    private $categories;
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="movies")
+     */
+    private $categories;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -256,29 +256,29 @@ class Movie
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, Category>
-//     */
-//    public function getCategories(): Collection
-//    {
-//        return $this->categories;
-//    }
-//
-//    public function addCategory(Category $category): self
-//    {
-//        if (!$this->categories->contains($category)) {
-//            $this->categories[] = $category;
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeCategory(Category $category): self
-//    {
-//        $this->categories->removeElement($category);
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
+
+        return $this;
+    }
 
     public function getTmdbId(): ?int
     {
