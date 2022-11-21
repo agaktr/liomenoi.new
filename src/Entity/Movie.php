@@ -44,9 +44,45 @@ class Movie
      */
     private $slug;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $poster;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $backdrop;
+
+    /**
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    private $originalTitle;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $overview;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $releaseDate;
+
+    /**
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    private $runtime;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="movies")
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +164,102 @@ class Movie
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?string $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+
+    public function getBackdrop(): ?string
+    {
+        return $this->backdrop;
+    }
+
+    public function setBackdrop(?string $backdrop): self
+    {
+        $this->backdrop = $backdrop;
+
+        return $this;
+    }
+
+    public function getOriginalTitle(): ?string
+    {
+        return $this->originalTitle;
+    }
+
+    public function setOriginalTitle(?string $originalTitle): self
+    {
+        $this->originalTitle = $originalTitle;
+
+        return $this;
+    }
+
+    public function getOverview(): ?string
+    {
+        return $this->overview;
+    }
+
+    public function setOverview(?string $overview): self
+    {
+        $this->overview = $overview;
+
+        return $this;
+    }
+
+    public function getReleaseDate(): ?\DateTimeInterface
+    {
+        return $this->releaseDate;
+    }
+
+    public function setReleaseDate(?\DateTimeInterface $releaseDate): self
+    {
+        $this->releaseDate = $releaseDate;
+
+        return $this;
+    }
+
+    public function getRuntime(): ?string
+    {
+        return $this->runtime;
+    }
+
+    public function setRuntime(?string $runtime): self
+    {
+        $this->runtime = $runtime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }
