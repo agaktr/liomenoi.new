@@ -134,7 +134,17 @@ class ScrapYifyObjectCommand extends Command
                 $movie->setSlug($movieData['data']->getSlug());
                 $movie->setTitle($movieData['data']->getTitle());
                 $movie->setYear($movieData['data']->getYear());
-var_dump($movieData);
+
+                if (!isset($movieData['magnet'])) {
+                    $this->em->remove($objectsMap[$e->getMessage()]);
+                    $this->em->flush();
+                    unset($objectsMap[$e->getMessage()]);
+                    unset($this->urls[$e->getMessage()]);
+                    $io->title('magnet__deleting '.$e->getMessage());
+
+                    continue;
+                }
+
                 foreach ($movieData['magnet'] as $magnetLink) {
 
                     /** @var Magnet $magnet */
