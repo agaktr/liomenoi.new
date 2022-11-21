@@ -76,12 +76,13 @@ class PublicController extends AptoAbstractController
         /** @var Movie $movie */
         $movie = $repository->load(87421);
 
+        var_dump($movie);
         var_dump($movie->getTitle());
-        var_dump($movie->getImages());
-        var_dump($movie->getPosterPath());
-        var_dump($movie->getBackdropImage());
-        var_dump($movie->getBackdropPath());
-        var_dump($movie->getVideos());
+//        var_dump($movie->getImages());
+//        var_dump($movie->getPosterPath());
+//        var_dump($movie->getBackdropImage());
+//        var_dump($movie->getBackdropPath());
+//        var_dump($movie->getVideos());
 
         return $this->render('public/home.html.twig', [
         ]);
