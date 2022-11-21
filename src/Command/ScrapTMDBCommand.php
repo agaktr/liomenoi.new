@@ -66,6 +66,9 @@ class ScrapTMDBCommand extends Command
             //get gr version
             $repository = new MovieRepository($this->scrapper->client);
             /** @var \Tmdb\Model\Movie $movie */
+            $modelMovie = $repository->load($tmdbMovie["id"]);
+
+            var_dump($modelMovie);
             $modelMovie = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 //            $tmdbMovieGr = $this->scrapper->client->getMoviesApi()->getMovie($tmdbMovie["id"],['language' => 'el-GR']);
 
