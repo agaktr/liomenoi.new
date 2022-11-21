@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -125,8 +126,6 @@ class AptoAbstractController extends AbstractController implements AppInterface
             $defaultContext = [
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
 
-                var_dump($object);
-                die();
                 return $object->getId();
                 },
             ];
@@ -137,11 +136,12 @@ class AptoAbstractController extends AbstractController implements AppInterface
 
             foreach ($parameters as $key => $value){
 
+
                 if (is_array($value) && is_object($value[0])){
-                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
+                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json', [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]));
                 }else{
                     if (is_object($value)) {
-                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json'));
+                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json', [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]));
                     }else{
                         $respArray[ $key ] = $value;
                     }
