@@ -101,7 +101,6 @@ class ScrapTMDBCommand extends Command
             $object->setRuntime($modelMovie->getRuntime());
 
             //set genres
-            $genresMovie = [];
             foreach($modelMovie->getGenres() as $genre){
                 if(isset($genresLocalArray[$genre->getId()])){
                     $object->addCategory($genresLocalArray[$genre->getId()]);
