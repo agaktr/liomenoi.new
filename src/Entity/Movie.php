@@ -84,6 +84,11 @@ class Movie
      */
     private $tmdbId;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $fetched;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
@@ -277,6 +282,18 @@ class Movie
     public function setTmdbId(?int $tmdbId): self
     {
         $this->tmdbId = $tmdbId;
+
+        return $this;
+    }
+
+    public function isFetched(): ?bool
+    {
+        return $this->fetched;
+    }
+
+    public function setFetched(?bool $fetched): self
+    {
+        $this->fetched = $fetched;
 
         return $this;
     }
