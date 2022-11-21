@@ -37,6 +37,7 @@ class MovieController extends AptoAbstractController
                     'size' => $magnet->getSize(),
                     'quality' => $magnet->getQuality(),
                 ];
+                $magnets[] = $magnet;
             }
 
             $moviesResponse[$movie->getId()] = [
