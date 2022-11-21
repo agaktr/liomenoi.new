@@ -64,7 +64,7 @@ class PublicController extends AptoAbstractController
 
 
 
-        var_dump($tmdbClient->getMoviesApi()->getMovie(550));
+        var_dump($client->getMoviesApi()->getMovie(550));
 
 
         return $this->render('public/home.html.twig', [
