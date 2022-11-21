@@ -4,9 +4,12 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=7.4" ,
+        "php": ">=7.4",
         "ext-ctype": "*",
+        "ext-curl": "*",
+        "ext-dom": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
@@ -14,6 +17,7 @@
         "hwi/oauth-bundle": "^1.4",
         "nyholm/psr7": "^1.5",
         "php-http/httplug-bundle": "^1.27",
+        "php-tmdb/api": "4",
         "predis/predis": "^1.0",
         "sensio/framework-extra-bundle": "^6.2",
         "snc/redis-bundle": "^4.3",
@@ -40,10 +44,7 @@
         "symfonycasts/verify-email-bundle": "^1.12",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
-        "voku/html-compress-twig": "^4.0" ,
-        "ext-json": "*" ,
-      "ext-curl": "*" ,
-        "ext-dom": "*"
+        "voku/html-compress-twig": "^4.0"
     },
     "config": {
         "allow-plugins": {
