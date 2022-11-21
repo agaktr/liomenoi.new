@@ -51,9 +51,9 @@ class ScrapCategoriesCommand extends Command
         $io->title('Starting to scrap Categories');
 
         $categories = $this->scrapper->client->getGenresApi()->getGenres(['language' => 'el-GR']);
-        var_dump($categories);
-        foreach ($categories as $category){
-var_dump($category);
+
+        foreach ($categories["genres"] as $category){
+
             $ourCategory = $this->em->getRepository(Category::class)->findOneBy(['tmdbId' => $category['id']]);
 
             if (!$ourCategory){
