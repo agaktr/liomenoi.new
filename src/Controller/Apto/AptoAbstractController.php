@@ -135,6 +135,9 @@ class AptoAbstractController extends AbstractController implements AppInterface
 
             foreach ($parameters as $key => $value){
 
+                var_dump($key);
+                var_dump($value);
+
                 if (is_array($value) &&  is_object($value[$key])){
                     $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
                 }else{
