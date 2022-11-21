@@ -42,6 +42,7 @@ var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
         /** @var Movie $movie */
         $movie = $repository->load(87421);
 
+
         var_dump($movie);
 //        var_dump($movie->getTitle());
 //        var_dump($movie->getImages());
