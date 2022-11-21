@@ -56,6 +56,9 @@ class CategoryController extends AptoAbstractController
      */
     public function show(Category $category): Response
     {
+
+        $this->isApi = true;
+
         return $this->render('category/show.html.twig', [
             'category' => $category,
         ]);
