@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Apto\AptoAbstractController;
+use App\Service\TMDBService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -23,61 +24,25 @@ class PublicController extends AptoAbstractController
     /**
      * @Route("/", name="app_home")
      */
-    public function index(): Response
+    public function index(TMDBService $TMDBService): Response
     {
 
-        $ed = new EventDispatcher();
+//        $a = $TMDBService->client->getMoviesApi()->getMovie(550);
 
-        $options = [
+        $a = $TMDBService->client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
 
-            'api_token' => '45a50e7d0f3e99b4e902a1973184aa69',
-            'event_dispatcher' => [
-                'adapter' => $ed
-            ],
-            // We make use of PSR-17 and PSR-18 auto discovery to automatically guess these, but preferably set these explicitly.
-//            'http' => [
-//                'client' => null,
-//                'request_factory' => null,
-//                'response_factory' => null,
-//                'stream_factory' => null,
-//                'uri_factory' => null,
-//            ]
-        ];
-
-        $client = new Client($options);
-
-        /**
-         * Required event listeners and events to be registered with the PSR-14 Event Dispatcher.
-         */
-        $requestListener = new RequestListener($client->getHttpClient(), $ed);
-        $ed->addListener(RequestEvent::class, $requestListener);
-
-        $apiTokenListener = new ApiTokenRequestListener($client->getToken());
-        $ed->addListener(BeforeRequestEvent::class, $apiTokenListener);
-
-        $acceptJsonListener = new AcceptJsonRequestListener();
-        $ed->addListener(BeforeRequestEvent::class, $acceptJsonListener);
-
-        $jsonContentTypeListener = new ContentTypeJsonRequestListener();
-        $ed->addListener(BeforeRequestEvent::class, $jsonContentTypeListener);
-
-        $userAgentListener = new UserAgentRequestListener();
-        $ed->addListener(BeforeRequestEvent::class, $userAgentListener);
-
-        $a = $client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
-
-var_dump($client->getConfigurationApi()->getConfiguration());
+var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
 //        var_dump($client->getGenresApi()->getGenre('18'));
-        var_dump($client->getGenresApi()->getGenres(['language' => 'el-GR']));
+        var_dump($TMDBService->client->getGenresApi()->getGenres(['language' => 'el-GR']));
         var_dump($a);
-        var_dump($client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
+        var_dump($TMDBService->client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
 
 
-        $repository = new MovieRepository($client);
+        $repository = new MovieRepository($TMDBService->client);
         /** @var Movie $movie */
         $movie = $repository->load(87421);
 
-//        var_dump($movie);
+        var_dump($movie);
 //        var_dump($movie->getTitle());
 //        var_dump($movie->getImages());
 //        var_dump($movie->getPosterPath());
