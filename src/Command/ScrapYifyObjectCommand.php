@@ -97,7 +97,7 @@ class ScrapYifyObjectCommand extends Command
                 $this->em->remove($objectsMap[$e->getMessage()]);
                 $this->em->flush();
                 unset($objectsMap[$e->getMessage()]);
-                unset($this->urls[$object->getId()]);
+                unset($this->urls[$e->getMessage()]);
                 $io->title('deleting '.$e->getMessage());
                 continue;
             } catch (\Exception $e) {
