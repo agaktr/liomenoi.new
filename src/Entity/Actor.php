@@ -76,10 +76,10 @@ class Actor
     /**
      * @return Collection<int, Movie>
      */
-    public function getMovies(): Collection
-    {
-        return $this->movies;
-    }
+//    public function getMovies(): Collection
+//    {
+//        return $this->movies;
+//    }
 
     public function addMovie(Movie $movie): self
     {

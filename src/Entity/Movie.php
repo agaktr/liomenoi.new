@@ -89,10 +89,10 @@ class Movie
      */
     private $fetched;
 
-//    /**
-//     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
-//     */
-//    private $actors;
+    /**
+     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
+     */
+    private $actors;
 
     public function __construct()
     {
@@ -304,30 +304,30 @@ class Movie
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, Actor>
-//     */
-//    public function getActors(): Collection
-//    {
-//        return $this->actors;
-//    }
-//
-//    public function addActor(Actor $actor): self
-//    {
-//        if (!$this->actors->contains($actor)) {
-//            $this->actors[] = $actor;
-//            $actor->addMovie($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeActor(Actor $actor): self
-//    {
-//        if ($this->actors->removeElement($actor)) {
-//            $actor->removeMovie($this);
-//        }
-//
-//        return $this;
-//    }
+    /**
+     * @return Collection<int, Actor>
+     */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor): self
+    {
+        if (!$this->actors->contains($actor)) {
+            $this->actors[] = $actor;
+            $actor->addMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActor(Actor $actor): self
+    {
+        if ($this->actors->removeElement($actor)) {
+            $actor->removeMovie($this);
+        }
+
+        return $this;
+    }
 }
