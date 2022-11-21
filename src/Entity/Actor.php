@@ -34,6 +34,11 @@ class Actor
      */
     private $movies;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tmdbId;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -88,6 +93,18 @@ class Actor
     public function removeMovie(Movie $movie): self
     {
         $this->movies->removeElement($movie);
+
+        return $this;
+    }
+
+    public function getTmdbId(): ?int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(int $tmdbId): self
+    {
+        $this->tmdbId = $tmdbId;
 
         return $this;
     }

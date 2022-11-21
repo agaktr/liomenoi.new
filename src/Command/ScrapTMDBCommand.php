@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Actor;
 use App\Entity\Category;
 use App\Entity\Movie;
 use App\Entity\YifyObject;
@@ -59,6 +60,12 @@ class ScrapTMDBCommand extends Command
         $genresLocalArray = [];
         foreach($genresLocal as $genre){
             $genresLocalArray[$genre->getTmdbId()] = $genre;
+        }
+
+        $actorsLocal = $this->em->getRepository(Category::class)->findAll();
+        $actorsLocalArray = [];
+        foreach($actorsLocal as $actor){
+            $actorsLocalArray[$actor->getTmdbId()] = $actor;
         }
 
         while ($counter < 1000000000) {
@@ -127,13 +134,25 @@ class ScrapTMDBCommand extends Command
 
                 //set actors
                 $actors = [];
-                foreach($modelMovie->getCredits()->getCast() as $actor){
-                    var_dump($actor);
+                foreach($modelMovie->getCredits()->getCast() as $actorModel){
+                    if(!isset($actorsLocalArray[$actorModel->getId()])){
+
+                        $actor = new Actor();
+                        $this->em->persist($actor);
+                        $actor->setName($actorModel->getName());
+                        $actor->setTmdbId($actorModel->getId());
+                        $actor->setPoster($actorModel->getProfilePath());
+                        $actorsLocalArray[$actorModel->getId()] = $actor;
+
+                        $io->info('Added new actor '.$actorModel->getName());
+                    }
+
+                    $object->addActor($actorsLocalArray[$actorModel->getId()]);
                 }
 
-//                $object->setFetched(true);
+                $object->setFetched(true);
 
-//                $this->em->flush();
+                $this->em->flush();
             }
 
         }
