@@ -149,7 +149,7 @@ class AptoAbstractController extends AbstractController implements AppInterface
 
             $resp->headers->set('Content-Type', 'application/json');
             // Allow all websites
-            $resp->headers->set('Access-Control-Allow-Origin', '*');
+            $resp->headers->set('Access-Control-Allow-Origin', 'https://liomenoi.vercel.app/fetch');
 
             return $resp;
         }
