@@ -87,7 +87,7 @@ class ScrapTMDBCommand extends Command
 
             //set overview
             $object->setOverview($modelMovieGr->getOverview());
-            if (empty($object->getOverview())){
+            if (empty($object->getOverview()))
                 $object->setOverview($modelMovie->getOverview());
 
             //set poster
