@@ -24,10 +24,19 @@ class MovieController extends AptoAbstractController
 
         $this->isApi = true;
 
+        $movies = $movieRepository->findBy([],[ 'id' => 'ASC'], 1,0);
+
+        $moviesResponse = [];
+        foreach ($movies as $movie) {
+            $moviesResponse[$movie->getId()] = $movie->getId();
+        }
+
         return $this->render('movie/index.html.twig', [
-            'movies' => $movieRepository->findBy([],[ 'id' => 'ASC'], 1,0),
+            'movies' => $moviesResponse,
         ]);
     }
+
+
 
     /**
      * @Route("/new", name="app_movie_new", methods={"GET", "POST"})
