@@ -125,9 +125,6 @@ class AptoAbstractController extends AbstractController implements AppInterface
             $defaultContext = [
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
 
-                var_dump($object->getId());
-                var_dump($format);
-                var_dump($context);
                 return $object->getId();
                 },
             ];
