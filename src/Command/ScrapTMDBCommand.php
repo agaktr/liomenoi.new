@@ -71,7 +71,10 @@ class ScrapTMDBCommand extends Command
 
             $a = $modelMovie->getCredits()->getCast();
 
-            var_dump($a);
+            foreach ($a as $b){
+                var_dump($b);
+            }
+//            var_dump($a);
 //            var_dump($modelMovie);
 
         }
