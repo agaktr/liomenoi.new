@@ -14,6 +14,8 @@ use Tmdb\Event\Listener\Request\ContentTypeJsonRequestListener;
 use Tmdb\Event\Listener\Request\UserAgentRequestListener;
 use Tmdb\Event\Listener\RequestListener;
 use Tmdb\Event\RequestEvent;
+use Tmdb\Model\Movie;
+use Tmdb\Repository\MovieRepository;
 
 
 class PublicController extends AptoAbstractController
@@ -64,10 +66,22 @@ class PublicController extends AptoAbstractController
 
         $a = $client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
 
+
         var_dump($client->getGenresApi()->getGenre('18'));
         var_dump($a);
         var_dump($client->getMoviesApi()->getMovie(550));
 
+
+        $repository = new MovieRepository($client);
+        /** @var Movie $movie */
+        $movie = $repository->load(87421);
+
+        var_dump($movie->getTitle());
+        var_dump($movie->getPosterImage());
+        var_dump($movie->getPosterPath());
+        var_dump($movie->getBackdropImage());
+        var_dump($movie->getBackdropPath());
+        var_dump($movie->getVideos());
 
         return $this->render('public/home.html.twig', [
         ]);
