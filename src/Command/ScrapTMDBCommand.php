@@ -150,7 +150,6 @@ class ScrapTMDBCommand extends Command
                     }else{
                         $io->info('Found actor '.$actorModel->getName());
                     }
-var_dump($actorsLocalArray[$actorModel->getId()]->getName());
 
                     $object->addActor($actorsLocalArray[$actorModel->getId()]);
                 }
