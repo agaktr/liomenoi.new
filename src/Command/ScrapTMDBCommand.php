@@ -103,7 +103,6 @@ class ScrapTMDBCommand extends Command
                 $object->setOriginalTitle($modelMovie->getTitle());
 
                 //set overview
-                var_dump($modelMovieGr->getOverview());
                 $object->setOverview($modelMovieGr->getOverview());
                 if (empty($object->getOverview()))
                     $object->setOverview($modelMovie->getOverview());
