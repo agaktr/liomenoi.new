@@ -35,6 +35,8 @@ class MovieController extends AptoAbstractController
                 'posterPath' => $movie->getPoster(),
                 'backdropPath' => $movie->getBackdrop(),
                 'overview' => $movie->getOverview(),
+                'releaseDate' => $movie->getReleaseDate(),
+                'magnets' => $movie->getMagnets(),
             ];
         }
 

@@ -135,8 +135,7 @@ class AptoAbstractController extends AbstractController implements AppInterface
 
             foreach ($parameters as $key => $value){
 
-                var_dump($key);
-                var_dump($value);
+
 
                 if (
                     is_array($value) ||
