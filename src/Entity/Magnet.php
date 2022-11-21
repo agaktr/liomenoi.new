@@ -38,7 +38,7 @@ class Magnet
     private $magnet;
 
     /**
-     * @ORM\ManyToOne(targetEntity=movie::class, inversedBy="magnets", fetch="EXTRA_LAZY")
+     * @ORM\ManyToOne(targetEntity=movie::class, inversedBy="magnets")
      */
     private $movie;
 

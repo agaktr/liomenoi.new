@@ -74,10 +74,10 @@ class Movie
      */
     private $runtime;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="movies")
-     */
-    private $categories;
+//    /**
+//     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="movies")
+//     */
+//    private $categories;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -89,10 +89,10 @@ class Movie
      */
     private $fetched;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
-     */
-    private $actors;
+//    /**
+//     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
+//     */
+//    private $actors;
 
     public function __construct()
     {
