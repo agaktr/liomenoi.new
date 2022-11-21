@@ -52,70 +52,78 @@ class ScrapTMDBCommand extends Command
 
         $io->title('Starting to scrap Objects');
 
-        $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
+        $counter = 0;
 
-        $genresLocal = $this->em->getRepository(Category::class)->findAll();
+        while ($counter < 1000000000) {
 
-        $genresLocalArray = [];
-        foreach($genresLocal as $genre){
-            $genresLocalArray[$genre->getTmdbId()] = $genre;
-        }
+            $counter++;
+            $io->title($counter);
 
-        foreach ($objects as $object){
+            $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
 
-            $io->title('Doing '.$object->getTitle());
+            $genresLocal = $this->em->getRepository(Category::class)->findAll();
 
-            //scrap imdb id from imdb url $object->getImdb
-            $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
-
-            //find movie from tmdb based on imdb id
-            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
-
-            //get en/gr version of movie
-            /** @var \Tmdb\Model\Movie $modelMovie */
-            /** @var \Tmdb\Model\Movie $modelMovieGr */
-            $repository = new MovieRepository($this->scrapper->client);
-            $modelMovie = $repository->load($tmdbMovie["id"]);
-            $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
-
-            //set tmdb id
-            $object->setTmdbId($tmdbMovie["id"]);
-
-            //set title
-            $object->setTitle($modelMovieGr->getTitle());
-
-            //set original title
-            $object->setOriginalTitle($modelMovie->getTitle());
-
-            //set overview
-            $object->setOverview($modelMovieGr->getOverview());
-            if (empty($object->getOverview()))
-                $object->setOverview($modelMovie->getOverview());
-
-            //set poster
-            $object->setPoster($modelMovie->getPosterPath());
-
-            //set backdrop
-            $object->setBackdrop($modelMovie->getBackdropPath());
-
-            //set release date
-            $object->setReleaseDate($modelMovie->getReleaseDate());
-
-            //set runtime
-            $object->setRuntime($modelMovie->getRuntime());
-
-            //set genres
-            foreach($modelMovie->getGenres() as $genre){
-                if(isset($genresLocalArray[$genre->getId()])){
-                    $object->addCategory($genresLocalArray[$genre->getId()]);
-                }
+            $genresLocalArray = [];
+            foreach($genresLocal as $genre){
+                $genresLocalArray[$genre->getTmdbId()] = $genre;
             }
 
-            $object->setFetched(true);
+            foreach ($objects as $object){
+
+                $io->title('Doing '.$object->getTitle());
+
+                //scrap imdb id from imdb url $object->getImdb
+                $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
+
+                //find movie from tmdb based on imdb id
+                $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
+
+                //get en/gr version of movie
+                /** @var \Tmdb\Model\Movie $modelMovie */
+                /** @var \Tmdb\Model\Movie $modelMovieGr */
+                $repository = new MovieRepository($this->scrapper->client);
+                $modelMovie = $repository->load($tmdbMovie["id"]);
+                $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
+
+                //set tmdb id
+                $object->setTmdbId($tmdbMovie["id"]);
+
+                //set title
+                $object->setTitle($modelMovieGr->getTitle());
+
+                //set original title
+                $object->setOriginalTitle($modelMovie->getTitle());
+
+                //set overview
+                $object->setOverview($modelMovieGr->getOverview());
+                if (empty($object->getOverview()))
+                    $object->setOverview($modelMovie->getOverview());
+
+                //set poster
+                $object->setPoster($modelMovie->getPosterPath());
+
+                //set backdrop
+                $object->setBackdrop($modelMovie->getBackdropPath());
+
+                //set release date
+                $object->setReleaseDate($modelMovie->getReleaseDate());
+
+                //set runtime
+                $object->setRuntime($modelMovie->getRuntime());
+
+                //set genres
+                foreach($modelMovie->getGenres() as $genre){
+                    if(isset($genresLocalArray[$genre->getId()])){
+                        $object->addCategory($genresLocalArray[$genre->getId()]);
+                    }
+                }
+
+                $object->setFetched(true);
+
+                $this->em->flush();
+            }
+
         }
-
-        $this->em->flush();
-
 
         return Command::SUCCESS;
     }
