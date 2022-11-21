@@ -16,7 +16,24 @@ class PublicController extends AptoAbstractController
     public function index(): Response
     {
 
-        $options['api_token'] = '45a50e7d0f3e99b4e902a1973184aa69';
+        $ed = new Symfony\Component\EventDispatcher\EventDispatcher();
+
+        $options = [
+
+            'api_token' => '45a50e7d0f3e99b4e902a1973184aa69',
+            'event_dispatcher' => [
+                'adapter' => $ed
+            ],
+            // We make use of PSR-17 and PSR-18 auto discovery to automatically guess these, but preferably set these explicitly.
+//            'http' => [
+//                'client' => null,
+//                'request_factory' => null,
+//                'response_factory' => null,
+//                'stream_factory' => null,
+//                'uri_factory' => null,
+//            ]
+        ];
+
         $tmdbClient = new Client($options);
         var_dump($tmdbClient->getMoviesApi()->getMovie(550));
 
