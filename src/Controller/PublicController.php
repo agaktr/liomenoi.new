@@ -42,7 +42,7 @@ class PublicController extends AptoAbstractController
 //            ]
         ];
 
-        $tmdbClient = new Client($options);
+        $client = new Client($options);
 
         /**
          * Required event listeners and events to be registered with the PSR-14 Event Dispatcher.
