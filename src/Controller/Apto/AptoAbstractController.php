@@ -125,6 +125,8 @@ class AptoAbstractController extends AbstractController implements AppInterface
             $defaultContext = [
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
 
+                var_dump($object);
+                die();
                 return $object->getId();
                 },
             ];
@@ -136,10 +138,10 @@ class AptoAbstractController extends AbstractController implements AppInterface
             foreach ($parameters as $key => $value){
 
                 if (is_array($value) && is_object($value[0])){
-                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json', ['groups' => 'product_listing:read']));
+                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
                 }else{
                     if (is_object($value)) {
-                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json', ['groups' => 'product_listing:read']));
+                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json'));
                     }else{
                         $respArray[ $key ] = $value;
                     }
