@@ -61,7 +61,8 @@ class ScrapTMDBCommand extends Command
             var_dump($imdbId);
 
             //find movie from tmdb based on imdb id
-            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
+//            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
+            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy('tt0111161',['external_source' => 'imdb_id'])["movie_results"][0];
 
             //get gr version
             $repository = new MovieRepository($this->scrapper->client);
