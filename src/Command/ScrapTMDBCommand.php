@@ -91,8 +91,11 @@ class ScrapTMDBCommand extends Command
 
 
             $object->setOverview($modelMovieGr->getOverview());
+            var_dump($object->getOverview());
             if (empty($object->getOverview()))
                 $object->setOverview($modelMovie->getOverview());
+
+            var_dump($object->getOverview());
 
             //set poster
             $object->setPoster($modelMovie->getPosterPath());
