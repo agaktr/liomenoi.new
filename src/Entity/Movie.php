@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * @Groups("product_listing:read")
  */
 class Movie
 {
