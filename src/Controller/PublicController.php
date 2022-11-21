@@ -64,6 +64,7 @@ class PublicController extends AptoAbstractController
 
         $a = $client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
 
+        var_dump($client->getGenresApi()->getGenre('18'));
         var_dump($a);
         var_dump($client->getMoviesApi()->getMovie(550));
 
