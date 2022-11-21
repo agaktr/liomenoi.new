@@ -40,16 +40,7 @@ class MovieController extends AptoAbstractController
                 $magnets[] = $magnet;
             }
 
-            $moviesResponse[$movie->getId()] = [
-                'id' => $movie->getId(),
-                'title' => $movie->getTitle(),
-                'tmdbId' => $movie->getTmdbId(),
-                'posterPath' => $movie->getPoster(),
-                'backdropPath' => $movie->getBackdrop(),
-                'overview' => $movie->getOverview(),
-                'releaseDate' => $movie->getReleaseDate(),
-                'magnets' => $magnets,
-            ];
+            $moviesResponse[$movie->getId()] = $movie;
         }
 
         return $this->render('movie/index.html.twig', [
