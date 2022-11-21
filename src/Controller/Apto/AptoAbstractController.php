@@ -145,7 +145,13 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 }
             }
 
-            return new JsonResponse($respArray);
+            $resp = new JsonResponse($respArray);
+
+            $resp->headers->set('Content-Type', 'application/json');
+            // Allow all websites
+            $resp->headers->set('Access-Control-Allow-Origin', '*');
+
+            return $resp;
         }
 
         $content = $this->renderView($view, $parameters);
