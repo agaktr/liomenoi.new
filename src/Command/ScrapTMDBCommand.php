@@ -54,23 +54,22 @@ class ScrapTMDBCommand extends Command
 
         $counter = 0;
 
+        $genresLocal = $this->em->getRepository(Category::class)->findAll();
+
+        $genresLocalArray = [];
+        foreach($genresLocal as $genre){
+            $genresLocalArray[$genre->getTmdbId()] = $genre;
+        }
+
         while ($counter < 1000000000) {
 
             $counter++;
-            $io->title($counter);
 
             $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
 
-            $genresLocal = $this->em->getRepository(Category::class)->findAll();
-
-            $genresLocalArray = [];
-            foreach($genresLocal as $genre){
-                $genresLocalArray[$genre->getTmdbId()] = $genre;
-            }
-
             foreach ($objects as $object){
 
-                $io->title('Doing '.$object->getTitle());
+                $io->title($counter. ': Doing '.$object->getTitle());
 
                 //scrap imdb id from imdb url $object->getImdb
                 $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
