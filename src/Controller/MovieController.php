@@ -33,7 +33,6 @@ class MovieController extends AptoAbstractController
             foreach ($movie->getMagnets() as $magnet) {
                 $magnets[] = [
                     'id' => $magnet->getId(),
-                    'name' => $magnet->getName(),
                     'magnet' => $magnet->getMagnet(),
                     'size' => $magnet->getSize(),
                     'quality' => $magnet->getQuality(),
