@@ -256,29 +256,29 @@ class Movie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        $this->categories->removeElement($category);
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, Category>
+//     */
+//    public function getCategories(): Collection
+//    {
+//        return $this->categories;
+//    }
+//
+//    public function addCategory(Category $category): self
+//    {
+//        if (!$this->categories->contains($category)) {
+//            $this->categories[] = $category;
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeCategory(Category $category): self
+//    {
+//        $this->categories->removeElement($category);
+//
+//        return $this;
+//    }
 
     public function getTmdbId(): ?int
     {
@@ -304,30 +304,30 @@ class Movie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Actor>
-     */
-    public function getActors(): Collection
-    {
-        return $this->actors;
-    }
-
-    public function addActor(Actor $actor): self
-    {
-        if (!$this->actors->contains($actor)) {
-            $this->actors[] = $actor;
-            $actor->addMovie($this);
-        }
-
-        return $this;
-    }
-
-    public function removeActor(Actor $actor): self
-    {
-        if ($this->actors->removeElement($actor)) {
-            $actor->removeMovie($this);
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, Actor>
+//     */
+//    public function getActors(): Collection
+//    {
+//        return $this->actors;
+//    }
+//
+//    public function addActor(Actor $actor): self
+//    {
+//        if (!$this->actors->contains($actor)) {
+//            $this->actors[] = $actor;
+//            $actor->addMovie($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeActor(Actor $actor): self
+//    {
+//        if ($this->actors->removeElement($actor)) {
+//            $actor->removeMovie($this);
+//        }
+//
+//        return $this;
+//    }
 }
