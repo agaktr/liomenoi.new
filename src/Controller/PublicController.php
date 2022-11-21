@@ -17,7 +17,7 @@ class PublicController extends AptoAbstractController
     {
 
         $options['api_token'] = '45a50e7d0f3e99b4e902a1973184aa69';
-        $tmdbClient = new Client();
+        $tmdbClient = new Client($options);
         var_dump($tmdbClient->getMoviesApi()->getMovie(550));
 
         return $this->render('public/home.html.twig', [
