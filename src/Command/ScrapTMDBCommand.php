@@ -63,6 +63,8 @@ class ScrapTMDBCommand extends Command
 
         foreach ($objects as $object){
 
+            $io->title('Doing '.$object->getTitle());
+
             //scrap imdb id from imdb url $object->getImdb
             $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
 
