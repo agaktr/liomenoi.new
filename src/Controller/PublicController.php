@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Controller\Apto\AptoAbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tmdb\Client;
 
 
@@ -16,7 +17,7 @@ class PublicController extends AptoAbstractController
     public function index(): Response
     {
 
-        $ed = new Symfony\Component\EventDispatcher\EventDispatcher();
+        $ed = new EventDispatcher();
 
         $options = [
 
