@@ -30,7 +30,7 @@ class Category
     private $tmdbId;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity=Movie::class, mappedBy="categories", fetch="EXTRA_LAZY")
      */
     private $movies;
 

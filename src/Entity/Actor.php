@@ -30,7 +30,7 @@ class Actor
     private $poster;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Movie::class, inversedBy="actors")
+     * @ORM\ManyToMany(targetEntity=Movie::class, inversedBy="actors", fetch="EXTRA_LAZY")
      */
     private $movies;
 
