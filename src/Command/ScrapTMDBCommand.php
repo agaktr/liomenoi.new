@@ -75,7 +75,7 @@ class ScrapTMDBCommand extends Command
                 var_dump($b);
             }
             var_dump($a);
-//            var_dump($modelMovie);
+            var_dump($modelMovie->getGenres());
 
         }
 
