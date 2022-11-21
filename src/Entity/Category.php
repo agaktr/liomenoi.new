@@ -22,6 +22,11 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tmdbId;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +40,18 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getTmdbId(): ?int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(int $tmdbId): self
+    {
+        $this->tmdbId = $tmdbId;
 
         return $this;
     }
