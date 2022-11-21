@@ -28,6 +28,18 @@ class MovieController extends AptoAbstractController
 
         $moviesResponse = [];
         foreach ($movies as $movie) {
+
+            $magnets = [];
+            foreach ($movie->getMagnets() as $magnet) {
+                $magnets[] = [
+                    'id' => $magnet->getId(),
+                    'name' => $magnet->getName(),
+                    'magnet' => $magnet->getMagnet(),
+                    'size' => $magnet->getSize(),
+                    'quality' => $magnet->getQuality(),
+                ];
+            }
+
             $moviesResponse[$movie->getId()] = [
                 'id' => $movie->getId(),
                 'title' => $movie->getTitle(),
@@ -36,7 +48,7 @@ class MovieController extends AptoAbstractController
                 'backdropPath' => $movie->getBackdrop(),
                 'overview' => $movie->getOverview(),
                 'releaseDate' => $movie->getReleaseDate(),
-                'magnets' => $movie->getMagnets(),
+                'magnets' => $magnets,
             ];
         }
 
