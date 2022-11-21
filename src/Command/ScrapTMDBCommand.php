@@ -72,7 +72,7 @@ class ScrapTMDBCommand extends Command
 
             $counter++;
 
-            $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>true],[ 'id' => 'ASC'], 1,0);
+            $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
 
             foreach ($objects as $object){
 
@@ -146,7 +146,7 @@ class ScrapTMDBCommand extends Command
                             $actor->setPoster($actorModel->getProfilePath());
                         $actorsLocalArray[$actorModel->getId()] = $actor;
 
-                        $io->info('Added new actor '.$actorModel->getName());
+                        $io->note('Added new actor '.$actorModel->getName());
                     }else{
                         $io->info('Found actor '.$actorModel->getName());
                     }
