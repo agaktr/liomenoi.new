@@ -25,7 +25,7 @@ class MovieController extends AptoAbstractController
         $this->isApi = true;
 
         return $this->render('movie/index.html.twig', [
-            'movies' => $movieRepository->findBy([],[ 'id' => 'ASC'], 12,0),
+            'movies' => $movieRepository->findBy([],[ 'id' => 'ASC'], 1,0),
         ]);
     }
 
