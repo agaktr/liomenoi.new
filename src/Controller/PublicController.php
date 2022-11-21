@@ -16,6 +16,7 @@ class PublicController extends AptoAbstractController
     public function index(): Response
     {
 
+        $options['api_token'] = '45a50e7d0f3e99b4e902a1973184aa69';
         $tmdbClient = new Client();
         var_dump($tmdbClient->getMoviesApi()->getMovie(550));
 
