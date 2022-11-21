@@ -67,9 +67,9 @@ class PublicController extends AptoAbstractController
         $a = $client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
 
 
-        var_dump($client->getGenresApi()->getGenre('18'));
-        var_dump($a);
-        var_dump($client->getMoviesApi()->getMovie(550));
+//        var_dump($client->getGenresApi()->getGenre('18'));
+//        var_dump($a);
+//        var_dump($client->getMoviesApi()->getMovie(550));
 
 
         $repository = new MovieRepository($client);
@@ -77,7 +77,7 @@ class PublicController extends AptoAbstractController
         $movie = $repository->load(87421);
 
         var_dump($movie);
-        var_dump($movie->getTitle());
+//        var_dump($movie->getTitle());
 //        var_dump($movie->getImages());
 //        var_dump($movie->getPosterPath());
 //        var_dump($movie->getBackdropImage());
