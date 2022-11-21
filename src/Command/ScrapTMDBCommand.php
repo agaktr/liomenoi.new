@@ -95,8 +95,7 @@ class ScrapTMDBCommand extends Command
             $object->setBackdrop($modelMovie->getBackdropPath());
 
             //set release date
-            var_dump($modelMovie->getReleaseDate());
-            $object->setReleaseDate(new DateTime($modelMovie->getReleaseDate()));
+            $object->setReleaseDate($modelMovie->getReleaseDate());
 
             //set runtime
             $object->setRuntime($modelMovie->getRuntime());
