@@ -65,7 +65,7 @@ class ScrapTMDBCommand extends Command
 
             $counter++;
 
-            $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 5,0);
+            $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
 
             foreach ($objects as $object){
 
@@ -125,9 +125,15 @@ class ScrapTMDBCommand extends Command
                     }
                 }
 
-                $object->setFetched(true);
+                //set actors
+                $actors = [];
+                foreach($modelMovie->getCredits()->getCast() as $actor){
+                    var_dump($actor);
+                }
 
-                $this->em->flush();
+//                $object->setFetched(true);
+
+//                $this->em->flush();
             }
 
         }
