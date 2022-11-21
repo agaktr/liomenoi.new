@@ -26,6 +26,21 @@ class MovieController extends AptoAbstractController
 
         $movies = $movieRepository->findBy([],[ 'id' => 'ASC'], 12,0);
 
+        $moviesResponse = [];
+        foreach ($movies as $movie) {
+            $moviesResponse[$movie->getId()] = [
+                'id' => $movie->getId(),
+                'title' => $movie->getTitle(),
+                'originalTitle' => $movie->getOriginalTitle(),
+                'runtime' => $movie->getRuntime(),
+                'overview' => $movie->getOverview(),
+                'poster' => $movie->getPoster(),
+                'backdrop' => $movie->getBackdrop(),
+                'release_date' => $movie->getReleaseDate()->format('Y-m-d'),
+                'genres' => $movie->getCategories(),
+            ];
+        }
+
         return $this->render('movie/index.html.twig', [
             'movies' => $movies,
         ]);
