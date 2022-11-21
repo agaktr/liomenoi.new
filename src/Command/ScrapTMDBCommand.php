@@ -141,7 +141,9 @@ class ScrapTMDBCommand extends Command
                         $this->em->persist($actor);
                         $actor->setName($actorModel->getName());
                         $actor->setTmdbId($actorModel->getId());
-                        $actor->setPoster($actorModel->getProfilePath());
+                        $actor->setPoster('');
+                        if (!empty($actorModel->getProfilePath()))
+                            $actor->setPoster($actorModel->getProfilePath());
                         $actorsLocalArray[$actorModel->getId()] = $actor;
 
                         $io->info('Added new actor '.$actorModel->getName());
