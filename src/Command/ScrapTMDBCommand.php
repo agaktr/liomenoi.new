@@ -51,7 +51,7 @@ class ScrapTMDBCommand extends Command
 
         $io->title('Starting to scrap Objects');
 
-        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 2,0);
+        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 1,0);
 
         foreach ($objects as $object){
 
@@ -59,7 +59,10 @@ class ScrapTMDBCommand extends Command
             $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
             var_dump($imdbId);
 
+            //find movie from tmdb based on imdb id
+            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
 
+            var_dump($tmdbMovie);
 
 //            var_dump($object->getImdb());
         }
