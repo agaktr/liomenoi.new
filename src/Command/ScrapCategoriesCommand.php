@@ -54,7 +54,7 @@ class ScrapCategoriesCommand extends Command
 
         foreach ($categories as $category){
 
-            $ourCategory = $this->em->getRepository('App:Category')->findOneBy(['tmdbId' => $category['id']]);
+            $ourCategory = $this->em->getRepository(Category::class)->findOneBy(['tmdbId' => $category['id']]);
 
             if (!$ourCategory){
                 $ourCategory = new Category();
