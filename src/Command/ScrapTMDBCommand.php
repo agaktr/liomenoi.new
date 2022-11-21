@@ -52,7 +52,7 @@ class ScrapTMDBCommand extends Command
 
         $io->title('Starting to scrap Objects');
 
-        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 10,0);
+        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 1,0);
 
         foreach ($objects as $object){
 
@@ -61,21 +61,17 @@ class ScrapTMDBCommand extends Command
             var_dump($imdbId);
 
             //find movie from tmdb based on imdb id
-//            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
-            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy('tt0111161',['external_source' => 'imdb_id'])["movie_results"][0];
+            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
 
-            //get gr version
-            $repository = new MovieRepository($this->scrapper->client);
+            //get en/gr version of movie
             /** @var \Tmdb\Model\Movie $modelMovie */
+            $repository = new MovieRepository($this->scrapper->client);
             $modelMovie = $repository->load($tmdbMovie["id"]);
+            $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 
-            var_dump($modelMovie->getOverview());
-            $modelMovie = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
-//            $tmdbMovieGr = $this->scrapper->client->getMoviesApi()->getMovie($tmdbMovie["id"],['language' => 'el-GR']);
 
-            var_dump($modelMovie->getOverview());
+            var_dump($modelMovie);
 
-//            var_dump($object->getImdb());
         }
 
 
