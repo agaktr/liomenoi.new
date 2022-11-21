@@ -77,7 +77,7 @@ class PublicController extends AptoAbstractController
         $movie = $repository->load(87421);
 
         var_dump($movie->getTitle());
-        var_dump($movie->getPosterImage());
+        var_dump($movie->getImages());
         var_dump($movie->getPosterPath());
         var_dump($movie->getBackdropImage());
         var_dump($movie->getBackdropPath());
