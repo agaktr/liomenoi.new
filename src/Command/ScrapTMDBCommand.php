@@ -69,8 +69,10 @@ class ScrapTMDBCommand extends Command
             $modelMovie = $repository->load($tmdbMovie["id"]);
             $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 
+            $a = $modelMovie->getCredits()->getCast();
 
-            var_dump($modelMovie);
+            var_dump($a);
+//            var_dump($modelMovie);
 
         }
 
