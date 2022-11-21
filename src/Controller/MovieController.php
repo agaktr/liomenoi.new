@@ -28,7 +28,7 @@ class MovieController extends AptoAbstractController
 
         $moviesResponse = [];
         foreach ($movies as $movie) {
-            $moviesResponse[$movie->getId()] = $movie->getMagnets();
+            $moviesResponse[$movie->getId()] = $movie;
         }
 
         return $this->render('movie/index.html.twig', [
