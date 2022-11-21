@@ -86,16 +86,9 @@ class ScrapTMDBCommand extends Command
             $object->setOriginalTitle($modelMovie->getTitle());
 
             //set overview
-            var_dump($modelMovieGr->getOverview());
-            var_dump($modelMovie->getOverview());
-
-
             $object->setOverview($modelMovieGr->getOverview());
-            var_dump($object->getOverview());
             if (empty($object->getOverview()))
                 $object->setOverview($modelMovie->getOverview());
-
-            var_dump($object->getOverview());
 
             //set poster
             $object->setPoster($modelMovie->getPosterPath());
@@ -110,6 +103,7 @@ class ScrapTMDBCommand extends Command
             $object->setRuntime($modelMovie->getRuntime());
 
             //set genres
+            var_dump($modelMovie->getGenres());
             foreach($modelMovie->getGenres() as $genre){
                 if(isset($genresLocalArray[$genre->getId()])){
                     $object->addCategory($genresLocalArray[$genre->getId()]);
