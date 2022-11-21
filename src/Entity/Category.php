@@ -70,30 +70,30 @@ class Category
         return $this;
     }
 
-//    /**
-//     * @return Collection<int, Movie>
-//     */
+    /**
+     * @return Collection<int, Movie>
+     */
 //    public function getMovies(): Collection
 //    {
 //        return $this->movies;
 //    }
-//
-//    public function addMovie(Movie $movie): self
-//    {
-//        if (!$this->movies->contains($movie)) {
-//            $this->movies[] = $movie;
-//            $movie->addCategory($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeMovie(Movie $movie): self
-//    {
-//        if ($this->movies->removeElement($movie)) {
-//            $movie->removeCategory($this);
-//        }
-//
-//        return $this;
-//    }
+
+    public function addMovie(Movie $movie): self
+    {
+        if (!$this->movies->contains($movie)) {
+            $this->movies[] = $movie;
+            $movie->addCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMovie(Movie $movie): self
+    {
+        if ($this->movies->removeElement($movie)) {
+            $movie->removeCategory($this);
+        }
+
+        return $this;
+    }
 }
