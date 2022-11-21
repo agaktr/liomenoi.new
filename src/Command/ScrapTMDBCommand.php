@@ -110,6 +110,8 @@ class ScrapTMDBCommand extends Command
                     $object->addCategory($genresLocalArray[$genre->getId()]);
                 }
             }
+
+            $object->setFetched(true);
         }
 
         $this->em->flush();
