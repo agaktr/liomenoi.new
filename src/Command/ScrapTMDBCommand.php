@@ -52,7 +52,7 @@ class ScrapTMDBCommand extends Command
 
         $io->title('Starting to scrap Objects');
 
-        $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>false],[ 'id' => 'ASC'], 1,0);
+        $objects = $this->em->getRepository(Movie::class)->findBy(['fetched'=>null],[ 'id' => 'ASC'], 1,0);
 
         $genresLocal = $this->em->getRepository(Category::class)->findAll();
 
