@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tmdb\Repository\MovieRepository;
 
 class ScrapTMDBCommand extends Command
 {
@@ -60,9 +61,15 @@ class ScrapTMDBCommand extends Command
             var_dump($imdbId);
 
             //find movie from tmdb based on imdb id
-            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
+            $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
 
-            var_dump($tmdbMovie);
+            //get gr version
+            $repository = new MovieRepository($this->scrapper->client);
+            /** @var \Tmdb\Model\Movie $movie */
+            $modelMovie = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
+//            $tmdbMovieGr = $this->scrapper->client->getMoviesApi()->getMovie($tmdbMovie["id"],['language' => 'el-GR']);
+
+            var_dump($modelMovie);
 
 //            var_dump($object->getImdb());
         }
