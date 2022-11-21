@@ -24,7 +24,7 @@ class MovieController extends AptoAbstractController
 
         $this->isApi = true;
 
-        $movies = $movieRepository->findBy([],[ 'id' => 'ASC'], 12,0);
+        $movies = $movieRepository->findBy(['fetched'=>true],[ 'id' => 'ASC'], 12,0);
 
         $moviesResponse = [];
         foreach ($movies as $movie) {
