@@ -7,6 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Tmdb\Client;
+use Tmdb\Event\BeforeRequestEvent;
+use Tmdb\Event\Listener\Request\AcceptJsonRequestListener;
+use Tmdb\Event\Listener\Request\ApiTokenRequestListener;
+use Tmdb\Event\Listener\Request\ContentTypeJsonRequestListener;
+use Tmdb\Event\Listener\Request\UserAgentRequestListener;
+use Tmdb\Event\Listener\RequestListener;
+use Tmdb\Event\RequestEvent;
 
 
 class PublicController extends AptoAbstractController
@@ -36,6 +43,27 @@ class PublicController extends AptoAbstractController
         ];
 
         $tmdbClient = new Client($options);
+
+        /**
+         * Required event listeners and events to be registered with the PSR-14 Event Dispatcher.
+         */
+        $requestListener = new RequestListener($client->getHttpClient(), $ed);
+        $ed->addListener(RequestEvent::class, $requestListener);
+
+        $apiTokenListener = new ApiTokenRequestListener($client->getToken());
+        $ed->addListener(BeforeRequestEvent::class, $apiTokenListener);
+
+        $acceptJsonListener = new AcceptJsonRequestListener();
+        $ed->addListener(BeforeRequestEvent::class, $acceptJsonListener);
+
+        $jsonContentTypeListener = new ContentTypeJsonRequestListener();
+        $ed->addListener(BeforeRequestEvent::class, $jsonContentTypeListener);
+
+        $userAgentListener = new UserAgentRequestListener();
+        $ed->addListener(BeforeRequestEvent::class, $userAgentListener);
+
+
+
         var_dump($tmdbClient->getMoviesApi()->getMovie(550));
 
 
