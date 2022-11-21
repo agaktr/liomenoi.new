@@ -62,8 +62,9 @@ class PublicController extends AptoAbstractController
         $userAgentListener = new UserAgentRequestListener();
         $ed->addListener(BeforeRequestEvent::class, $userAgentListener);
 
+        $a = $client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
 
-
+        var_dump($a);
         var_dump($client->getMoviesApi()->getMovie(550));
 
 
