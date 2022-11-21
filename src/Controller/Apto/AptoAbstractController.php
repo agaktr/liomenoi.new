@@ -124,7 +124,9 @@ class AptoAbstractController extends AbstractController implements AppInterface
             $encoders = [new JsonEncoder()];
             $defaultContext = [
                 AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
-                    return $object->getId();
+
+                var_dump($object->getId());
+                return $object->getId();
                 },
             ];
             $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
