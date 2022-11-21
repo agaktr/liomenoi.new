@@ -68,6 +68,7 @@ class PublicController extends AptoAbstractController
 
 var_dump($client->getConfigurationApi()->getConfiguration());
 //        var_dump($client->getGenresApi()->getGenre('18'));
+        var_dump($client->getGenresApi()->getGenres());
         var_dump($a);
         var_dump($client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
 
