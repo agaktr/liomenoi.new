@@ -133,7 +133,6 @@ class ScrapTMDBCommand extends Command
                 }
 
                 //set actors
-                $actors = [];
                 foreach($modelMovie->getCredits()->getCast() as $actorModel){
                     if(!isset($actorsLocalArray[$actorModel->getId()])){
 
