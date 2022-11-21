@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Category;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use App\Service\TMDBService;
@@ -49,9 +50,24 @@ class ScrapCategoriesCommand extends Command
 
         $io->title('Starting to scrap Categories');
 
-        $categories = $this->scrapper->client->getGenresApi()->getGenres();
+        $categories = $this->scrapper->client->getGenresApi()->getGenres(['language' => 'el-GR']);
 
-        var_dump($categories);
+        foreach ($categories as $category){
+
+            $ourCategory = $this->em->getRepository('App:Category')->findOneBy(['tmdbId' => $category['id']]);
+
+            if (!$ourCategory){
+                $ourCategory = new Category();
+                $this->em->persist($ourCategory);
+                $ourCategory->setTmdbId($category['id']);
+            }
+
+            $ourCategory->setName($category['name']);
+
+            $io->title('Doing category '.$category['name']);
+        }
+
+        $this->em->flush();
 
         return Command::SUCCESS;
     }
