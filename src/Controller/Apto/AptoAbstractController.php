@@ -136,10 +136,10 @@ class AptoAbstractController extends AbstractController implements AppInterface
             foreach ($parameters as $key => $value){
 
                 if (is_array($value) && is_object($value[0])){
-                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
+                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json', ['groups' => 'product_listing:read']));
                 }else{
                     if (is_object($value)) {
-                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json'));
+                        $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json', ['groups' => 'product_listing:read']));
                     }else{
                         $respArray[ $key ] = $value;
                     }
