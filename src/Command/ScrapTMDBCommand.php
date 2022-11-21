@@ -52,7 +52,7 @@ class ScrapTMDBCommand extends Command
 
         $io->title('Starting to scrap Objects');
 
-        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 1,0);
+        $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 10,0);
 
         foreach ($objects as $object){
 
@@ -65,7 +65,7 @@ class ScrapTMDBCommand extends Command
 
             //get gr version
             $repository = new MovieRepository($this->scrapper->client);
-            /** @var \Tmdb\Model\Movie $movie */
+            /** @var \Tmdb\Model\Movie $modelMovie */
             $modelMovie = $repository->load($tmdbMovie["id"]);
 
             var_dump($modelMovie->getOverview());
