@@ -60,6 +60,7 @@ class MovieController extends AptoAbstractController
         $this->isApi = true;
 
         var_dump($movie->getId());
+        var_dump($movie->getMagnets());
         die();
 
         return $this->render('movie/show.html.twig', [
