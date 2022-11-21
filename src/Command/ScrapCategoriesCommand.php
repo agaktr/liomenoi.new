@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
+use App\Service\TMDBService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -13,23 +14,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ScrapYifyCommand extends Command
+class ScrapCategoriesCommand extends Command
 {
-    protected static $defaultName = 'ScrapYify';
+    protected static $defaultName = 'ScrapCategories';
     protected static $defaultDescription = 'This command scraps objects from YIFY so we can get the torrents.';
 
     private EntityManagerInterface $em;
-    private ScrapperService $scrapper;
+    private TMDBService $scrapper;
 
 
-    public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService)
+    public function __construct(EntityManagerInterface $entityManager,TMDBService $tmdbService)
     {
 
         $this->em = $entityManager;
-        $this->scrapper = $scrapperService;
-
-//        $this->urls[] = 'https://yts.do/browse-movies?page=1';
-
+        $this->scrapper = $tmdbService;
 
         parent::__construct();
     }
@@ -49,52 +47,11 @@ class ScrapYifyCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->title('Starting to scrap YIFY');
+        $io->title('Starting to scrap Categories');
 
-        $currentPage = 2240;
+        $categories = $this->scrapper->client->getGenresApi()->getGenres();
 
-        while ($currentPage < 2500) {
-
-            $io->title('Doing page '.$currentPage.' to '.($currentPage + 5));
-
-            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
-
-                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
-            }
-            $currentPage = $currentPage + 5;
-
-            $this->scrapper->setUrls($this->urls);
-
-            $this->scrapper->initSlugs();
-
-            $added = $updated = 0;
-
-            foreach ($this->scrapper->getScrappedContent() as $scrap) {
-
-                $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
-
-                if (!$object) {
-                    ++$added;
-                    $object = new YifyObject();
-                    $this->em->persist($object);
-                }else{
-                    ++$updated;
-                }
-
-                $object->setTitle($scrap['title']);
-                $object->setYear($scrap['year']);
-                $object->setSlug($scrap['slug']);
-                $object->setFetched(false);
-            }
-
-            $this->em->flush();
-
-            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
-
-            $io->success($content);
-
-            unset($this->urls);
-        }
+        var_dump($categories);
 
         return Command::SUCCESS;
     }
