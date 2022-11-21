@@ -94,11 +94,11 @@ class ScrapYifyObjectCommand extends Command
                 $this->scrapper->initObjects();
             }catch (ErrorException $e) {
 
+                $io->title('deleting '.$e->getMessage());
                 unset($objectsMap[$e->getMessage()]);
                 unset($this->urls[$e->getMessage()]);
                 $this->em->remove($objectsMap[$e->getMessage()]);
                 $this->em->flush();
-                $io->title('deleting '.$e->getMessage());
                 continue;
             } catch (\Exception $e) {
                 $io->title('retry '.$currentPage);
@@ -136,11 +136,11 @@ class ScrapYifyObjectCommand extends Command
                 $movie->setYear($movieData['data']->getYear());
 
                 if (!isset($movieData['magnet'])) {
+                    $io->title('magnet__deleting '.$movie->getId());
                     unset($objectsMap[$movie->getId()]);
                     unset($this->urls[$movie->getId()]);
                     $this->em->remove($movie);
                     $this->em->flush();
-                    $io->title('magnet__deleting '.$e->getMessage());
                     continue;
                 }
 
