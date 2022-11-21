@@ -24,27 +24,10 @@ class MovieController extends AptoAbstractController
 
         $this->isApi = true;
 
-        $movies = $movieRepository->findBy([],[ 'id' => 'ASC'], 1,0);
-
-        $moviesResponse = [];
-        foreach ($movies as $movie) {
-
-            $magnets = [];
-            foreach ($movie->getMagnets() as $magnet) {
-                $magnets[] = [
-                    'id' => $magnet->getId(),
-                    'magnet' => $magnet->getMagnet(),
-                    'size' => $magnet->getSize(),
-                    'quality' => $magnet->getQuality(),
-                ];
-                $magnets[] = $magnet;
-            }
-
-            $moviesResponse[$movie->getId()] = $movie;
-        }
+        $movies = $movieRepository->findBy([],[ 'id' => 'ASC'], 12,0);
 
         return $this->render('movie/index.html.twig', [
-            'movies' => $moviesResponse,
+            'movies' => $movies,
         ]);
     }
 
