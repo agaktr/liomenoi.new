@@ -42,7 +42,7 @@ class MovieController extends AptoAbstractController
         }
 
         return $this->render('movie/index.html.twig', [
-            'movies' => $movies,
+            'movies' => $moviesResponse,
         ]);
     }
 
