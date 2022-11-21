@@ -89,10 +89,16 @@ class Movie
      */
     private $fetched;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
+     */
+    private $actors;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->actors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -294,6 +300,33 @@ class Movie
     public function setFetched(?bool $fetched): self
     {
         $this->fetched = $fetched;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Actor>
+     */
+    public function getActors(): Collection
+    {
+        return $this->actors;
+    }
+
+    public function addActor(Actor $actor): self
+    {
+        if (!$this->actors->contains($actor)) {
+            $this->actors[] = $actor;
+            $actor->addMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActor(Actor $actor): self
+    {
+        if ($this->actors->removeElement($actor)) {
+            $actor->removeMovie($this);
+        }
 
         return $this;
     }
