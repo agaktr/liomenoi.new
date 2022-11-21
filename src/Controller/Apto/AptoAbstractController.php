@@ -135,7 +135,8 @@ class AptoAbstractController extends AbstractController implements AppInterface
             $respArray = [];
 
             foreach ($parameters as $key => $value){
-
+                var_dump(4);
+                die();
                 $result = $serializer->normalize($value, null, [AbstractObjectNormalizer::ENABLE_MAX_DEPTH => true]);
 var_dump($result);
                 die();
