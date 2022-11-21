@@ -53,7 +53,11 @@ class ScrapTMDBCommand extends Command
 
         $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 2,0);
 
-        var_dump($objects);
+        foreach ($objects as $object){
+
+            var_dump($object->getImdb());
+        }
+
 
         return Command::SUCCESS;
     }
