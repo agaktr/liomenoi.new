@@ -54,30 +54,63 @@ class ScrapTMDBCommand extends Command
 
         $objects = $this->em->getRepository(Movie::class)->findBy([],[ 'id' => 'ASC'], 1,0);
 
+        $genresLocal = $this->em->getRepository(Category::class)->findAll();
+
+        $genresLocalArray = [];
+        foreach($genresLocal as $genre){
+            $genresLocalArray[$genre->getTmdbId()] = $genre;
+        }
+
         foreach ($objects as $object){
 
             //scrap imdb id from imdb url $object->getImdb
             $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
-            var_dump($imdbId);
 
             //find movie from tmdb based on imdb id
             $tmdbMovie = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id'])["movie_results"][0];
 
             //get en/gr version of movie
             /** @var \Tmdb\Model\Movie $modelMovie */
+            /** @var \Tmdb\Model\Movie $modelMovieGr */
             $repository = new MovieRepository($this->scrapper->client);
             $modelMovie = $repository->load($tmdbMovie["id"]);
             $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 
-            $a = $modelMovie->getCredits()->getCast();
+            //set tmdb id
+            $object->setTmdbId($tmdbMovie["id"]);
 
-            foreach ($a as $b){
-                var_dump($b);
+            //set title
+            $object->setTitle($modelMovieGr->getTitle());
+
+            //set original title
+            $object->setOriginalTitle($modelMovie->getTitle());
+
+            //set overview
+            $object->setOverview($modelMovieGr->getOverview());
+
+            //set poster
+            $object->setPoster($modelMovie->getPosterPath());
+
+            //set backdrop
+            $object->setBackdrop($modelMovie->getBackdropPath());
+
+            //set release date
+            $object->setReleaseDate(new DateTime($modelMovie->getReleaseDate()));
+
+            //set runtime
+            $object->setRuntime($modelMovie->getRuntime());
+
+            //set genres
+            $genresMovie = [];
+            foreach($modelMovie->getGenres() as $genre){
+                if(isset($genresLocalArray[$genre->getId()])){
+                    $genresMovie[] = $genresLocalArray[$genre->getId()];
+                }
             }
-            var_dump($a);
-            var_dump($modelMovie->getGenres());
-
+            $object->setGenres($genresMovie);
         }
+
+        $this->em->flush();
 
 
         return Command::SUCCESS;

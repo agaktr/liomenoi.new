@@ -79,6 +79,11 @@ class Movie
      */
     private $categories;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $tmdbId;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
@@ -260,6 +265,18 @@ class Movie
     public function removeCategory(Category $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getTmdbId(): ?int
+    {
+        return $this->tmdbId;
+    }
+
+    public function setTmdbId(?int $tmdbId): self
+    {
+        $this->tmdbId = $tmdbId;
 
         return $this;
     }
