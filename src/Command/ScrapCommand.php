@@ -65,6 +65,8 @@ class ScrapCommand extends Command
 
         ini_set('memory_limit', '2048M');
 
+
+
         $io = new SymfonyStyle($input, $output);
 
         //get genres
@@ -122,6 +124,8 @@ class ScrapCommand extends Command
             }
 
             while ($hasMore) {
+
+                $start = microtime(true);
 
                 $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , 0);
 
@@ -204,6 +208,10 @@ class ScrapCommand extends Command
                 }
 
                 $this->em->flush();
+
+                $perf = $this->scrapper->getPerformance();
+                $perf['total'] = microtime(true) - $start;
+                $this->scrapper->setPerformance($perf);
 
                 $content = sprintf('DONE Time: %s' , json_encode($this->scrapper->getPerformance()));
 
