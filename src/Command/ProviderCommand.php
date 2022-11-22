@@ -63,7 +63,7 @@ class ProviderCommand extends Command
 
         while ($hasMore) {
 
-            $io->text('Doing page '.$currentPage.' to '.($currentPage + $pagesNo));
+            $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
 
             for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
 
