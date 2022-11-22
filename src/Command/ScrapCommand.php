@@ -94,7 +94,7 @@ class ScrapCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 1;
+            $pagesNo = 2;
             $doing = 'Movie';
 
             switch ($doing) {
