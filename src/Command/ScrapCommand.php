@@ -64,7 +64,6 @@ class ScrapCommand extends Command
             $io->title('Starting Movie scrapping');
 
             //init variables
-            $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
             $hasMore = true;
             $pagesNo = 5;
             $doing = 'Movie';
