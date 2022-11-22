@@ -202,10 +202,14 @@ class ScrapperService
             $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
             $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
 
+            if ($this->doing === 'Serie'){
+                $year = str_replace('TV Series', '', $year);
+            }
+
             $this->scrappedContent[] = [
                 'title' => trim($title),
                 'year' => trim($year),
-                'type' => 'Movie',
+                'type' => $this->doing,
                 'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
             ];
         }
