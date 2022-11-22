@@ -182,8 +182,10 @@ class ScrapCommand extends Command
 
                 $io->success($content);
 
+                if (count($this->objectsMap) < $pagesNo) {
+                    $hasMore = false;
+                }
             }
-
         }
 
         return Command::SUCCESS;
