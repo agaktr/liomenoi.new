@@ -53,13 +53,12 @@ class ProviderCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
 
-        $io->title('Starting Movie Provider Scrapping');
-
         //Get providers
         $providers = $this->em->getRepository(Provider::class)->findAll();
         foreach ($providers as $provider){
 
-            $io->info('Provider: '.$provider->getName());
+            $io->title('Provider: '.$provider->getName());
+            $io->title('Starting Movie Provider Scrapping');
 
             //init variables
             $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
