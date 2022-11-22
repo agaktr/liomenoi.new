@@ -203,7 +203,7 @@ class ScrapperService
             $title = trim($this->getStringBetween($titleElement->nodeValue, '', '('));
 
             $this->scrappedContent[] = [
-                'title' => $titleElement->nodeValue,
+                'title' => $title,
                 'year' => $year,
                 'type' => 'Movie',
                 'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
