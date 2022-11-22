@@ -48,8 +48,6 @@ class ScrapYifyObjectCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        ini_set('memory_limit', '2048M');
-
         $io = new SymfonyStyle($input, $output);
 
         $io->title('Starting to scrap YIFY');
