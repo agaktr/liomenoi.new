@@ -133,23 +133,6 @@ class ScrapCommand extends Command
                 $this->urls = [];
                 foreach ($objects as $object) {
 
-//                if (
-//                    strpos($object->getSlug(), '%') !== false
-//                ) {
-//                    $this->em->remove($object);
-//                    $this->em->flush();
-//                    $io->title('%% deleting '.$object->getId());
-//                    continue;
-//                }
-//                if (
-//                    strpos($object->getSlug(), '_') !== false
-//                ) {
-//                    $this->em->remove($object);
-//                    $this->em->flush();
-//                    $io->title('__ deleting '.$object->getId());
-//                    continue;
-//                }
-
                     $this->objectsMap[ $object->getId() ] = $object;
                     $this->urls[ $object->getId() ] = substr($object->getProvider()->getDomain() , 0 , -1) . $object->getSlug();
                 }
@@ -166,34 +149,11 @@ class ScrapCommand extends Command
                 $this->scrapper->getScraps();
 
 
-
-//                var_dump($this->scrapper->getScrappedContent());
-//                die();
-//
-//                try {
-//                    $this->scrapper->initObjects();
-//                } catch (ErrorException $e) {
-//
-//                    $io->title('deleting ' . $e->getMessage());
-//                    unset($this->objectsMap[ $e->getMessage() ]);
-//                    unset($this->urls[ $e->getMessage() ]);
-//                    $this->em->remove($this->objectsMap[ $e->getMessage() ]);
-//                    $this->em->flush();
-//                    continue;
-//                } catch (\Exception $e) {
-//                    $io->title('retry ' . $currentPage);
-//                    continue;
-//                }
-
-
                 $results = $this->scrapper->getScrappedContent();
                 foreach ($results as $id => $content) {
 
                     $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
                 }
-
-//                $added = $updated = 0;
-//                $addedMagnet = $updatedMagnet = 0;
 
                 foreach ($results as $objectId => $objectData) {
 
@@ -226,32 +186,7 @@ class ScrapCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function slugify($text, string $divider = '-')
-    {
-        // replace non letter or digits by divider
-        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = trim($text, $divider);
-
-        // remove duplicate divider
-        $text = preg_replace('~-+~', $divider, $text);
-
-        // lowercase
-        $text = strtolower($text);
-
-        if (empty($text)) {
-            return 'n-a';
-        }
-
-        return $text;
-    }
 
 
     private function handleMovie(int $objectId, array $movieData,$io)
@@ -283,16 +218,6 @@ class ScrapCommand extends Command
         $movie->setTitle($movie->getMatchName());
         $movie->setYear($movieData[ 'data' ]->getYear());
         $movie->setSlug('N/A');
-
-//        if ( !isset($movieData[ 'magnet' ]) ) {
-//            $io->title('magnet__deleting ' . $movie->getId());
-//            unset($this->objectsMap[ $movie->getId() ]);
-//            unset($this->urls[ $movie->getId() ]);
-//            $this->em->remove($movie);
-//            $this->em->flush();
-//            continue;
-//        }
-
 
         //Magnet stuff
         foreach ($movieData[ 'magnet' ] as $magnetLink) {
@@ -342,6 +267,7 @@ class ScrapCommand extends Command
         $repository = new MovieRepository($this->tmdbService->client);
         $modelMovie = $repository->load($tmdbMovie["id"]);
         $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
+
         //set tmdb id
         $movie->setTmdbId($tmdbMovie["id"]);
 
@@ -409,6 +335,33 @@ class ScrapCommand extends Command
         $perf = $this->scrapper->getPerformance();
         $perf['handle'] = microtime(true) - $start;
         $this->scrapper->setPerformance($perf);
+    }
+
+    private function slugify($text, string $divider = '-')
+    {
+        // replace non letter or digits by divider
+        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, $divider);
+
+        // remove duplicate divider
+        $text = preg_replace('~-+~', $divider, $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
     }
 }
 
