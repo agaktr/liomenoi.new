@@ -63,6 +63,14 @@ class ProviderCommand extends Command
         $hasMore = true;
         $doing = 'Movie';
 
+        $objectsLocal = $this->em->getRepository(Scrap::class)->findAll();
+
+        $objectsLocalArray = [];
+        foreach($objectsLocal as $object){
+            $objectKey = $object->getName().'-'.$object->getProvider()->getId();
+            $objectsLocalArray[$objectKey] = $object;
+        }
+
         //While we still add and not update only
         while ($hasMore) {
 
@@ -95,12 +103,12 @@ class ProviderCommand extends Command
             $added = $updated = 0;
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
-                $object = $this->em->getRepository(Scrap::class)->findOneBy(['slug' => $scrap['slug'],'provider' => $provider]);
-
-                if (!$object) {
-                    ++$added;
+                $objectKey = $scrap['title'].'-'.$provider->getId();
+                if(!isset($objectsLocalArray[$objectKey])){
                     $object = new Scrap();
                     $this->em->persist($object);
+                    $objectsLocalArray[$objectKey] = $object;
+                    ++$added;
                 }else{
                     ++$updated;
                 }
