@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\Provider;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use DateTime;
@@ -46,53 +47,59 @@ class ProviderCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->title('Starting to scrap YIFY');
+        $io->title('Starting Provider Scrapping');
 
-        $currentPage = 2240;
+        //Get Least updated provider
+        $provider = $this->em->getRepository(Provider::class)->findOneBy([],['updated' => 'ASC']);
 
-        while ($currentPage < 2500) {
-
-            $io->title('Doing page '.$currentPage.' to '.($currentPage + 5));
-
-            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
-
-                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
-            }
-            $currentPage = $currentPage + 5;
-
-            $this->scrapper->setUrls($this->urls);
-
-            $this->scrapper->initSlugs();
-
-            $added = $updated = 0;
-
-            foreach ($this->scrapper->getScrappedContent() as $scrap) {
-
-                $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
-
-
-                if (!$object) {
-                    ++$added;
-                    $object = new YifyObject();
-                    $this->em->persist($object);
-                }else{
-                    ++$updated;
-                }
-
-                $object->setTitle($scrap['title']);
-                $object->setYear($scrap['year']);
-                $object->setSlug($scrap['slug']);
-                $object->setFetched(false);
-            }
-
-            $this->em->flush();
-
-            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
-
-            $io->success($content);
-
-            unset($this->urls);
-        }
+        var_dump($provider);
+//
+//
+//        $currentPage = 2240;
+//
+//        while ($currentPage < 2500) {
+//
+//            $io->title('Doing page '.$currentPage.' to '.($currentPage + 5));
+//
+//            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
+//
+//                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
+//            }
+//            $currentPage = $currentPage + 5;
+//
+//            $this->scrapper->setUrls($this->urls);
+//
+//            $this->scrapper->initSlugs();
+//
+//            $added = $updated = 0;
+//
+//            foreach ($this->scrapper->getScrappedContent() as $scrap) {
+//
+//                $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
+//
+//
+//                if (!$object) {
+//                    ++$added;
+//                    $object = new YifyObject();
+//                    $this->em->persist($object);
+//                }else{
+//                    ++$updated;
+//                }
+//
+//                $object->setTitle($scrap['title']);
+//                $object->setYear($scrap['year']);
+//                $object->setSlug($scrap['slug']);
+//                $object->setFetched(false);
+//            }
+//
+//            $this->em->flush();
+//
+//            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
+//
+//            $io->success($content);
+//
+//            unset($this->urls);
+//        }
 
         return Command::SUCCESS;
     }
