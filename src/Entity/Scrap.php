@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ScrapRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * @ORM\Entity(repositoryClass=ScrapRepository::class)
@@ -58,10 +59,12 @@ class Scrap
      */
     private $type;
 
-//    /**
-//     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
-//     */
-//    private $movie;
+    /**
+     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
+     * @Ignore()
+     * @Ignore (groups={"scrap"})
+     */
+    private $movie;
 
     public function getId(): ?int
     {
@@ -164,15 +167,15 @@ class Scrap
         return $this;
     }
 
-//    public function getMovie(): ?Movie
-//    {
-//        return $this->movie;
-//    }
+    public function getMovie(): ?Movie
+    {
+        return $this->movie;
+    }
 
-//    public function setMovie(?Movie $movie): self
-//    {
-//        $this->movie = $movie;
-//
-//        return $this;
-//    }
+    public function setMovie(?Movie $movie): self
+    {
+        $this->movie = $movie;
+
+        return $this;
+    }
 }
