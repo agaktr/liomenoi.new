@@ -62,7 +62,7 @@ class Scrap
     /**
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
      * @Ignore()
-     * @Ignore (groups={"scrap"})
+     * @Ignore
      */
     private $movie;
 
