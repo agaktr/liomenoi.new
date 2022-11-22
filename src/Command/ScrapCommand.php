@@ -282,6 +282,7 @@ class ScrapCommand extends Command
         //general stuff
         $movie->setTitle($movie->getMatchName());
         $movie->setYear($movieData[ 'data' ]->getYear());
+        $movie->setSlug('N/A');
 
 //        if ( !isset($movieData[ 'magnet' ]) ) {
 //            $io->title('magnet__deleting ' . $movie->getId());
@@ -327,11 +328,10 @@ class ScrapCommand extends Command
         $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
 
         if (empty($tmdbMovieRes['movie_results'])){
-            $movie->setFetched(false);
-            $this->em->flush();
-
             $io->error('No TMDB for '.$imdbId);
 
+            $movie->setFetched(false);
+            $this->em->flush();
             return;
         }
         $tmdbMovie = $tmdbMovieRes["movie_results"][0];
