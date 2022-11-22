@@ -11,6 +11,7 @@ use App\Entity\Scrap;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use App\Service\TMDBService;
+use App\Service\TorrentService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ErrorException;
@@ -36,10 +37,10 @@ class TestCommand extends Command
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
-    private TMDBService $tmdbService;
+    private TorrentService $tmdbService;
 
 
-    public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService,TMDBService $tmdbService)
+    public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService,TorrentService $tmdbService)
     {
 
         $this->em = $entityManager;
@@ -65,7 +66,11 @@ class TestCommand extends Command
 
 
 
-        var_dump(file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent'));
+        $torrent = file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent');
+        $torrents = new TorrentService( $torrent );
+        var_dump($torrents->magnet());
+
+
 
         return Command::SUCCESS;
     }
