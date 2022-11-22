@@ -49,6 +49,11 @@ class Provider
      */
     private $scraps;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updated;
+
     public function __construct()
     {
         $this->scraps = new ArrayCollection();
@@ -145,6 +150,18 @@ class Provider
                 $scrap->setProvider(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUpdated(): ?\DateTimeInterface
+    {
+        return $this->updated;
+    }
+
+    public function setUpdated(\DateTimeInterface $updated): self
+    {
+        $this->updated = $updated;
 
         return $this;
     }
