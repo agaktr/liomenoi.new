@@ -199,7 +199,8 @@ class ScrapperService
             $classname="mli-info";
             $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
 
-            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
+            $year = trim($this->getStringBetween($titleElement->nodeValue, '(', ')'));
+            $title = trim($this->getStringBetween($titleElement->nodeValue, '', '('));
 
             $this->scrappedContent[] = [
                 'title' => $titleElement->nodeValue,
