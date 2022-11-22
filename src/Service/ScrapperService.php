@@ -199,12 +199,12 @@ class ScrapperService
             $classname="mli-info";
             $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
 
-            $year = trim($this->getStringBetween($titleElement->nodeValue, '(', ')'));
-            $title = trim($this->getStringBetween($titleElement->nodeValue, '', '('));
+            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
+            $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
 
             $this->scrappedContent[] = [
-                'title' => $title,
-                'year' => $year,
+                'title' => trim($title),
+                'year' => trim($year),
                 'type' => 'Movie',
                 'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
             ];
