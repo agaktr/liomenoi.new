@@ -24,6 +24,10 @@ class ScrapperService
     {
         return $this->performance;
     }
+    public function setPerformance($performance): void
+    {
+        $this->performance = $performance;
+    }
 
     /**
      * @return array

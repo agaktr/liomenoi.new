@@ -248,6 +248,9 @@ class ScrapCommand extends Command
 
     private function handleMovie(int $objectId, array $movieData,$io)
     {
+
+        $start = microtime(true);
+
         /** @var Movie $movie */
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
 
@@ -389,6 +392,10 @@ class ScrapCommand extends Command
         $movie->setFetched(true);
 
         $this->em->flush();
+
+        $perf = $this->scrapper->getPerformance();
+        $perf['handle'] = microtime(true) - $start;
+        $this->scrapper->setPerformance($perf);
     }
 }
 
