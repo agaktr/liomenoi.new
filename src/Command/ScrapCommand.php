@@ -325,6 +325,7 @@ class ScrapCommand extends Command
         if (empty($tmdbMovieRes['movie_results'])){
             $movie->setFetched(false);
             $movie->setTitle($movie->getMatchName());
+            $movie->setYear($movieData[ 'data' ]->getYear());
             $this->em->flush();
 
             $io->error('No TMDB for '.$imdbId);
