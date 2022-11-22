@@ -252,7 +252,7 @@ class ScrapCommand extends Command
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
 
         if(!isset($this->objectsLocalArray[$objectKey])){
-            $io->error(': Creating new Object ');
+            $io->info('Creating new Object');
             $movie = new Movie();
             $this->em->persist($movie);
             $this->objectsLocalArray[$objectKey] = $movie;
@@ -375,9 +375,9 @@ class ScrapCommand extends Command
                     $actor->setPoster($actorModel->getProfilePath());
                 $this->actorsLocalArray[$actorModel->getId()] = $actor;
 
-                $io->note('Added new actor '.$actorModel->getName());
+                $io->text('Added new actor '.$actorModel->getName());
             }else{
-                $io->info('Found actor '.$actorModel->getName());
+                $io->text('Found actor '.$actorModel->getName());
             }
 
             $movie->addActor($this->actorsLocalArray[$actorModel->getId()]);
