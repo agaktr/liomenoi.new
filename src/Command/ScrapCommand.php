@@ -322,14 +322,15 @@ class ScrapCommand extends Command
         //find movie from tmdb based on imdb id
         $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
 
-//        if (empty($tmdbMovieRes['movie_results'])){
-//            $movie->setFetched(false);
-//            $this->em->flush();
-//
-//            $io->error('No movie found for '.$movie->getTitle());
-//            continue;
-//        }
-        var_dump($tmdbMovieRes);
+        if (empty($tmdbMovieRes['movie_results'])){
+            $movie->setFetched(false);
+            $movie->setTitle($movie->getMatchName());
+            $this->em->flush();
+
+            $io->error('No TMDB for '.$imdbId);
+
+            return;
+        }
         $tmdbMovie = $tmdbMovieRes["movie_results"][0];
 
         //get en/gr version of movie
