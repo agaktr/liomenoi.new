@@ -99,10 +99,10 @@ class Movie
      */
     private $matchName;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Scrap::class, mappedBy="movie")
-     */
-    private $scraps;
+//    /**
+//     * @ORM\OneToMany(targetEntity=Scrap::class, mappedBy="movie")
+//     */
+//    private $scraps;
 
     public function __construct()
     {
@@ -354,24 +354,24 @@ class Movie
         return $this;
     }
 
-    /**
-     * @return Collection<int, Scrap>
-     */
-    public function getScraps(): Collection
-    {
-        return $this->scraps;
-    }
-
-    public function addScrap(Scrap $scrap): self
-    {
-        if (!$this->scraps->contains($scrap)) {
-            $this->scraps[] = $scrap;
-            $scrap->setMovie($this);
-        }
-
-        return $this;
-    }
-
+//    /**
+//     * @return Collection<int, Scrap>
+//     */
+//    public function getScraps(): Collection
+//    {
+//        return $this->scraps;
+//    }
+//
+//    public function addScrap(Scrap $scrap): self
+//    {
+//        if (!$this->scraps->contains($scrap)) {
+//            $this->scraps[] = $scrap;
+//            $scrap->setMovie($this);
+//        }
+//
+//        return $this;
+//    }
+//
 //    public function removeScrap(Scrap $scrap): self
 //    {
 //        if ($this->scraps->removeElement($scrap)) {
