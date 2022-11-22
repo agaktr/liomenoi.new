@@ -103,8 +103,8 @@ class ScrapTMDBCommand extends Command
                 /** @var \Tmdb\Model\Movie $modelMovieGr */
                 $repository = new MovieRepository($this->scrapper->client);
                 $modelMovie = $repository->load($tmdbMovie["id"]);
-                $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
                 var_dump($modelMovie->getTitle());
+                $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
                 var_dump($modelMovieGr->getTitle());
                 //set tmdb id
                 $object->setTmdbId($tmdbMovie["id"]);
