@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Provider;
+use App\Entity\Scrap;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use DateTime;
@@ -65,6 +66,7 @@ class ProviderCommand extends Command
 
             $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
 
+            $this->urls = [];
             for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
 
                 $this->urls[] =
@@ -83,40 +85,37 @@ class ProviderCommand extends Command
 
             $this->scrapper->getScraps();
 
-            var_dump($this->scrapper->getScrappedContent());
+            $added = $updated = 0;
 
-//            $this->scrapper->initSlugs();
-//
-//            $added = $updated = 0;
-//
-//            foreach ($this->scrapper->getScrappedContent() as $scrap) {
-//
-//                $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
-//
-//
-//                if (!$object) {
-//                    ++$added;
-//                    $object = new YifyObject();
-//                    $this->em->persist($object);
-//                }else{
-//                    ++$updated;
-//                }
-//
-//                $object->setTitle($scrap['title']);
-//                $object->setYear($scrap['year']);
-//                $object->setSlug($scrap['slug']);
-//                $object->setFetched(false);
-//            }
-//
-//            $this->em->flush();
-//
-//            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
-//
-//            $io->success($content);
-//
-//            unset($this->urls);
+            foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
-            $hasMore = false;
+                $object = $this->em->getRepository(Scrap::class)->findOneBy(['slug' => $scrap['slug'],'provider' => $provider]);
+
+                if (!$object) {
+                    ++$added;
+                    $object = new Scrap();
+                    $this->em->persist($object);
+                }else{
+                    ++$updated;
+                }
+
+                $object->setProvider($provider);
+                $object->setName($scrap['title']);
+                $object->setYear($scrap['year']);
+                $object->setSlug($scrap['slug']);
+                $object->setCreated(new DateTime());
+                $object->setUpdated(new DateTime());
+            }
+
+            $this->em->flush();
+
+            $content = sprintf('Provider: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
+
+            $io->success($content);
+
+            if ($added == 0) {
+                $hasMore = false;
+            }
         }
 
         return Command::SUCCESS;
