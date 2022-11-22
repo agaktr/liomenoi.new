@@ -99,11 +99,9 @@ class ProviderCommand extends Command
 
             //Scrap
             $this->scrapper->getContent();
-
-            var_dump($this->scrapper->getUrlContent());
-            die();
             $this->scrapper->getScraps();
-
+            var_dump($this->scrapper->getScrappedContent());
+            die();
 
             //Save scraps
             $added = $updated = 0;
