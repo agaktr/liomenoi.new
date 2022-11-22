@@ -64,10 +64,13 @@ class TestCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-
+        $file = './george.torrent';
 
         $torrent = file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent');
-        $torrents = new TorrentService( file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent') );
+
+        file_put_contents($file, $torrent);
+
+        $torrents = new TorrentService( $file );
         var_dump($torrents->magnet());
 
 
