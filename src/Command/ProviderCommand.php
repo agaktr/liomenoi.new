@@ -57,7 +57,7 @@ class ProviderCommand extends Command
         $io->info('Provider: '.$provider->getName());
 
         $currentPage = 1;
-        $pagesNo = 1;
+        $pagesNo = 2;
         $hasMore = true;
         $doing = 'Movie';
 
