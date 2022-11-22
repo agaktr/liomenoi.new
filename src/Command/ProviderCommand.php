@@ -19,6 +19,8 @@ class ProviderCommand extends Command
     protected static $defaultName = 'Provider';
     protected static $defaultDescription = 'This command scraps objects from YIFY so we can get the torrents.';
 
+    private array $urls = [];
+
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
 
@@ -55,16 +57,24 @@ class ProviderCommand extends Command
         $io->info('Provider: '.$provider->getName());
 
         $currentPage = 1;
+        $pagesNo = 1;
         $hasMore = true;
+        $doing = 'Movie';
 
         while ($hasMore) {
 
-            $io->text('Doing page '.$currentPage.' to '.($currentPage + 5));
+            $io->text('Doing page '.$currentPage.' to '.($currentPage + $pagesNo));
 
-//            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
-//
-//                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
-//            }
+            for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
+
+                $this->urls[] =
+                    $provider->getDomain().
+                    $provider->{'get'.$doing.'Path'}().
+                    $provider->getPageQueryString().
+                    $i;
+            }
+
+            var_dump($this->urls);
 //            $currentPage = $currentPage + 5;
 //
 //            $this->scrapper->setUrls($this->urls);
