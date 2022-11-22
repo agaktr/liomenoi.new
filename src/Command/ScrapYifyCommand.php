@@ -73,6 +73,7 @@ class ScrapYifyCommand extends Command
 
                 $object = $this->em->getRepository(YifyObject::class)->findOneBy(['slug' => $scrap['slug']]);
 
+
                 if (!$object) {
                     ++$added;
                     $object = new YifyObject();
