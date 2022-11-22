@@ -67,7 +67,7 @@ class ProviderCommand extends Command
         $objectsLocal = $this->em->getRepository(Scrap::class)->findAll();
         $objectsLocalArray = [];
         foreach($objectsLocal as $object){
-            $objectKey = $object->getName().'-'.$object->getProvider()->getId();
+            $objectKey = $object->getSlug().'-'.$object->getProvider()->getId();
             $objectsLocalArray[$objectKey] = $object;
         }
 
@@ -102,7 +102,7 @@ class ProviderCommand extends Command
             $added = $updated = 0;
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
-                $objectKey = $scrap['title'].'-'.$provider->getId();
+                $objectKey = $scrap['slug'].'-'.$provider->getId();
                 if(!isset($objectsLocalArray[$objectKey])){
                     $object = new Scrap();
                     $this->em->persist($object);
