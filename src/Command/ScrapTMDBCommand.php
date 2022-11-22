@@ -88,7 +88,7 @@ class ScrapTMDBCommand extends Command
 
                 //find movie from tmdb based on imdb id
                 $tmdbMovieRes = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
-var_dump($tmdbMovieRes);
+
                 if (empty($tmdbMovieRes['movie_results'])){
                     $object->setFetched(false);
                     $this->em->flush();
@@ -104,7 +104,8 @@ var_dump($tmdbMovieRes);
                 $repository = new MovieRepository($this->scrapper->client);
                 $modelMovie = $repository->load($tmdbMovie["id"]);
                 $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
-
+                var_dump($modelMovie->getTitle());
+                var_dump($modelMovieGr->getTitle());
                 //set tmdb id
                 $object->setTmdbId($tmdbMovie["id"]);
 
