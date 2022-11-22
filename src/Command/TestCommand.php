@@ -67,7 +67,7 @@ class TestCommand extends Command
 
 
         $torrent = file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent');
-        $torrents = new TorrentService( $torrent );
+        $torrents = new TorrentService( file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent') );
         var_dump($torrents->magnet());
 
 
