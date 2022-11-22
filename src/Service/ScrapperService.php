@@ -345,54 +345,6 @@ class ScrapperService
         }
     }
 
-    private function scrapObjects()
-    {
-
-        $start = microtime(true);
-
-        foreach ($this->urlContent as $id=>$content) {
-
-            var_dump($id);
-            var_dump($this->urls[$id]);
-
-            if ($content === '') {
-               throw new ErrorException($id);
-            }
-
-            $dom = new DomDocument();
-            @$dom->loadHTML($content);
-
-            //imdb
-//            $element = $this->getElementByClass($dom, 'rating-row',true);
-            $element = $this->getElementByTitle($dom, 'IMDb Rating',true);
-            $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
-
-            //torrents
-            $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
-
-            foreach ($torrentElements as $k=>$torrentElement) {
-
-                $tmpElFinder = new DomXPath($torrentElement);
-
-                $qualityClassname="modal-quality";
-                $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
-
-                $qualitySizeClassname="quality-size";
-                $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
-
-                $magnetClassname="magnet-download";
-                $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
-
-                $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->nodeValue);
-                $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
-                $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
-                $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
-            }
-        }
-
-        $this->performance['scrap'] = microtime(true) - $start;
-    }
-
     public function getElementByClass($dom, $classname, $single = false)
     {
         $finder = new DomXPath($dom);
@@ -421,9 +373,9 @@ class ScrapperService
         if ($single) {
             $newDom = new DomDocument();
 
-            if (null === $elements->item(0)) {
-                throw new \Exception('No rating found');
-            }
+//            if (null === $elements->item(0)) {
+//                throw new \Exception('No rating found');
+//            }
 
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
             return $newDom;
