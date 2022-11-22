@@ -108,6 +108,7 @@ class ScrapCommand extends Command
                 $this->scrapper->getContent();
                 $this->scrapper->getScraps();
 
+                var_dump($this->scrapper->getScrappedContent());
                 die();
 
                 try {

@@ -159,14 +159,14 @@ class ScrapperService
         $start = microtime(true);
 
         foreach ($this->urlContent as $id=>$content) {
-var_dump($content);
             switch ($this->provider->getName()){
 
                 case 'yts.do':
-//                    $this->YTSdoScrap($content);
+                    $this->YTSdoScrap($id,$content);
                     break;
                 case 'ytstv.me':
-//                    $this->YTSTVmeScrap($content);
+                    die('ytstv.me');
+                    $this->YTSTVmeScrap($content);
                     break;
             }
 
@@ -185,10 +185,10 @@ var_dump($content);
             switch ($this->provider->getName()){
 
                 case 'yts.do':
-                    $this->YTSdoScrap($content);
+                    $this->YTSdoScrapProvider($content);
                     break;
                 case 'ytstv.me':
-                    $this->YTSTVmeScrap($content);
+                    $this->YTSTVmeScrapProvider($content);
                     break;
             }
 
@@ -198,6 +198,46 @@ var_dump($content);
     }
 
     private function YTSTVmeScrap($content){
+
+        die('not implemented');
+
+//        $dom = new DomDocument();
+//        @$dom->loadHTML($content);
+//
+//        $finder = new DomXPath($dom);
+//        $classname="ml-item";
+//        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+//
+//        //foreach element in the node list
+//        foreach ($elements as $k=>$element) {
+//
+//            $tmpDom = new DomDocument();
+//            $tmpDom->appendChild($tmpDom->importNode($element, true));
+//            $tmpFinder = new DomXPath($tmpDom);
+//
+//            $classname="ml-mask";
+//            $linkElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+//
+//            $classname="mli-info";
+//            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+//
+//            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
+//            $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
+//
+//            if ($this->doing === 'Serie'){
+//                $year = str_replace('TV Series', '', $year);
+//            }
+//
+//            $this->scrappedContent[] = [
+//                'title' => trim($title),
+//                'year' => trim($year),
+//                'type' => $this->doing,
+//                'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
+//            ];
+//        }
+    }
+
+    private function YTSTVmeScrapProvider($content){
 
         $dom = new DomDocument();
         @$dom->loadHTML($content);
@@ -235,7 +275,39 @@ var_dump($content);
         }
     }
 
-    private function YTSdoScrap($content){
+    private function YTSdoScrap($id,$content){
+
+        $dom = new DomDocument();
+        @$dom->loadHTML($content);
+
+        //imdb
+        $element = $this->getElementByTitle($dom, 'IMDb Rating',true);
+        $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
+
+        //torrents
+        $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
+
+        foreach ($torrentElements as $k=>$torrentElement) {
+
+            $tmpElFinder = new DomXPath($torrentElement);
+
+            $qualityClassname="modal-quality";
+            $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
+
+            $qualitySizeClassname="quality-size";
+            $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
+
+            $magnetClassname="magnet-download";
+            $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
+
+            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
+        }
+    }
+
+    private function YTSdoScrapProvider($content){
 
         $dom = new DomDocument();
         @$dom->loadHTML($content);
@@ -271,8 +343,6 @@ var_dump($content);
 
         $start = microtime(true);
 
-//
-//die();
         foreach ($this->urlContent as $id=>$content) {
 
             var_dump($id);
@@ -287,7 +357,7 @@ var_dump($content);
 
             //imdb
 //            $element = $this->getElementByClass($dom, 'rating-row',true);
-            $element = $this->getRating($dom, 'IMDb Rating',true);
+            $element = $this->getElementByTitle($dom, 'IMDb Rating',true);
             $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
             //torrents
@@ -295,8 +365,6 @@ var_dump($content);
 
             foreach ($torrentElements as $k=>$torrentElement) {
 
-//                $tmpElDom = new DomDocument();
-//                $tmpElDom->appendChild($tmpElDom->importNode($torrentElement, true));
                 $tmpElFinder = new DomXPath($torrentElement);
 
                 $qualityClassname="modal-quality";
@@ -312,7 +380,6 @@ var_dump($content);
                 $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
                 $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
                 $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
-//                var_dump($this->scrappedContent[$id]);
             }
         }
 
@@ -339,7 +406,7 @@ var_dump($content);
         return $return;
     }
 
-    public function getRating($dom, $titleName, $single = false)
+    public function getElementByTitle($dom, $titleName, $single = false)
     {
         $finder = new DomXPath($dom);
         $elements = $finder->query("//*[contains(concat(' ', normalize-space(@title), ' '), ' $titleName ')]");
