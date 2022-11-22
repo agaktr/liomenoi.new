@@ -55,102 +55,105 @@ class ProviderCommand extends Command
 
         $io->title('Starting Movie Provider Scrapping');
 
-        //Get Least updated provider
-        $provider = $this->em->getRepository(Provider::class)->findOneBy([],['updated' => 'ASC']);
+        //Get providers
+        $providers = $this->em->getRepository(Provider::class)->findAll();
+        foreach ($providers as $provider){
 
-        $io->info('Provider: '.$provider->getName());
+            $io->info('Provider: '.$provider->getName());
 
-        //init variables
-        $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
-        $pagesNo = 1;
-        $hasMore = true;
-        $doing = 'Movie';
+            //init variables
+            $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
+            $pagesNo = 1;
+            $hasMore = true;
+            $doing = 'Movie';
 
-        //get local scrap
-        $objectsLocal = $this->em->getRepository(Scrap::class)->findBy(['provider' => $provider]);
-        $objectsLocalArray = [];
-        foreach($objectsLocal as $object){
-            $objectKey = $object->getSlug().'-'.$object->getProvider()->getId();
-            $objectsLocalArray[$objectKey] = $object;
-        }
-
-        //While we still add and not update only
-        while ($hasMore) {
-
-            $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
-
-            //Setup pages to scrap
-            $this->urls = [];
-
-            for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
-
-                $this->urls[] =
-                    $provider->getDomain().
-                    $provider->{'get'.$doing.'Path'}().
-                    $provider->getPageQueryString().
-                    $i;
+            //get local scrap
+            $objectsLocal = $this->em->getRepository(Scrap::class)->findBy(['provider' => $provider]);
+            $objectsLocalArray = [];
+            foreach($objectsLocal as $object){
+                $objectKey = $object->getSlug().'-'.$object->getProvider()->getId();
+                $objectsLocalArray[$objectKey] = $object;
             }
-            $currentPage = $currentPage + $pagesNo;
 
-            //Init scrapper
-            $this->scrapper->setUrls($this->urls);
-            $this->scrapper->setProvider($provider);
-            $this->scrapper->setDoing($doing);
+            //While we still add and not update only
+            while ($hasMore) {
 
-            //Scrap
-            $this->scrapper->getContent();
-            $this->scrapper->getScraps();
+                $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
 
-            //Save scraps
-            $added = $updated = 0;
-            foreach ($this->scrapper->getScrappedContent() as $scrap) {
+                //Setup pages to scrap
+                $this->urls = [];
 
-                $objectKey = $scrap['slug'].'-'.$provider->getId();
-                if(!isset($objectsLocalArray[$objectKey])){
-                    $object = new Scrap();
-                    $this->em->persist($object);
-                    $objectsLocalArray[$objectKey] = $object;
-                    ++$added;
-                }else{
-                    $object = $objectsLocalArray[$objectKey];
-                    ++$updated;
+                for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
+
+                    $this->urls[] =
+                        $provider->getDomain().
+                        $provider->{'get'.$doing.'Path'}().
+                        $provider->getPageQueryString().
+                        $i;
+                }
+                $currentPage = $currentPage + $pagesNo;
+
+                //Init scrapper
+                $this->scrapper->setUrls($this->urls);
+                $this->scrapper->setProvider($provider);
+                $this->scrapper->setDoing($doing);
+
+                //Scrap
+                $this->scrapper->getContent();
+                $this->scrapper->getScraps();
+
+                //Save scraps
+                $added = $updated = 0;
+                foreach ($this->scrapper->getScrappedContent() as $scrap) {
+
+                    $objectKey = $scrap['slug'].'-'.$provider->getId();
+                    if(!isset($objectsLocalArray[$objectKey])){
+                        $object = new Scrap();
+                        $this->em->persist($object);
+                        $objectsLocalArray[$objectKey] = $object;
+                        ++$added;
+                    }else{
+                        $object = $objectsLocalArray[$objectKey];
+                        ++$updated;
+                    }
+
+                    $object->setProvider($provider);
+                    $object->setName($scrap['title']);
+                    $object->setYear($scrap['year']);
+                    $object->setSlug($scrap['slug']);
+                    $object->setType($scrap['type']);
+                    $object->setCreated(new DateTime());
+                    $object->setUpdated(new DateTime());
                 }
 
-                $object->setProvider($provider);
-                $object->setName($scrap['title']);
-                $object->setYear($scrap['year']);
-                $object->setSlug($scrap['slug']);
-                $object->setType($scrap['type']);
-                $object->setCreated(new DateTime());
-                $object->setUpdated(new DateTime());
+                //flush each scrap
+                $this->em->flush();
+
+                $content = sprintf('Provider: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
+
+                $io->success($content);
+
+                //If we did not add anything
+                // Check if we did TV and then
+                // we are done
+                if ($added == 0) {
+
+                    $hasMore = false;
+                    if ($doing === 'Movie' && $provider->getSeriePath()){
+
+                        $io->title('Starting Serie Provider Scrapping');
+                        $doing = 'Serie';
+                        $hasMore = true;
+                        $currentPage = 1;
+                    }
+                }
             }
 
-            //flush each scrap
+            //Update provider
+            $provider->setUpdated(new DateTime());
             $this->em->flush();
 
-            $content = sprintf('Provider: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
-
-            $io->success($content);
-
-            //If we did not add anything
-            // Check if we did TV and then
-            // we are done
-            if ($added == 0) {
-
-                $hasMore = false;
-                if ($doing === 'Movie' && $provider->getSeriePath()){
-
-                    $io->title('Starting Serie Provider Scrapping');
-                    $doing = 'Serie';
-                    $hasMore = true;
-                    $currentPage = 1;
-                }
-            }
         }
-
-        //Update provider
-        $provider->setUpdated(new DateTime());
-        $this->em->flush();
 
         return Command::SUCCESS;
     }
