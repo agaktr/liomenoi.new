@@ -24,6 +24,7 @@ class ScrapCommand extends Command
     protected static $defaultDescription = 'This command scraps objects from YIFY so we can get the torrents.';
 
     private array $urls = [];
+    private array $objectsMap = [];
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
@@ -72,7 +73,7 @@ class ScrapCommand extends Command
 
                 $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , 0);
 
-                $objectsMap = [];
+                $this->objectsMap = [];
                 $this->urls = [];
                 foreach ($objects as $object) {
 
@@ -93,11 +94,11 @@ class ScrapCommand extends Command
 //                    continue;
 //                }
 
-                    $objectsMap[ $object->getId() ] = $object;
+                    $this->objectsMap[ $object->getId() ] = $object;
                     $this->urls[ $object->getId() ] = substr($object->getProvider()->getDomain() , 0 , -1) . $object->getSlug();
                 }
 
-                $io->text('Doing ids '.json_encode(array_keys($objectsMap)));
+                $io->text('Doing ids '.json_encode(array_keys($this->objectsMap)));
 
                 //Init scrapper
                 $this->scrapper->setUrls($this->urls);
@@ -108,84 +109,46 @@ class ScrapCommand extends Command
                 $this->scrapper->getContent();
                 $this->scrapper->getScraps();
 
-                var_dump($this->scrapper->getScrappedContent());
-                die();
 
-                try {
-                    $this->scrapper->initObjects();
-                } catch (ErrorException $e) {
 
-                    $io->title('deleting ' . $e->getMessage());
-                    unset($objectsMap[ $e->getMessage() ]);
-                    unset($this->urls[ $e->getMessage() ]);
-                    $this->em->remove($objectsMap[ $e->getMessage() ]);
-                    $this->em->flush();
-                    continue;
-                } catch (\Exception $e) {
-                    $io->title('retry ' . $currentPage);
-                    continue;
-                }
+//                var_dump($this->scrapper->getScrappedContent());
+//                die();
+//
+//                try {
+//                    $this->scrapper->initObjects();
+//                } catch (ErrorException $e) {
+//
+//                    $io->title('deleting ' . $e->getMessage());
+//                    unset($this->objectsMap[ $e->getMessage() ]);
+//                    unset($this->urls[ $e->getMessage() ]);
+//                    $this->em->remove($this->objectsMap[ $e->getMessage() ]);
+//                    $this->em->flush();
+//                    continue;
+//                } catch (\Exception $e) {
+//                    $io->title('retry ' . $currentPage);
+//                    continue;
+//                }
 
 
                 $results = $this->scrapper->getScrappedContent();
-
                 foreach ($results as $id => $content) {
 
-                    $results[ $id ][ 'data' ] = $objectsMap[ $id ];
-
+                    $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
                 }
 
-                $added = $updated = 0;
-                $addedMagnet = $updatedMagnet = 0;
+//                $added = $updated = 0;
+//                $addedMagnet = $updatedMagnet = 0;
 
-                foreach ($results as $objectId => $movieData) {
+                foreach ($results as $objectId => $objectData) {
 
-                    /** @var Movie $movie */
-                    $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData[ 'data' ]->getSlug()]);
-
-                    if ( !$movie ) {
-                        ++$added;
-                        $movie = new Movie();
-                        $this->em->persist($movie);
-                    } else {
-                        ++$updated;
+                    switch ($doing) {
+                        case 'Movie':
+                            $this->handleMovie($objectId,$objectData);
+                            break;
+                        case 'Serie':
+                            die();
+                            break;
                     }
-
-                    $movie->setImdb($movieData[ 'imdb' ]);
-                    $movie->setSlug($movieData[ 'data' ]->getSlug());
-                    $movie->setTitle($movieData[ 'data' ]->getTitle());
-                    $movie->setYear($movieData[ 'data' ]->getYear());
-
-                    if ( !isset($movieData[ 'magnet' ]) ) {
-                        $io->title('magnet__deleting ' . $movie->getId());
-                        unset($objectsMap[ $movie->getId() ]);
-                        unset($this->urls[ $movie->getId() ]);
-                        $this->em->remove($movie);
-                        $this->em->flush();
-                        continue;
-                    }
-
-                    foreach ($movieData[ 'magnet' ] as $magnetLink) {
-
-                        /** @var Magnet $magnet */
-                        $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink[ 'magnet' ]]);
-
-                        if ( !$magnet ) {
-                            ++$addedMagnet;
-                            $magnet = new Magnet();
-                            $this->em->persist($magnet);
-                        } else {
-                            ++$updatedMagnet;
-                        }
-
-                        $magnet->setType($magnetLink[ 'type' ]);
-                        $magnet->setQuality($magnetLink[ 'quality' ]);
-                        $magnet->setSize($magnetLink[ 'size' ]);
-                        $magnet->setMagnet($magnetLink[ 'magnet' ]);
-                        $magnet->setMovie($movie);
-                    }
-
-                    $objectsMap[ $objectId ]->setFetched(true);
                 }
 
                 $this->em->flush();
@@ -199,6 +162,59 @@ class ScrapCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function handleMovie(int $objectId, array $movieData)
+    {
+        /** @var Movie $movie */
+        $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData[ 'data' ]->getSlug()]);
+
+        var_dump($movieData);
+        die();
+
+        if ( !$movie ) {
+//            ++$added;
+            $movie = new Movie();
+            $this->em->persist($movie);
+        } else {
+//            ++$updated;
+        }
+
+        $movie->setImdb($movieData[ 'imdb' ]);
+        $movie->setSlug($movieData[ 'data' ]->getSlug());
+        $movie->setTitle($movieData[ 'data' ]->getTitle());
+        $movie->setYear($movieData[ 'data' ]->getYear());
+
+//        if ( !isset($movieData[ 'magnet' ]) ) {
+//            $io->title('magnet__deleting ' . $movie->getId());
+//            unset($this->objectsMap[ $movie->getId() ]);
+//            unset($this->urls[ $movie->getId() ]);
+//            $this->em->remove($movie);
+//            $this->em->flush();
+//            continue;
+//        }
+
+        foreach ($movieData[ 'magnet' ] as $magnetLink) {
+
+            /** @var Magnet $magnet */
+            $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink[ 'magnet' ]]);
+
+            if ( !$magnet ) {
+                ++$addedMagnet;
+                $magnet = new Magnet();
+                $this->em->persist($magnet);
+            } else {
+                ++$updatedMagnet;
+            }
+
+            $magnet->setType($magnetLink[ 'type' ]);
+            $magnet->setQuality($magnetLink[ 'quality' ]);
+            $magnet->setSize($magnetLink[ 'size' ]);
+            $magnet->setMagnet($magnetLink[ 'magnet' ]);
+            $magnet->setMovie($movie);
+        }
+
+        $this->objectsMap[ $objectId ]->setValid(true);
     }
 }
 

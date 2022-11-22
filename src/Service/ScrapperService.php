@@ -284,6 +284,9 @@ class ScrapperService
         $element = $this->getElementByTitle($dom, 'IMDb Rating',true);
         $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
 
+        //type
+        $this->scrappedContent[$id]['type'] = $this->doing;
+
         //torrents
         $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
 
