@@ -12,7 +12,7 @@ class ScrapperService
 
     private array $urls;
     private array $urlContent = [];
-    private array $scrappedContent;
+    private ?array $scrappedContent = [];
     private array $performance = [];
     private string $doing = 'Movie';
     private Provider $provider;
