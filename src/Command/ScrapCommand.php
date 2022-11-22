@@ -103,8 +103,9 @@ class ScrapCommand extends Command
                     foreach($objectsLocal as $object){
                         $objectKey = $object->getMatchName().'-'.$object->getYear();
                         $this->objectsLocalArray[$objectKey] = $object;
-                        var_dump($objectKey);
+
                     }
+                    var_dump(array_keys($this->objectsLocalArray));
                     unset($objectsLocal);
 
                     //get local magnets
