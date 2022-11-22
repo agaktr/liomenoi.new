@@ -90,7 +90,7 @@ class ProviderCommand extends Command
                     $provider->getPageQueryString().
                     $i;
             }
-
+var_dump($this->urls);
             $currentPage = $currentPage + $pagesNo;
 
             //Init scrapper
@@ -100,31 +100,31 @@ class ProviderCommand extends Command
 
             //Scrap
             $this->scrapper->getContent();
-            $this->scrapper->getScraps();
-
-
-            //Save scraps
-            $added = $updated = 0;
-            foreach ($this->scrapper->getScrappedContent() as $scrap) {
-
-                $objectKey = $scrap['slug'].'-'.$provider->getId();
-                if(!isset($objectsLocalArray[$objectKey])){
-                    $object = new Scrap();
-                    $this->em->persist($object);
-                    $objectsLocalArray[$objectKey] = $object;
-                    ++$added;
-                }else{
-                    $object = $objectsLocalArray[$objectKey];
-                    ++$updated;
-                }
-
-                $object->setProvider($provider);
-                $object->setName($scrap['title']);
-                $object->setYear($scrap['year']);
-                $object->setSlug($scrap['slug']);
-                $object->setCreated(new DateTime());
-                $object->setUpdated(new DateTime());
-            }
+//            $this->scrapper->getScraps();
+//
+//
+//            //Save scraps
+//            $added = $updated = 0;
+//            foreach ($this->scrapper->getScrappedContent() as $scrap) {
+//
+//                $objectKey = $scrap['slug'].'-'.$provider->getId();
+//                if(!isset($objectsLocalArray[$objectKey])){
+//                    $object = new Scrap();
+//                    $this->em->persist($object);
+//                    $objectsLocalArray[$objectKey] = $object;
+//                    ++$added;
+//                }else{
+//                    $object = $objectsLocalArray[$objectKey];
+//                    ++$updated;
+//                }
+//
+//                $object->setProvider($provider);
+//                $object->setName($scrap['title']);
+//                $object->setYear($scrap['year']);
+//                $object->setSlug($scrap['slug']);
+//                $object->setCreated(new DateTime());
+//                $object->setUpdated(new DateTime());
+//            }
 
             //flush each scrap
             $this->em->flush();
