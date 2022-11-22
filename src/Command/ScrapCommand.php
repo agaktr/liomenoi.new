@@ -101,8 +101,12 @@ class ScrapCommand extends Command
 
                 //Init scrapper
                 $this->scrapper->setUrls($this->urls);
-                $this->scrapper->setProvider($object->getProvider());
+                $this->scrapper->setProvider($provider);
                 $this->scrapper->setDoing($doing);
+
+                //Scrap
+                $this->scrapper->getContent();
+                $this->scrapper->getScraps();
 
                 die();
 

@@ -84,6 +84,12 @@ class ScrapperService
         $this->scrap();
     }
 
+    public function getProviderScraps()
+    {
+        $this->scrappedContent = [];
+        $this->providerScrap();
+    }
+
     /**
      * @return string
      */
@@ -148,6 +154,28 @@ class ScrapperService
     }
 
     private function scrap()
+    {
+
+        $start = microtime(true);
+
+        foreach ($this->urlContent as $id=>$content) {
+var_dump($content);
+            switch ($this->provider->getName()){
+
+                case 'yts.do':
+//                    $this->YTSdoScrap($content);
+                    break;
+                case 'ytstv.me':
+//                    $this->YTSTVmeScrap($content);
+                    break;
+            }
+
+        }
+
+        $this->performance['scrap'] = microtime(true) - $start;
+    }
+
+    private function providerScrap()
     {
 
         $start = microtime(true);

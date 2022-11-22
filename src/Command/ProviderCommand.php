@@ -98,7 +98,7 @@ class ProviderCommand extends Command
 
                 //Scrap
                 $this->scrapper->getContent();
-                $this->scrapper->getScraps();
+                $this->scrapper->getProviderScraps();
 
                 //Save scraps
                 $added = $updated = 0;
