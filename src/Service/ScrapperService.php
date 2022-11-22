@@ -64,7 +64,13 @@ class ScrapperService
         return $this->urlContent;
     }
 
-
+    /**
+     * @return array
+     */
+    public function getScrappedContent(): array
+    {
+        return $this->scrappedContent;
+    }
 
     public function getContent()
     {
@@ -92,14 +98,6 @@ class ScrapperService
     public function setDoing(string $doing): void
     {
         $this->doing = $doing;
-    }
-
-    /**
-     * @return array
-     */
-    public function getScrappedContent(): array
-    {
-        return $this->scrappedContent;
     }
 
     public function initSlugs()
