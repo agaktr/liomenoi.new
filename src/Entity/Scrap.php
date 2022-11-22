@@ -169,10 +169,10 @@ class Scrap
 //        return $this->movie;
 //    }
 
-    public function setMovie(?Movie $movie): self
-    {
-        $this->movie = $movie;
-
-        return $this;
-    }
+//    public function setMovie(?Movie $movie): self
+//    {
+//        $this->movie = $movie;
+//
+//        return $this;
+//    }
 }
