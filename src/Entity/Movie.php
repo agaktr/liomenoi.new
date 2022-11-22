@@ -94,11 +94,22 @@ class Movie
      */
     private $actors;
 
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $matchName;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Scrap::class, mappedBy="movie")
+     */
+    private $scraps;
+
     public function __construct()
     {
         $this->magnets = new ArrayCollection();
         $this->categories = new ArrayCollection();
         $this->actors = new ArrayCollection();
+        $this->scraps = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -326,6 +337,48 @@ class Movie
     {
         if ($this->actors->removeElement($actor)) {
             $actor->removeMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function getMatchName(): ?string
+    {
+        return $this->matchName;
+    }
+
+    public function setMatchName(string $matchName): self
+    {
+        $this->matchName = $matchName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Scrap>
+     */
+    public function getScraps(): Collection
+    {
+        return $this->scraps;
+    }
+
+    public function addScrap(Scrap $scrap): self
+    {
+        if (!$this->scraps->contains($scrap)) {
+            $this->scraps[] = $scrap;
+            $scrap->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScrap(Scrap $scrap): self
+    {
+        if ($this->scraps->removeElement($scrap)) {
+            // set the owning side to null (unless already changed)
+            if ($scrap->getMovie() === $this) {
+                $scrap->setMovie(null);
+            }
         }
 
         return $this;

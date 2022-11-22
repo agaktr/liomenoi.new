@@ -167,10 +167,14 @@ class ScrapCommand extends Command
     private function handleMovie(int $objectId, array $movieData)
     {
         /** @var Movie $movie */
-        $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData[ 'data' ]->getSlug()]);
+        $movie = $this->em->getRepository(Movie::class)->findOneBy(
+            [
+                'matchName' => $movieData[ 'data' ]->getName(),
+                'year'=>$movieData[ 'data' ]->getYear()
+            ]);
 
-        var_dump($movieData);
-        die();
+        var_dump($movieData[ 'data' ]->getSlug());
+//        d
 
         if ( !$movie ) {
 //            ++$added;
@@ -182,7 +186,7 @@ class ScrapCommand extends Command
 
         $movie->setImdb($movieData[ 'imdb' ]);
         $movie->setSlug($movieData[ 'data' ]->getSlug());
-        $movie->setTitle($movieData[ 'data' ]->getTitle());
+        $movie->setTitle($movieData[ 'data' ]->getName());
         $movie->setYear($movieData[ 'data' ]->getYear());
 
 //        if ( !isset($movieData[ 'magnet' ]) ) {

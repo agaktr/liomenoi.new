@@ -58,6 +58,11 @@ class Scrap
      */
     private $type;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
+     */
+    private $movie;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -155,6 +160,18 @@ class Scrap
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getMovie(): ?Movie
+    {
+        return $this->movie;
+    }
+
+    public function setMovie(?Movie $movie): self
+    {
+        $this->movie = $movie;
 
         return $this;
     }
