@@ -30,7 +30,7 @@ class ProviderCommand extends Command
     {
 
         $this->em = $entityManager;
-//        $this->scrapper = $scrapperService;
+        $this->scrapper = $scrapperService;
 
         parent::__construct();
     }
@@ -63,8 +63,8 @@ class ProviderCommand extends Command
         $hasMore = true;
         $doing = 'Movie';
 
+        //get local scrap
         $objectsLocal = $this->em->getRepository(Scrap::class)->findAll();
-
         $objectsLocalArray = [];
         foreach($objectsLocal as $object){
             $objectKey = $object->getName().'-'.$object->getProvider()->getId();
@@ -77,7 +77,6 @@ class ProviderCommand extends Command
             $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
 
             //Setup pages to scrap
-            $this->scrapper = new ScrapperService();
             $this->urls = [];
 
             for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
