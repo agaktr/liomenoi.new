@@ -52,7 +52,7 @@ class ProviderCommand extends Command
         //Get Least updated provider
         $provider = $this->em->getRepository(Provider::class)->findOneBy([],['updated' => 'ASC']);
 
-        var_dump($provider);
+        var_dump($provider->getName());
 //
 //
 //        $currentPage = 2240;
