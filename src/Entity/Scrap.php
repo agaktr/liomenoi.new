@@ -61,8 +61,6 @@ class Scrap
 
     /**
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
-     * @Ignore()
-     * @Ignore
      */
     private $movie;
 
