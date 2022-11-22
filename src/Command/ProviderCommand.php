@@ -62,7 +62,7 @@ class ProviderCommand extends Command
 
         //init variables
         $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
-        $pagesNo = 5;
+        $pagesNo = 1;
         $hasMore = true;
         $doing = 'Movie';
 
@@ -90,6 +90,7 @@ class ProviderCommand extends Command
                     $provider->getPageQueryString().
                     $i;
             }
+
             $currentPage = $currentPage + $pagesNo;
 
             //Init scrapper
@@ -139,7 +140,7 @@ class ProviderCommand extends Command
         }
 
         //Update provider
-        $provider->setUpdated(new DateTime());
+//        $provider->setUpdated(new DateTime());
         $this->em->flush();
 
         return Command::SUCCESS;
