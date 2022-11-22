@@ -42,7 +42,7 @@ class ProviderCommand extends Command
         $this
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
-//            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addOption('page', null, InputOption::VALUE_NONE, 'the page to start from')
         ;
     }
 
@@ -57,15 +57,18 @@ class ProviderCommand extends Command
 
         $io->info('Provider: '.$provider->getName());
 
-        $currentPage = 1;
+        //init variables
+        $currentPage = $input->getOption('page') ?? 1;
         $pagesNo = 5;
         $hasMore = true;
         $doing = 'Movie';
 
+        //While we still add and not update only
         while ($hasMore) {
 
             $io->text('Doing page '.$currentPage.' to '.($currentPage + ($pagesNo - 1)));
 
+            //Setup pages to scrap
             $this->urls = [];
             for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
 
@@ -77,13 +80,16 @@ class ProviderCommand extends Command
             }
             $currentPage = $currentPage + $pagesNo;
 
+            //Init scrapper
             $this->scrapper->setUrls($this->urls);
             $this->scrapper->setProvider($provider);
             $this->scrapper->setDoing($doing);
 
+            //Scrap
             $this->scrapper->getContent();
             $this->scrapper->getScraps();
 
+            //Save scraps
             $added = $updated = 0;
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
@@ -105,16 +111,22 @@ class ProviderCommand extends Command
                 $object->setUpdated(new DateTime());
             }
 
+            //flush each scrap
             $this->em->flush();
 
             $content = sprintf('Provider: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
 
             $io->success($content);
 
+            //If we did not add anything we are done
             if ($added == 0) {
                 $hasMore = false;
             }
         }
+
+        //Update provider
+        $provider->setUpdated(new DateTime());
+        $this->em->flush();
 
         return Command::SUCCESS;
     }
