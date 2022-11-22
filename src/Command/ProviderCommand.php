@@ -53,7 +53,7 @@ class ProviderCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
 
-        $io->title('Starting Provider Scrapping');
+        $io->title('Starting Movie Provider Scrapping');
 
         //Get Least updated provider
         $provider = $this->em->getRepository(Provider::class)->findOneBy([],['updated' => 'ASC']);
@@ -132,9 +132,19 @@ class ProviderCommand extends Command
 
             $io->success($content);
 
-            //If we did not add anything we are done
+            //If we did not add anything
+            // Check if we did TV and then
+            // we are done
             if ($added == 0) {
+
                 $hasMore = false;
+                if ($doing === 'Movie' && $provider->getSeriePath()){
+
+                    $io->title('Starting Serie Provider Scrapping');
+                    $doing = 'Serie';
+                    $hasMore = true;
+                    $currentPage = 1;
+                }
             }
         }
 
