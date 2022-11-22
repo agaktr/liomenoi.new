@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Provider;
 use DOMDocument;
 use DOMXPath;
 use ErrorException;
@@ -13,6 +14,8 @@ class ScrapperService
     private array $urlContent = [];
     private array $scrappedContent = [];
     private array $performance = [];
+    private string $doing = 'Movie';
+    private Provider $provider;
 
     /**
      * @return array
@@ -38,6 +41,22 @@ class ScrapperService
     }
 
     /**
+     * @return Provider
+     */
+    public function getProvider(): Provider
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param Provider $provider
+     */
+    public function setProvider(Provider $provider): void
+    {
+        $this->provider = $provider;
+    }
+
+    /**
      * @return array
      */
     public function getUrlContent(): array
@@ -57,6 +76,28 @@ class ScrapperService
     {
         unset($this->urlContent);
         $this->get();
+    }
+
+    public function getScraps()
+    {
+        unset($this->scrappedContent);
+        $this->scrap();
+    }
+
+    /**
+     * @return string
+     */
+    public function getDoing(): string
+    {
+        return $this->doing;
+    }
+
+    /**
+     * @param string $doing
+     */
+    public function setDoing(string $doing): void
+    {
+        $this->doing = $doing;
     }
 
     public function initSlugs()
@@ -112,6 +153,55 @@ class ScrapperService
         curl_multi_close($mh);
 
         $this->performance['curl'] = microtime(true) - $start;
+    }
+
+    private function scrap()
+    {
+
+        $start = microtime(true);
+
+        foreach ($this->urlContent as $id=>$content) {
+
+            switch ($this->provider->getName()){
+
+                case 'yts.do':
+                    $this->YTSdoScrap($content);
+                    break;
+            }
+
+        }
+
+        $this->performance['scrap'] = microtime(true) - $start;
+    }
+
+    private function YTSdoScrap($content){
+
+        $dom = new DomDocument();
+        @$dom->loadHTML($content);
+
+        $finder = new DomXPath($dom);
+        $classname="browse-movie-bottom";
+        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+
+        //foreach element in the node list
+        foreach ($elements as $k=>$element) {
+
+            $tmpDom = new DomDocument();
+            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            $tmpFinder = new DomXPath($tmpDom);
+
+            $titleClassname="browse-movie-title";
+            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $titleClassname ')]")->item(0);
+
+            $yearClassname="browse-movie-year";
+            $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
+
+            $this->scrappedContent[] = [
+                'title' => $titleElement->nodeValue,
+                'year' => $yearElement->nodeValue,
+                'slug' => $titleElement->getAttribute('href'),
+            ];
+        }
     }
 
     private function scrapSlugs()
@@ -252,4 +342,8 @@ class ScrapperService
 
         return $return;
     }
+
+
+
+
 }

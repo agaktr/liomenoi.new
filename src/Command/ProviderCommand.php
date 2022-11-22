@@ -76,10 +76,14 @@ class ProviderCommand extends Command
             $currentPage = $currentPage + $pagesNo;
 
             $this->scrapper->setUrls($this->urls);
+            $this->scrapper->setProvider($provider);
+            $this->scrapper->setDoing($doing);
 
             $this->scrapper->getContent();
 
-            var_dump($this->scrapper->getUrlContent());
+            $this->scrapper->getScraps();
+
+            var_dump($this->scrapper->getScrappedContent());
 
 //            $this->scrapper->initSlugs();
 //
