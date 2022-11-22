@@ -94,7 +94,7 @@ class ScrapCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 2;
+            $pagesNo = 1;
             $doing = 'Movie';
 
             switch ($doing) {
@@ -154,6 +154,8 @@ class ScrapCommand extends Command
 
                     $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
                 }
+
+                var_dump($this->urls);
 
                 foreach ($results as $objectId => $objectData) {
 
