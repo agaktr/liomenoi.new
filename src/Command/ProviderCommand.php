@@ -70,6 +70,7 @@ class ProviderCommand extends Command
 
             //Setup pages to scrap
             $this->urls = [];
+
             for ($i = $currentPage; $i < $currentPage + $pagesNo; $i++) {
 
                 $this->urls[] =
