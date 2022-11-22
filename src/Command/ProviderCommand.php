@@ -104,6 +104,7 @@ class ProviderCommand extends Command
 
                 $objectKey = $scrap['slug'].'-'.$provider->getId();
                 var_dump($objectKey);
+                var_dump(isset($objectsLocalArray[$objectKey]));
                 if(!isset($objectsLocalArray[$objectKey])){
                     $object = new Scrap();
                     $this->em->persist($object);
