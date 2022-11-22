@@ -58,7 +58,6 @@ class ProviderCommand extends Command
         $io->info('Provider: '.$provider->getName());
 
         //init variables
-        var_dump($input->getOption('page'));
         $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
         $pagesNo = 5;
         $hasMore = true;
