@@ -53,6 +53,11 @@ class Scrap
      */
     private $provider;
 
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class Scrap
     public function setProvider(?Provider $provider): self
     {
         $this->provider = $provider;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }
