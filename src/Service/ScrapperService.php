@@ -53,6 +53,12 @@ class ScrapperService
         return $this->scrappedContent;
     }
 
+    public function getContent()
+    {
+        unset($this->urlContent);
+        $this->get();
+    }
+
     public function initSlugs()
     {
         unset($this->urlContent);

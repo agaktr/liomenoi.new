@@ -73,12 +73,14 @@ class ProviderCommand extends Command
                     $provider->getPageQueryString().
                     $i;
             }
+            $currentPage = $currentPage + $pagesNo;
 
-            var_dump($this->urls);
-//            $currentPage = $currentPage + 5;
-//
-//            $this->scrapper->setUrls($this->urls);
-//
+            $this->scrapper->setUrls($this->urls);
+
+            $this->scrapper->getContent();
+
+            var_dump($this->scrapper->getUrlContent());
+
 //            $this->scrapper->initSlugs();
 //
 //            $added = $updated = 0;
