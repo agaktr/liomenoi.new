@@ -199,6 +199,7 @@ class ScrapperService
             $this->scrappedContent[] = [
                 'title' => $titleElement->nodeValue,
                 'year' => $yearElement->nodeValue,
+                'type' => 'Movie',
                 'slug' => $titleElement->getAttribute('href'),
             ];
         }
