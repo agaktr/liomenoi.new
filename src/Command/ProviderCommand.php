@@ -42,7 +42,7 @@ class ProviderCommand extends Command
         $this
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
-            ->addOption('page', null, InputOption::VALUE_OPTIONAL, 'the page to start from')
+            ->addOption('page', null, InputOption::VALUE_REQUIRED, 'the page to start from')
         ;
     }
 
