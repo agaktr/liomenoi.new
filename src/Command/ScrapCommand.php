@@ -216,6 +216,14 @@ class ScrapCommand extends Command
         $movie->setYear($movieData[ 'data' ]->getYear());
         $movie->setSlug('N/A');
 
+        if ( !isset($movieData[ 'magnet' ]) ) {
+            $io->error('No Magnets for '.$movie->getMatchName());
+            $movie->setFetched(false);
+            $this->objectsMap[ $movie->getId() ]->setValid(false);
+            $this->em->flush();
+            return;
+        }
+
         //Magnet stuff
         foreach ($movieData[ 'magnet' ] as $magnetLink) {
 

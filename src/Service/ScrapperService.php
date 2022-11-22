@@ -293,8 +293,6 @@ class ScrapperService
             $this->scrappedContent[$id]['imdb'] = null;
         }
 
-
-
         //type
         $this->scrappedContent[$id]['type'] = $this->doing;
 
