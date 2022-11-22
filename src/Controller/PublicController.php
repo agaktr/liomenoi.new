@@ -33,9 +33,9 @@ class PublicController extends AptoAbstractController
 
 var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
 //        var_dump($client->getGenresApi()->getGenre('18'));
-        var_dump($TMDBService->client->getGenresApi()->getGenres(['language' => 'el-GR']));
-        var_dump($a);
-        var_dump($TMDBService->client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
+//        var_dump($TMDBService->client->getGenresApi()->getGenres(['language' => 'el-GR']));
+//        var_dump($a);
+//        var_dump($TMDBService->client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
 
 
         $repository = new MovieRepository($TMDBService->client);
@@ -43,7 +43,7 @@ var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
         $movie = $repository->load(87421);
 
 
-        var_dump($movie);
+//        var_dump($movie);
 //        var_dump($movie->getTitle());
 //        var_dump($movie->getImages());
 //        var_dump($movie->getPosterPath());
