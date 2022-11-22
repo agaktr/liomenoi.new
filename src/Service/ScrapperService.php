@@ -195,7 +195,7 @@ class ScrapperService
 
             $titleClassname="ml-mask";
             $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $titleClassname ')]")->item(0);
-
+var_dump($titleElement);
             $yearClassname="browse-movie-year";
             $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
 
