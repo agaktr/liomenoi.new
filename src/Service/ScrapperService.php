@@ -193,17 +193,22 @@ class ScrapperService
             $tmpDom->appendChild($tmpDom->importNode($element, true));
             $tmpFinder = new DomXPath($tmpDom);
 
-            $titleClassname="ml-mask";
-            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $titleClassname ')]")->item(0);
-var_dump($titleElement);
-            $yearClassname="browse-movie-year";
-            $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
+            $classname="ml-mask";
+            $linkElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+
+            $classname="mli-info";
+            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+
+            var_dump($titleElement->textContent);
+            var_dump($titleElement->nodeValue);
+            $classname="browse-movie-year";
+            $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
 
             $this->scrappedContent[] = [
                 'title' => $titleElement->nodeValue,
                 'year' => $yearElement->nodeValue,
                 'type' => 'Movie',
-                'slug' => $titleElement->getAttribute('href'),
+                'slug' => $linkElement->getAttribute('href'),
             ];
         }
     }
