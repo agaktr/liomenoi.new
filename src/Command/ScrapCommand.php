@@ -105,7 +105,6 @@ class ScrapCommand extends Command
                         $this->objectsLocalArray[$objectKey] = $object;
 
                     }
-                    var_dump(array_keys($this->objectsLocalArray));
                     unset($objectsLocal);
 
                     //get local magnets
@@ -254,10 +253,12 @@ class ScrapCommand extends Command
         var_dump(4);
         var_dump($objectKey);
         if(!isset($this->objectsLocalArray[$objectKey])){
+            $io->info(': Creating new Object ');
             $movie = new Movie();
             $this->em->persist($movie);
             $this->objectsLocalArray[$objectKey] = $movie;
         }else{
+            $io->info(': Existing Object ');
             $movie = $this->objectsLocalArray[$objectKey];
         }
 
