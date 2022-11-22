@@ -25,6 +25,8 @@ class ScrapCommand extends Command
 
     private array $urls = [];
     private array $objectsMap = [];
+    private array $objectsLocalArray = [];
+    private array $magnetsLocalArray = [];
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
@@ -68,6 +70,29 @@ class ScrapCommand extends Command
             $hasMore = true;
             $pagesNo = 5;
             $doing = 'Movie';
+
+            switch ($doing) {
+                case 'Movie':
+                    //get local scrap
+                    $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
+                    $this->objectsLocalArray = [];
+                    foreach($objectsLocal as $object){
+                        $objectKey = $object->getMatchName().'-'.$object->getYear();
+                        $this->objectsLocalArray[$objectKey] = $object;
+                    }
+
+                    //get local magnets
+                    $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
+                    $this->magnetsLocalArray = [];
+                    foreach($objectsLocal as $object){
+                        $objectKey = $object->getMagnet();
+                        $this->magnetsLocalArray[$objectKey] = $object;
+                    }
+                    break;
+                case 'Serie':
+                    die();
+                    break;
+            }
 
             while ($hasMore) {
 
@@ -167,22 +192,16 @@ class ScrapCommand extends Command
     private function handleMovie(int $objectId, array $movieData)
     {
         /** @var Movie $movie */
-        $movie = $this->em->getRepository(Movie::class)->findOneBy(
-            [
-                'matchName' => $movieData[ 'data' ]->getName(),
-                'year'=>$movieData[ 'data' ]->getYear()
-            ]);
-
-        var_dump($movieData[ 'data' ]->getSlug());
-//        d
-
-        if ( !$movie ) {
-//            ++$added;
+        $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
+        if(!isset($this->objectsLocalArray[$objectKey])){
             $movie = new Movie();
             $this->em->persist($movie);
-        } else {
-//            ++$updated;
+            $this->objectsLocalArray[$objectKey] = $movie;
+        }else{
+            $movie = $this->objectsLocalArray[$objectKey];
         }
+
+        $movie->addScrap($movieData[ 'data' ]);
 
         $movie->setImdb($movieData[ 'imdb' ]);
         $movie->setSlug($movieData[ 'data' ]->getSlug());
@@ -201,14 +220,13 @@ class ScrapCommand extends Command
         foreach ($movieData[ 'magnet' ] as $magnetLink) {
 
             /** @var Magnet $magnet */
-            $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink[ 'magnet' ]]);
-
-            if ( !$magnet ) {
-                ++$addedMagnet;
+            $objectKey = $magnetLink[ 'magnet' ];
+            if(!isset($this->magnetsLocalArray[$objectKey])){
                 $magnet = new Magnet();
                 $this->em->persist($magnet);
-            } else {
-                ++$updatedMagnet;
+                $this->magnetsLocalArray[$objectKey] = $magnet;
+            }else{
+                $magnet = $this->magnetsLocalArray[$objectKey];
             }
 
             $magnet->setType($magnetLink[ 'type' ]);
