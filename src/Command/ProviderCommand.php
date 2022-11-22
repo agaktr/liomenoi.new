@@ -103,6 +103,7 @@ class ProviderCommand extends Command
 
             //Save scraps
             $added = $updated = 0;
+            var_dump($this->scrapper->getScrappedContent());
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
                 $objectKey = $scrap['slug'].'-'.$provider->getId();
@@ -126,7 +127,7 @@ class ProviderCommand extends Command
             }
 
             //flush each scrap
-            $this->em->flush();
+//            $this->em->flush();
 
             $content = sprintf('Provider: %s objects added. %s objects updated. DONE Time: %s', $added,$updated,json_encode($this->scrapper->getPerformance()));
 
@@ -150,7 +151,7 @@ class ProviderCommand extends Command
 
         //Update provider
 //        $provider->setUpdated(new DateTime());
-        $this->em->flush();
+//        $this->em->flush();
 
         return Command::SUCCESS;
     }
