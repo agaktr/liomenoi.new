@@ -111,6 +111,7 @@ class ProviderCommand extends Command
                     $objectsLocalArray[$objectKey] = $object;
                     ++$added;
                 }else{
+                    $object = $objectsLocalArray[$objectKey];
                     ++$updated;
                 }
 
