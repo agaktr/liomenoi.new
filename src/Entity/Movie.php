@@ -372,15 +372,15 @@ class Movie
         return $this;
     }
 
-    public function removeScrap(Scrap $scrap): self
-    {
-        if ($this->scraps->removeElement($scrap)) {
-            // set the owning side to null (unless already changed)
-            if ($scrap->getMovie() === $this) {
-                $scrap->setMovie(null);
-            }
-        }
-
-        return $this;
-    }
+//    public function removeScrap(Scrap $scrap): self
+//    {
+//        if ($this->scraps->removeElement($scrap)) {
+//            // set the owning side to null (unless already changed)
+//            if ($scrap->getMovie() === $this) {
+//                $scrap->setMovie(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 }
