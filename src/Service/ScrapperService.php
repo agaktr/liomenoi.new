@@ -200,14 +200,12 @@ class ScrapperService
             $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
 
             $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
-            var_dump($titleElement->textContent);
-            var_dump($year);
 
             $this->scrappedContent[] = [
                 'title' => $titleElement->nodeValue,
                 'year' => $year,
                 'type' => 'Movie',
-                'slug' => $linkElement->getAttribute('href'),
+                'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
             ];
         }
     }
