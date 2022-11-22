@@ -344,6 +344,8 @@ class ScrapCommand extends Command
         $perf = $this->scrapper->getPerformance();
         $perf['handle'] = microtime(true) - $start;
         $this->scrapper->setPerformance($perf);
+
+        $io->success('Added '.$movie->getTitle().'('.$movie->getId().')');
     }
 
     private function slugify($text, string $divider = '-')
