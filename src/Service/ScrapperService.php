@@ -167,11 +167,45 @@ class ScrapperService
                 case 'yts.do':
                     $this->YTSdoScrap($content);
                     break;
+                case 'ytstv.me':
+                    $this->YTSTVmeScrap($content);
+                    break;
             }
 
         }
 
         $this->performance['scrap'] = microtime(true) - $start;
+    }
+
+    private function YTSTVmeScrap($content){
+
+        $dom = new DomDocument();
+        @$dom->loadHTML($content);
+
+        $finder = new DomXPath($dom);
+        $classname="ml-item";
+        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+
+        //foreach element in the node list
+        foreach ($elements as $k=>$element) {
+
+            $tmpDom = new DomDocument();
+            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            $tmpFinder = new DomXPath($tmpDom);
+
+            $titleClassname="ml-mask";
+            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $titleClassname ')]")->item(0);
+
+            $yearClassname="browse-movie-year";
+            $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
+
+            $this->scrappedContent[] = [
+                'title' => $titleElement->nodeValue,
+                'year' => $yearElement->nodeValue,
+                'type' => 'Movie',
+                'slug' => $titleElement->getAttribute('href'),
+            ];
+        }
     }
 
     private function YTSdoScrap($content){
