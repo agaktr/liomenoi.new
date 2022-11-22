@@ -202,10 +202,10 @@ class ScrapCommand extends Command
         }
 
         $movie->addScrap($movieData[ 'data' ]);
+        $movie->setMatchName($movieData[ 'data' ]->getName());
 
         $movie->setImdb($movieData[ 'imdb' ]);
         $movie->setSlug($movieData[ 'data' ]->getSlug());
-        $movie->setMatchName($movieData[ 'data' ]->getName());
         $movie->setTitle($movieData[ 'data' ]->getName());
         $movie->setYear($movieData[ 'data' ]->getYear());
 
