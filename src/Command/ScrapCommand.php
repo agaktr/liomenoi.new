@@ -88,7 +88,7 @@ class ScrapCommand extends Command
 //                }
 
                 $objectsMap[$object->getId()] = $object;
-                $this->urls[$object->getId()] = $object->getProvider()->getDomain().$object->getSlug();
+                $this->urls[$object->getId()] = substr($object->getProvider()->getDomain(),0,-1).$object->getSlug();
             }
 
             var_dump($this->urls);
