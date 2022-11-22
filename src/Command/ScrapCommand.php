@@ -320,6 +320,9 @@ class ScrapCommand extends Command
         //set release date
         $movie->setReleaseDate($modelMovie->getReleaseDate());
 
+        //set year
+        $movie->setYear($modelMovie->getReleaseDate()->format('Y'));
+
         //set runtime
         $movie->setRuntime($modelMovie->getRuntime());
 
