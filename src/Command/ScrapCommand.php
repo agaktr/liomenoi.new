@@ -178,7 +178,7 @@ class ScrapCommand extends Command
 
                 $this->em->flush();
 
-                $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. %s magnets added. %s magnets updated. DONE Time: %s' , $added , $updated , $addedMagnet , $updatedMagnet , json_encode($this->scrapper->getPerformance()));
+                $content = sprintf('DONE Time: %s' , json_encode($this->scrapper->getPerformance()));
 
                 $io->success($content);
 
