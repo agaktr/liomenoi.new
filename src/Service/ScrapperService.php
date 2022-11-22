@@ -6,6 +6,7 @@ use App\Entity\Provider;
 use DOMDocument;
 use DOMXPath;
 use ErrorException;
+use Exception;
 
 class ScrapperService
 {
@@ -285,8 +286,14 @@ class ScrapperService
         @$dom->loadHTML($content);
 
         //imdb
-        $element = $this->getElementByTitle($dom, 'IMDb Rating',true);
-        $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
+        try {
+            $element = $this->getElementByTitle($dom , 'IMDb Rating' , true);
+            $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
+        } catch (Exception $e) {
+            $this->scrappedContent[$id]['imdb'] = null;
+        }
+
+
 
         //type
         $this->scrappedContent[$id]['type'] = $this->doing;
@@ -373,9 +380,9 @@ class ScrapperService
         if ($single) {
             $newDom = new DomDocument();
 
-//            if (null === $elements->item(0)) {
-//                throw new \Exception('No rating found');
-//            }
+            if (null === $elements->item(0)) {
+                throw new Exception('No rating found');
+            }
 
             $newDom->appendChild($newDom->importNode($elements->item(0), true));
             return $newDom;
