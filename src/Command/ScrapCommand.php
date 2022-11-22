@@ -103,6 +103,7 @@ class ScrapCommand extends Command
                     foreach($objectsLocal as $object){
                         $objectKey = $object->getMatchName().'-'.$object->getYear();
                         $this->objectsLocalArray[$objectKey] = $object;
+                        var_dump($objectKey);
                     }
                     unset($objectsLocal);
 
@@ -249,6 +250,8 @@ class ScrapCommand extends Command
     {
         /** @var Movie $movie */
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
+        var_dump(4);
+        var_dump($objectKey);
         if(!isset($this->objectsLocalArray[$objectKey])){
             $movie = new Movie();
             $this->em->persist($movie);
