@@ -59,7 +59,7 @@ class ProviderCommand extends Command
 
         //init variables
         var_dump($input->getOption('page'));
-        $currentPage = $input->getOption('page') ?? 1;
+        $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
         $pagesNo = 5;
         $hasMore = true;
         $doing = 'Movie';
