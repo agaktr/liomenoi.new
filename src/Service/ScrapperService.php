@@ -199,14 +199,13 @@ class ScrapperService
             $classname="mli-info";
             $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
 
+            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
             var_dump($titleElement->textContent);
-            var_dump($titleElement->nodeValue);
-            $classname="browse-movie-year";
-            $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+            var_dump($year);
 
             $this->scrappedContent[] = [
                 'title' => $titleElement->nodeValue,
-                'year' => $yearElement->nodeValue,
+                'year' => $year,
                 'type' => 'Movie',
                 'slug' => $linkElement->getAttribute('href'),
             ];
@@ -383,6 +382,14 @@ class ScrapperService
         return $return;
     }
 
+    private function getStringBetween($string, $start, $end){
+        $string = ' ' . $string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) return '';
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+        return substr($string, $ini, $len);
+    }
 
 
 
