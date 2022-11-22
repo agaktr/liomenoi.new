@@ -92,7 +92,7 @@ class ScrapCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 5;
+            $pagesNo = 1;
             $doing = 'Movie';
 
             switch ($doing) {
@@ -263,9 +263,6 @@ class ScrapCommand extends Command
 
         //Imdb stuff
         $movie->setImdb($movieData[ 'imdb' ]);
-//        $movie->setSlug($movieData[ 'data' ]->getSlug());
-//        $movie->setTitle($movieData[ 'data' ]->getName());
-//        $movie->setYear($movieData[ 'data' ]->getYear());
 
 //        if ( !isset($movieData[ 'magnet' ]) ) {
 //            $io->title('magnet__deleting ' . $movie->getId());
