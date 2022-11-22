@@ -211,9 +211,6 @@ class ScrapCommand extends Command
         $movie->addScrap($movieData[ 'data' ]);
         $movie->setMatchName($movieData[ 'data' ]->getName());
 
-        //Imdb stuff
-        $movie->setImdb($movieData[ 'imdb' ]);
-
         //general stuff
         $movie->setTitle($movie->getMatchName());
         $movie->setYear($movieData[ 'data' ]->getYear());
@@ -238,6 +235,9 @@ class ScrapCommand extends Command
             $magnet->setMagnet($magnetLink[ 'magnet' ]);
             $magnet->setMovie($movie);
         }
+
+        //Imdb stuff
+        $movie->setImdb($movieData[ 'imdb' ]);
 
         $this->objectsMap[ $objectId ]->setValid(true);
 
