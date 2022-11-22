@@ -62,12 +62,12 @@ class ProviderCommand extends Command
 
         //init variables
         $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
-        $pagesNo = 1;
+        $pagesNo = 5;
         $hasMore = true;
         $doing = 'Movie';
 
         //get local scrap
-        $objectsLocal = $this->em->getRepository(Scrap::class)->findAll();
+        $objectsLocal = $this->em->getRepository(Scrap::class)->findBy(['provider' => $provider]);
         $objectsLocalArray = [];
         foreach($objectsLocal as $object){
             $objectKey = $object->getSlug().'-'.$object->getProvider()->getId();
