@@ -84,8 +84,6 @@ class ScrapTMDBCommand extends Command
                 //scrap imdb id from imdb url $object->getImdb
                 $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$object->getImdb());
 
-                var_dump($imdbId);
-
                 //find movie from tmdb based on imdb id
                 $tmdbMovieRes = $this->scrapper->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
 
