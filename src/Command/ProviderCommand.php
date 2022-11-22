@@ -62,7 +62,7 @@ class ProviderCommand extends Command
 
         //init variables
         $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
-        $pagesNo = 5;
+        $pagesNo = 1;
         $hasMore = true;
         $doing = 'Movie';
 
@@ -100,8 +100,6 @@ class ProviderCommand extends Command
             //Scrap
             $this->scrapper->getContent();
             $this->scrapper->getScraps();
-            var_dump($this->scrapper->getScrappedContent());
-            die();
 
             //Save scraps
             $added = $updated = 0;
