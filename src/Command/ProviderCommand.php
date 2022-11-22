@@ -58,7 +58,7 @@ class ProviderCommand extends Command
         $io->info('Provider: '.$provider->getName());
 
         $currentPage = 1;
-        $pagesNo = 2;
+        $pagesNo = 5;
         $hasMore = true;
         $doing = 'Movie';
 
@@ -82,11 +82,9 @@ class ProviderCommand extends Command
             $this->scrapper->setDoing($doing);
 
             $this->scrapper->getContent();
-
             $this->scrapper->getScraps();
 
             $added = $updated = 0;
-
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
                 $object = $this->em->getRepository(Scrap::class)->findOneBy(['slug' => $scrap['slug'],'provider' => $provider]);
