@@ -329,6 +329,7 @@ class ScrapCommand extends Command
 //            $io->error('No movie found for '.$movie->getTitle());
 //            continue;
 //        }
+        var_dump($tmdbMovieRes);
         $tmdbMovie = $tmdbMovieRes["movie_results"][0];
 
         //get en/gr version of movie
