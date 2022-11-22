@@ -72,6 +72,7 @@ class ProviderCommand extends Command
                 $objectKey = $object->getSlug().'-'.$object->getProvider()->getId();
                 $objectsLocalArray[$objectKey] = $object;
             }
+            unset($objectsLocal);
 
             //While we still add and not update only
             while ($hasMore) {

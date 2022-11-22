@@ -2,12 +2,15 @@
 
 namespace App\Command;
 
+use App\Entity\Actor;
+use App\Entity\Category;
 use App\Entity\Magnet;
 use App\Entity\Movie;
 use App\Entity\Provider;
 use App\Entity\Scrap;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
+use App\Service\TMDBService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use ErrorException;
@@ -17,6 +20,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Tmdb\Repository\MovieRepository;
 
 class ScrapCommand extends Command
 {
@@ -27,16 +31,20 @@ class ScrapCommand extends Command
     private array $objectsMap = [];
     private array $objectsLocalArray = [];
     private array $magnetsLocalArray = [];
+    private array $genresLocalArray = [];
+    private array $actorsLocalArray = [];
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
+    private TMDBService $tmdbService;
 
 
-    public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService)
+    public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService,TMDBService $tmdbService)
     {
 
         $this->em = $entityManager;
         $this->scrapper = $scrapperService;
+        $this->tmdbService = $tmdbService;
 
         parent::__construct();
     }
@@ -59,6 +67,22 @@ class ScrapCommand extends Command
 
         $io = new SymfonyStyle($input, $output);
 
+        //get genres
+        $genresLocal = $this->em->getRepository(Category::class)->findAll();
+        $this->genresLocalArray = [];
+        foreach($genresLocal as $genre){
+            $this->genresLocalArray[$genre->getTmdbId()] = $genre;
+        }
+        unset($genresLocal);
+
+        //get actors
+        $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
+        $this->actorsLocalArray = [];
+        foreach($actorsLocal as $actor){
+            $this->actorsLocalArray[$actor->getTmdbId()] = $actor;
+        }
+        unset($actorsLocal);
+
         //Get providers
         $providers = $this->em->getRepository(Provider::class)->findAll();
         foreach ($providers as $provider) {
@@ -80,6 +104,7 @@ class ScrapCommand extends Command
                         $objectKey = $object->getMatchName().'-'.$object->getYear();
                         $this->objectsLocalArray[$objectKey] = $object;
                     }
+                    unset($objectsLocal);
 
                     //get local magnets
                     $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
@@ -88,6 +113,7 @@ class ScrapCommand extends Command
                         $objectKey = $object->getMagnet();
                         $this->magnetsLocalArray[$objectKey] = $object;
                     }
+                    unset($objectsLocal);
                     break;
                 case 'Serie':
                     die();
@@ -168,7 +194,7 @@ class ScrapCommand extends Command
 
                     switch ($doing) {
                         case 'Movie':
-                            $this->handleMovie($objectId,$objectData);
+                            $this->handleMovie($objectId,$objectData,$io);
                             break;
                         case 'Serie':
                             die();
@@ -191,7 +217,7 @@ class ScrapCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function handleMovie(int $objectId, array $movieData)
+    private function handleMovie(int $objectId, array $movieData,$io)
     {
         /** @var Movie $movie */
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
@@ -203,13 +229,15 @@ class ScrapCommand extends Command
             $movie = $this->objectsLocalArray[$objectKey];
         }
 
+        //Scrap stuff
         $movie->addScrap($movieData[ 'data' ]);
         $movie->setMatchName($movieData[ 'data' ]->getName());
 
+        //Imdb stuff
         $movie->setImdb($movieData[ 'imdb' ]);
-        $movie->setSlug($movieData[ 'data' ]->getSlug());
-        $movie->setTitle($movieData[ 'data' ]->getName());
-        $movie->setYear($movieData[ 'data' ]->getYear());
+//        $movie->setSlug($movieData[ 'data' ]->getSlug());
+//        $movie->setTitle($movieData[ 'data' ]->getName());
+//        $movie->setYear($movieData[ 'data' ]->getYear());
 
 //        if ( !isset($movieData[ 'magnet' ]) ) {
 //            $io->title('magnet__deleting ' . $movie->getId());
@@ -220,6 +248,8 @@ class ScrapCommand extends Command
 //            continue;
 //        }
 
+
+        //Magnet stuff
         foreach ($movieData[ 'magnet' ] as $magnetLink) {
 
             /** @var Magnet $magnet */
@@ -240,6 +270,90 @@ class ScrapCommand extends Command
         }
 
         $this->objectsMap[ $objectId ]->setValid(true);
+
+        /**
+         * START TMDB STUFF
+         */
+        $io->title(': Doing '.$movie->getMatchName());
+
+        //scrap imdb id from imdb url $movie->getImdb
+        $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$movie->getImdb());
+
+        //find movie from tmdb based on imdb id
+        $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
+
+//        if (empty($tmdbMovieRes['movie_results'])){
+//            $movie->setFetched(false);
+//            $this->em->flush();
+//
+//            $io->error('No movie found for '.$movie->getTitle());
+//            continue;
+//        }
+        $tmdbMovie = $tmdbMovieRes["movie_results"][0];
+
+        //get en/gr version of movie
+        /** @var \Tmdb\Model\Movie $modelMovie */
+        /** @var \Tmdb\Model\Movie $modelMovieGr */
+        $repository = new MovieRepository($this->tmdbService->client);
+        $modelMovie = $repository->load($tmdbMovie["id"]);
+        $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
+        //set tmdb id
+        $movie->setTmdbId($tmdbMovie["id"]);
+
+        //set title
+        $movie->setTitle($modelMovieGr->getTitle());
+
+        //set original title
+        $movie->setOriginalTitle($modelMovie->getTitle());
+
+        //set overview
+        $movie->setOverview($modelMovieGr->getOverview());
+        if (empty($movie->getOverview()))
+            $movie->setOverview($modelMovie->getOverview());
+
+        //set poster
+        $movie->setPoster($modelMovie->getPosterPath());
+
+        //set backdrop
+        $movie->setBackdrop($modelMovie->getBackdropPath());
+
+        //set release date
+        $movie->setReleaseDate($modelMovie->getReleaseDate());
+
+        //set runtime
+        $movie->setRuntime($modelMovie->getRuntime());
+
+        //set genres
+        foreach($modelMovie->getGenres() as $genre){
+            if(isset($this->genresLocalArray[$genre->getId()])){
+                $movie->addCategory($this->genresLocalArray[$genre->getId()]);
+            }
+        }
+
+        //set actors
+        foreach($modelMovie->getCredits()->getCast() as $actorModel){
+            if(!isset($this->actorsLocalArray[$actorModel->getId()])){
+
+                $actor = new Actor();
+                $this->em->persist($actor);
+                $actor->setName($actorModel->getName());
+                $actor->setTmdbId($actorModel->getId());
+                $actor->setPoster('');
+                if (!empty($actorModel->getProfilePath()))
+                    $actor->setPoster($actorModel->getProfilePath());
+                $this->actorsLocalArray[$actorModel->getId()] = $actor;
+
+                $io->note('Added new actor '.$actorModel->getName());
+            }else{
+                $io->info('Found actor '.$actorModel->getName());
+            }
+
+            $movie->addActor($this->actorsLocalArray[$actorModel->getId()]);
+        }
+
+        $movie->setFetched(true);
+
+        $this->em->flush();
     }
 }
 

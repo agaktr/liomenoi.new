@@ -59,7 +59,6 @@ class ScrapTMDBCommand extends Command
         $counter = 0;
 
         $genresLocal = $this->em->getRepository(Category::class)->findAll();
-
         $genresLocalArray = [];
         foreach($genresLocal as $genre){
             $genresLocalArray[$genre->getTmdbId()] = $genre;
