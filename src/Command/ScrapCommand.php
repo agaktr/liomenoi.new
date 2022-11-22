@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Magnet;
 use App\Entity\Movie;
+use App\Entity\Provider;
 use App\Entity\Scrap;
 use App\Entity\YifyObject;
 use App\Service\ScrapperService;
@@ -51,24 +52,30 @@ class ScrapCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
+//        ini_set('memory_limit', '2048M');
+
         $io = new SymfonyStyle($input, $output);
 
-        $io->title('Starting scrapping');
+        //Get providers
+        $providers = $this->em->getRepository(Provider::class)->findAll();
+        foreach ($providers as $provider) {
 
-        $currentPage = 1;
+            $io->title('Provider: ' . $provider->getName());
+            $io->title('Starting Movie scrapping');
 
-        while($currentPage < 99999999){
+            //init variables
+            $currentPage = $input->getOption('page') ? $input->getOption('page') : 1;
+            $hasMore = true;
+            $pagesNo = 5;
+            $doing = 'Movie';
 
-            $io->title('Doing page '.$currentPage);
+            while ($hasMore) {
 
-            ++$currentPage;
+                $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , 0);
 
-
-            $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null],[ 'id' => 'ASC'], 5,0);
-
-            $objectsMap = [];
-            $this->urls = [];
-            foreach ($objects as $object) {
+                $objectsMap = [];
+                $this->urls = [];
+                foreach ($objects as $object) {
 
 //                if (
 //                    strpos($object->getSlug(), '%') !== false
@@ -87,97 +94,103 @@ class ScrapCommand extends Command
 //                    continue;
 //                }
 
-                $objectsMap[$object->getId()] = $object;
-                $this->urls[$object->getId()] = substr($object->getProvider()->getDomain(),0,-1).$object->getSlug();
-            }
-
-            var_dump($this->urls);
-            die();
-
-            $this->scrapper->setUrls($this->urls);
-
-            try {
-                $this->scrapper->initObjects();
-            }catch (ErrorException $e) {
-
-                $io->title('deleting '.$e->getMessage());
-                unset($objectsMap[$e->getMessage()]);
-                unset($this->urls[$e->getMessage()]);
-                $this->em->remove($objectsMap[$e->getMessage()]);
-                $this->em->flush();
-                continue;
-            } catch (\Exception $e) {
-                $io->title('retry '.$currentPage);
-                continue;
-            }
-
-
-            $results = $this->scrapper->getScrappedContent();
-
-            foreach ($results as $id => $content) {
-
-                $results[$id]['data'] = $objectsMap[$id];
-
-            }
-
-            $added = $updated = 0;
-            $addedMagnet = $updatedMagnet = 0;
-
-            foreach ($results as $objectId => $movieData) {
-
-                /** @var Movie $movie */
-                $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData['data']->getSlug()]);
-
-                if (!$movie) {
-                    ++$added;
-                    $movie = new Movie();
-                    $this->em->persist($movie);
-                }else{
-                    ++$updated;
+                    $objectsMap[ $object->getId() ] = $object;
+                    $this->urls[ $object->getId() ] = substr($object->getProvider()->getDomain() , 0 , -1) . $object->getSlug();
                 }
 
-                $movie->setImdb($movieData['imdb']);
-                $movie->setSlug($movieData['data']->getSlug());
-                $movie->setTitle($movieData['data']->getTitle());
-                $movie->setYear($movieData['data']->getYear());
+                $io->text('Doing ids '.json_encode(array_keys($objectsMap)));
 
-                if (!isset($movieData['magnet'])) {
-                    $io->title('magnet__deleting '.$movie->getId());
-                    unset($objectsMap[$movie->getId()]);
-                    unset($this->urls[$movie->getId()]);
-                    $this->em->remove($movie);
+                //Init scrapper
+                $this->scrapper->setUrls($this->urls);
+                $this->scrapper->setProvider($object->getProvider());
+                $this->scrapper->setDoing($doing);
+
+                die();
+
+                try {
+                    $this->scrapper->initObjects();
+                } catch (ErrorException $e) {
+
+                    $io->title('deleting ' . $e->getMessage());
+                    unset($objectsMap[ $e->getMessage() ]);
+                    unset($this->urls[ $e->getMessage() ]);
+                    $this->em->remove($objectsMap[ $e->getMessage() ]);
                     $this->em->flush();
+                    continue;
+                } catch (\Exception $e) {
+                    $io->title('retry ' . $currentPage);
                     continue;
                 }
 
-                foreach ($movieData['magnet'] as $magnetLink) {
 
-                    /** @var Magnet $magnet */
-                    $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink['magnet']]);
+                $results = $this->scrapper->getScrappedContent();
 
-                    if (!$magnet) {
-                        ++$addedMagnet;
-                        $magnet = new Magnet();
-                        $this->em->persist($magnet);
-                    }else{
-                        ++$updatedMagnet;
-                    }
+                foreach ($results as $id => $content) {
 
-                    $magnet->setType($magnetLink['type']);
-                    $magnet->setQuality($magnetLink['quality']);
-                    $magnet->setSize($magnetLink['size']);
-                    $magnet->setMagnet($magnetLink['magnet']);
-                    $magnet->setMovie($movie);
+                    $results[ $id ][ 'data' ] = $objectsMap[ $id ];
+
                 }
 
-                $objectsMap[$objectId]->setFetched(true);
+                $added = $updated = 0;
+                $addedMagnet = $updatedMagnet = 0;
+
+                foreach ($results as $objectId => $movieData) {
+
+                    /** @var Movie $movie */
+                    $movie = $this->em->getRepository(Movie::class)->findOneBy(['slug' => $movieData[ 'data' ]->getSlug()]);
+
+                    if ( !$movie ) {
+                        ++$added;
+                        $movie = new Movie();
+                        $this->em->persist($movie);
+                    } else {
+                        ++$updated;
+                    }
+
+                    $movie->setImdb($movieData[ 'imdb' ]);
+                    $movie->setSlug($movieData[ 'data' ]->getSlug());
+                    $movie->setTitle($movieData[ 'data' ]->getTitle());
+                    $movie->setYear($movieData[ 'data' ]->getYear());
+
+                    if ( !isset($movieData[ 'magnet' ]) ) {
+                        $io->title('magnet__deleting ' . $movie->getId());
+                        unset($objectsMap[ $movie->getId() ]);
+                        unset($this->urls[ $movie->getId() ]);
+                        $this->em->remove($movie);
+                        $this->em->flush();
+                        continue;
+                    }
+
+                    foreach ($movieData[ 'magnet' ] as $magnetLink) {
+
+                        /** @var Magnet $magnet */
+                        $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet' => $magnetLink[ 'magnet' ]]);
+
+                        if ( !$magnet ) {
+                            ++$addedMagnet;
+                            $magnet = new Magnet();
+                            $this->em->persist($magnet);
+                        } else {
+                            ++$updatedMagnet;
+                        }
+
+                        $magnet->setType($magnetLink[ 'type' ]);
+                        $magnet->setQuality($magnetLink[ 'quality' ]);
+                        $magnet->setSize($magnetLink[ 'size' ]);
+                        $magnet->setMagnet($magnetLink[ 'magnet' ]);
+                        $magnet->setMovie($movie);
+                    }
+
+                    $objectsMap[ $objectId ]->setFetched(true);
+                }
+
+                $this->em->flush();
+
+                $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. %s magnets added. %s magnets updated. DONE Time: %s' , $added , $updated , $addedMagnet , $updatedMagnet , json_encode($this->scrapper->getPerformance()));
+
+                $io->success($content);
+
             }
-
-            $this->em->flush();
-
-            $content = sprintf('ScrapYIFY: %s objects added. %s objects updated. %s magnets added. %s magnets updated. DONE Time: %s', $added,$updated,$addedMagnet,$updatedMagnet,json_encode($this->scrapper->getPerformance()));
-
-            $io->success($content);
 
         }
 
