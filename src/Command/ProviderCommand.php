@@ -98,13 +98,12 @@ class ProviderCommand extends Command
             $this->scrapper->getContent();
             $this->scrapper->getScraps();
 
+
             //Save scraps
             $added = $updated = 0;
             foreach ($this->scrapper->getScrappedContent() as $scrap) {
 
                 $objectKey = $scrap['slug'].'-'.$provider->getId();
-                var_dump($objectKey);
-                var_dump(isset($objectsLocalArray[$objectKey]));
                 if(!isset($objectsLocalArray[$objectKey])){
                     $object = new Scrap();
                     $this->em->persist($object);
