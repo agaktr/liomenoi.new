@@ -221,7 +221,7 @@ class ScrapCommand extends Command
         if ( !isset($movieData[ 'magnet' ]) ) {
             $io->error('No Magnets for '.$movie->getMatchName());
             $movie->setFetched(false);
-            $this->objectsMap[ $movie->getId() ]->setValid(false);
+            $this->objectsMap[ $objectId ]->setValid(false);
             $this->em->flush();
             return;
         }
