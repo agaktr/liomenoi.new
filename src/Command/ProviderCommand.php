@@ -52,15 +52,15 @@ class ProviderCommand extends Command
         //Get Least updated provider
         $provider = $this->em->getRepository(Provider::class)->findOneBy([],['updated' => 'ASC']);
 
-        $io->text('Provider: '.$provider->getName());
-//
-//
-//        $currentPage = 2240;
-//
-//        while ($currentPage < 2500) {
-//
-//            $io->title('Doing page '.$currentPage.' to '.($currentPage + 5));
-//
+        $io->info('Provider: '.$provider->getName());
+
+        $currentPage = 1;
+        $hasMore = true;
+
+        while ($hasMore) {
+
+            $io->text('Doing page '.$currentPage.' to '.($currentPage + 5));
+
 //            for ($i = $currentPage; $i < $currentPage + 5; $i++) {
 //
 //                $this->urls[] = 'https://yts.do/browse-movies?page='.$i;
@@ -99,7 +99,9 @@ class ProviderCommand extends Command
 //            $io->success($content);
 //
 //            unset($this->urls);
-//        }
+
+            $hasMore = false;
+        }
 
         return Command::SUCCESS;
     }
