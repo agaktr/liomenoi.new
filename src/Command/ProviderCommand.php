@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Entity\Provider;
 use App\Entity\Scrap;
-use App\Entity\YifyObject;
 use App\Service\ScrapperService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -133,7 +132,7 @@ class ProviderCommand extends Command
                 $io->success($content);
 
                 //If we did not add anything
-                // Check if we did TV and then
+                // Check if we did TV, then
                 // we are done
                 if ($added == 0) {
 
@@ -151,7 +150,6 @@ class ProviderCommand extends Command
             //Update provider
             $provider->setUpdated(new DateTime());
             $this->em->flush();
-
         }
 
         return Command::SUCCESS;

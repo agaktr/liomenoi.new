@@ -100,14 +100,6 @@ class ScrapperService
         $this->doing = $doing;
     }
 
-    public function initSlugs()
-    {
-        unset($this->urlContent);
-        unset($this->scrappedContent);
-        $this->get();
-        $this->scrapSlugs();
-    }
-
     public function initObjects()
     {
         unset($this->urlContent);
@@ -244,46 +236,6 @@ class ScrapperService
                 'slug' => $titleElement->getAttribute('href'),
             ];
         }
-    }
-
-    private function scrapSlugs()
-    {
-
-        $start = microtime(true);
-
-        $index = 0;
-
-        foreach ($this->urlContent as $id=>$content) {
-
-            $dom = new DomDocument();
-            @$dom->loadHTML($content);
-
-            $finder = new DomXPath($dom);
-            $classname="browse-movie-bottom";
-            $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-
-            //foreach element in the node list
-            foreach ($elements as $k=>$element) {
-
-                $tmpDom = new DomDocument();
-                $tmpDom->appendChild($tmpDom->importNode($element, true));
-                $tmpFinder = new DomXPath($tmpDom);
-
-                $titleClassname="browse-movie-title";
-                $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $titleClassname ')]")->item(0);
-
-                $yearClassname="browse-movie-year";
-                $yearElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $yearClassname ')]")->item(0);
-
-                $this->scrappedContent[$index]['title'] = $titleElement->nodeValue;
-                $this->scrappedContent[$index]['slug'] = $titleElement->getAttribute('href');
-                $this->scrappedContent[$index]['year'] = $yearElement->nodeValue;
-
-                $index++;
-            }
-        }
-
-        $this->performance['scrap'] = microtime(true) - $start;
     }
 
     private function scrapObjects()
