@@ -252,7 +252,7 @@ class ScrapCommand extends Command
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
 
         if(!isset($this->objectsLocalArray[$objectKey])){
-            $io->warning(': Creating new Object ');
+            $io->error(': Creating new Object ');
             $movie = new Movie();
             $this->em->persist($movie);
             $this->objectsLocalArray[$objectKey] = $movie;
