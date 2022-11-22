@@ -99,10 +99,10 @@ class Movie
      */
     private $matchName;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity=Scrap::class, mappedBy="movie")
-//     */
-//    private $scraps;
+    /**
+     * @ORM\OneToMany(targetEntity=Scrap::class, mappedBy="movie")
+     */
+    private $scraps;
 
     public function __construct()
     {
