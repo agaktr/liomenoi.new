@@ -229,7 +229,6 @@ class ScrapCommand extends Command
 
         /** @var Movie $movie */
         if ($this->fast){
-
             $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
             if(!isset($this->objectsLocalArray[$objectKey])){
                 $io->note('Creating new Object');
@@ -241,8 +240,14 @@ class ScrapCommand extends Command
                 $movie = $this->objectsLocalArray[$objectKey];
             }
         }else{
-
             $movie = $this->em->getRepository(Movie::class)->findOneBy(['name'=>$movieData[ 'data' ]->getName(),'year'=>$movieData[ 'data' ]->getYear()]);
+            if (!$movie){
+                $io->note('Creating new Object');
+                $movie = new Movie();
+                $this->em->persist($movie);
+            }else{
+                $io->info('Existing Object');
+            }
         }
 
         //Scrap stuff
@@ -267,13 +272,21 @@ class ScrapCommand extends Command
         foreach ($movieData[ 'magnet' ] as $magnetLink) {
 
             /** @var Magnet $magnet */
-            $objectKey = $magnetLink[ 'magnet' ];
-            if(!isset($this->magnetsLocalArray[$objectKey])){
-                $magnet = new Magnet();
-                $this->em->persist($magnet);
-                $this->magnetsLocalArray[$objectKey] = $magnet;
-            }else{
-                $magnet = $this->magnetsLocalArray[$objectKey];
+            if ($this->fast) {
+                $objectKey = $magnetLink[ 'magnet' ];
+                if ( !isset($this->magnetsLocalArray[ $objectKey ]) ) {
+                    $magnet = new Magnet();
+                    $this->em->persist($magnet);
+                    $this->magnetsLocalArray[ $objectKey ] = $magnet;
+                } else {
+                    $magnet = $this->magnetsLocalArray[ $objectKey ];
+                }
+            } else {
+                $magnet = $this->em->getRepository(Magnet::class)->findOneBy(['magnet'=>$magnetLink[ 'magnet' ]]);
+                if (!$magnet){
+                    $magnet = new Magnet();
+                    $this->em->persist($magnet);
+                }
             }
 
             $magnet->setType($magnetLink[ 'type' ]);
@@ -373,27 +386,52 @@ class ScrapCommand extends Command
 
         //set genres
         foreach($modelMovie->getGenres() as $genre){
-            if(isset($this->genresLocalArray[$genre->getId()])){
-                $movie->addCategory($this->genresLocalArray[$genre->getId()]);
+            if ($this->fast) {
+                if ( isset($this->genresLocalArray[ $genre->getId() ]) ) {
+                    $movie->addCategory($this->genresLocalArray[ $genre->getId() ]);
+                }
+            } else {
+                $category = $this->em->getRepository(Category::class)->findOneBy(['tmdbId'=>$genre->getId()]);
+                if ($category){
+                    $movie->addCategory($category);
+                }
             }
         }
 
         //set actors
         foreach($modelMovie->getCredits()->getCast() as $actorModel){
-            if(!isset($this->actorsLocalArray[$actorModel->getId()])){
 
-                $actor = new Actor();
-                $this->em->persist($actor);
-                $actor->setName($actorModel->getName());
-                $actor->setTmdbId($actorModel->getId());
-                $actor->setPoster('');
-                if (!empty($actorModel->getProfilePath()))
-                    $actor->setPoster($actorModel->getProfilePath());
-                $this->actorsLocalArray[$actorModel->getId()] = $actor;
+            if ($this->fast) {
+                if ( !isset($this->actorsLocalArray[ $actorModel->getId() ]) ) {
 
-                $io->text('Added new actor '.$actorModel->getName());
-            }else{
-                $io->text('Found actor '.$actorModel->getName());
+                    $actor = new Actor();
+                    $this->em->persist($actor);
+                    $actor->setName($actorModel->getName());
+                    $actor->setTmdbId($actorModel->getId());
+                    $actor->setPoster('');
+                    if ( !empty($actorModel->getProfilePath()) )
+                        $actor->setPoster($actorModel->getProfilePath());
+                    $this->actorsLocalArray[ $actorModel->getId() ] = $actor;
+
+                    $io->text('Added new actor ' . $actorModel->getName());
+                } else {
+                    $io->text('Found actor ' . $actorModel->getName());
+                }
+            } else {
+                $actor = $this->em->getRepository(Actor::class)->findOneBy(['tmdbId'=>$actorModel->getId()]);
+                if (!$actor){
+                    $actor = new Actor();
+                    $this->em->persist($actor);
+                    $actor->setName($actorModel->getName());
+                    $actor->setTmdbId($actorModel->getId());
+                    $actor->setPoster('');
+                    if ( !empty($actorModel->getProfilePath()) )
+                        $actor->setPoster($actorModel->getProfilePath());
+
+                    $io->text('Added new actor ' . $actorModel->getName());
+                }else{
+                    $io->text('Found actor ' . $actorModel->getName());
+                }
             }
 
             $movie->addActor($this->actorsLocalArray[$actorModel->getId()]);
