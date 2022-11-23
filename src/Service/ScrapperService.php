@@ -163,7 +163,7 @@ class ScrapperService
                     $this->YTSdoScrap($id,$content);
                     break;
                 case 'ytstv.me':
-                    $this->YTSTVmeScrap($content);
+                    $this->YTSTVmeScrap($id,$content);
                     break;
             }
 
@@ -194,43 +194,42 @@ class ScrapperService
         $this->performance['scrap'] = microtime(true) - $start;
     }
 
-    private function YTSTVmeScrap($content){
-
-        var_dump($content);
+    private function YTSTVmeScrap($id,$content){
 
         $dom = new DomDocument();
         @$dom->loadHTML($content);
 
-        $finder = new DomXPath($dom);
-        $classname="ml-item";
-        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+        //imdb
+        try {
+            $element = $this->getElementByTitle($dom , 'IMDb Rating' , true);
+            $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
+        } catch (Exception $e) {
+            $this->scrappedContent[$id]['imdb'] = null;
+        }
 
-        //foreach element in the node list
-        foreach ($elements as $k=>$element) {
+        //type
+        $this->scrappedContent[$id]['type'] = $this->doing;
 
-            $tmpDom = new DomDocument();
-            $tmpDom->appendChild($tmpDom->importNode($element, true));
-            $tmpFinder = new DomXPath($tmpDom);
+        //torrents
+        $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
 
-            $classname="ml-mask";
-            $linkElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+        foreach ($torrentElements as $k=>$torrentElement) {
 
-            $classname="mli-info";
-            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+            $tmpElFinder = new DomXPath($torrentElement);
 
-            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
-            $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
+            $qualityClassname="modal-quality";
+            $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
 
-            if ($this->doing === 'Serie'){
-                $year = str_replace('TV Series', '', $year);
-            }
+            $qualitySizeClassname="quality-size";
+            $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
 
-            $this->scrappedContent[] = [
-                'title' => trim($title),
-                'year' => trim($year),
-                'type' => $this->doing,
-                'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
-            ];
+            $magnetClassname="magnet-download";
+            $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
+
+            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($qualityElement->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($qualitySizeElements->item(0)->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = trim($qualitySizeElements->item(1)->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnetElement->getAttribute('href');
         }
     }
 

@@ -66,12 +66,13 @@ class TestCommand extends Command
 
         $file = './george.torrent';
 
-        $torrent = file_get_contents('https://ytsmx.xyz/wp-mov/Gringo%20(2018)%20[BluRay]%20[720p].torrent');
+        $torrent = file_get_contents('https://ytsmx.xyz/wp-new/Black%20Adam%20(2022)%20[REPACK]%20[720p]%20[BluRay].torrent');
 
         file_put_contents($file, $torrent);
 
         $torrents = new TorrentService( $file );
         var_dump($torrents->magnet());
+        var_dump('magnet:?xt=urn:btih:C1556778EDEBF7B2B9BB375549CF4D5C6300DD20&dn=Black+Adam+%282022%29+%5B720p%5D+%5BYTS.MX%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.ch%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce');
 
 
 
