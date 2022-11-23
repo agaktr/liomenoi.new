@@ -419,7 +419,7 @@ class ScrapCommand extends Command
             $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
 
             //if not same year continue
-            $maybeYear = false;
+            $certainYear = true;
             if ($year != $movie->getYear()) {
 
                 //if year +- 1 is not equal to movie year
@@ -430,7 +430,7 @@ class ScrapCommand extends Command
                     continue;
                 }
 
-                $maybeYear = true;
+                $certainYear = false;
             }
 
             //slugify titles
@@ -448,7 +448,7 @@ class ScrapCommand extends Command
 
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
-            if ($percent > 70 && $amount == 1)
+            if ($percent > 70 && $amount == 1 && $certainYear)
                 return $result;
 
             //leave only digits to title
@@ -457,7 +457,7 @@ class ScrapCommand extends Command
 
             //if the digit only title match
             //this takes case of movies like 300, 300: Rise of an Empire
-            if ($digitsResultTitle == $digitsMovieTitle)
+            if ($digitsResultTitle == $digitsMovieTitle && $certainYear)
                 return $result;
 
             var_dump($slugOriginalResultTitle);
