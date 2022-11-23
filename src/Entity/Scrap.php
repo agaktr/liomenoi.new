@@ -62,7 +62,7 @@ class Scrap
     /**
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="scraps")
      */
-    private $movie;
+//    private $movie;
 
     public function getId(): ?int
     {
