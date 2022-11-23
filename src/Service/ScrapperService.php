@@ -251,15 +251,17 @@ class ScrapperService
 
                 //calculate size
                 $size = 0;
-                var_dump($torrent->info);
-                foreach ($torrent->info['files'] as $file) {
-                    $size += $file['length'];
-                }
-                //convert to mb or gb
-                if ($size > 1073741824) {
-                    $size = round($size / 1073741824, 2) . ' GB';
-                } else {
-                    $size = round($size / 1048576, 2) . ' MB';
+                if (isset($torrent->info['files'])) {
+                    foreach ($torrent->info[ 'files' ] as $file) {
+                        $size += $file[ 'length' ];
+                    }
+
+                    //convert to mb or gb
+                    if ($size > 1073741824) {
+                        $size = round($size / 1073741824, 2) . ' GB';
+                    } else {
+                        $size = round($size / 1048576, 2) . ' MB';
+                    }
                 }
 
                 $this->io->text('Size: '.$size);
