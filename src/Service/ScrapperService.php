@@ -207,12 +207,7 @@ class ScrapperService
         @$dom->loadHTML($content);
 
         //imdb
-        try {
-            $element = $this->getElementByTitle($dom , 'IMDb Rating' , true);
-            $this->scrappedContent[$id]['imdb'] = $element->getElementsByTagName('a')[0]->getAttribute('href');
-        } catch (Exception $e) {
-            $this->scrappedContent[$id]['imdb'] = null;
-        }
+        $this->scrappedContent[$id]['imdb'] = null;
 
         //type
         $this->scrappedContent[$id]['type'] = $this->doing;
@@ -268,6 +263,7 @@ class ScrapperService
                 $this->io->text('Size: '.$size);
                 $this->io->newLine();
                 $this->io->text('Magnet: '.$magnet);
+                $this->io->newLine();
                 $this->io->newLine();
             }
 
