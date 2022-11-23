@@ -217,7 +217,7 @@ class ScrapperService
         $torrentElements = $this->getElementByClass($newDom, 'lnk-dl');
 
         foreach ($torrentElements as $k=>$torrentDataElement) {
-
+            var_dump($torrentDataElement);
 //            $tmpElFinder = new DomXPath($torrentElement);
 //
 //            $qualityClassname="modal-quality";
@@ -228,7 +228,7 @@ class ScrapperService
 //
 //            $magnetClassname="magnet-download";
 //            $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
-var_dump($torrentDataElement->textContent);
+
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
