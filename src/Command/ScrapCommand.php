@@ -471,7 +471,7 @@ class ScrapCommand extends Command
 
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
-            if ($percent > 85 || ($percent > 70 && $amount == 1))
+            if ($percent >= 85 || ($percent > 70 && $amount == 1))
                 return $result;
 
             //leave only digits to title
