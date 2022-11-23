@@ -419,8 +419,19 @@ class ScrapCommand extends Command
             $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
 
             //if not same year continue
-            if ($year != $movie->getYear())
-                continue;
+            $maybeYear = false;
+            if ($year != $movie->getYear()) {
+
+                //if year +- 1 is not equal to movie year
+                if (
+                    $year != $movie->getYear() + 1 &&
+                    $year != $movie->getYear() - 1)
+                {
+                    continue;
+                }
+
+                $maybeYear = true;
+            }
 
             //slugify titles
             $slugResultTitle = $this->slugify($result['title']);
