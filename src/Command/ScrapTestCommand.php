@@ -212,8 +212,6 @@ class ScrapTestCommand extends Command
         $movie->addScrap($movieData[ 'data' ]);
         $movie->setMatchName($movieData[ 'data' ]->getName());
 
-        var_dump($movieData[ 'data' ]);
-
         //general stuff
         $movie->setTitle($movie->getMatchName());
         $movie->setYear($movieData[ 'data' ]->getYear());
