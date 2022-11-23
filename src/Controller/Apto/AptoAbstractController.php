@@ -128,9 +128,8 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 return $object->getId();
                 },
             ];
-//            $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
-            $normalizers = [new ObjectNormalizer()];
-            $serializer = new Serializer($normalizers, $encoders);
+            $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
+            $serializer = new Serializer($normalizers);
 
             $respArray = [];
 
