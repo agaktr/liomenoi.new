@@ -129,7 +129,7 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 },
             ];
             $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
-            $serializer = new Serializer($normalizers);
+            $serializer = new Serializer($normalizers, $encoders);
 
             $respArray = [];
 
@@ -140,7 +140,7 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 if (
                     is_array($value) ||
                     is_object($value)){
-                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
+                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json',[AbstractNormalizer::IGNORED_ATTRIBUTES=> ['id']]));
                 }else{
                     if (is_object($value)) {
                         $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json'));
