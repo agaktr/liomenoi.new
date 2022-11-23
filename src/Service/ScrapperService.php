@@ -217,7 +217,7 @@ class ScrapperService
         $torrentElements = $this->getElementByClass($newDom, 'lnk-dl');
 
         foreach ($torrentElements as $k=>$torrentDataElement) {
-            var_dump($torrentDataElement);
+            var_dump($torrentDataElement->childNodes[0]->nodeValue);
 //            $tmpElFinder = new DomXPath($torrentElement);
 //
 //            $qualityClassname="modal-quality";
