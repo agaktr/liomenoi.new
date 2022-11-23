@@ -19,8 +19,11 @@ class MovieController extends AptoAbstractController
     /**
      * @Route("/", name="app_movie_index", methods={"GET"})
      */
-    public function index(MovieRepository $movieRepository): Response
+    public function index(Request $request,MovieRepository $movieRepository): Response
     {
+
+
+        var_dump($request->query->all());
 
         $this->isApi = true;
 

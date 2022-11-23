@@ -186,9 +186,6 @@ class ScrapCommand extends Command
         return Command::SUCCESS;
     }
 
-
-
-
     private function handleMovie(int $objectId, array $movieData,$io)
     {
 
