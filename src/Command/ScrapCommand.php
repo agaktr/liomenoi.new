@@ -263,6 +263,7 @@ class ScrapCommand extends Command
                 $io->error('No TMDB for '.$movie->getMatchName());
                 $movie->setImdb(false);
                 $movie->setFetched(false);
+                $this->objectsMap[ $objectId ]->setValid(false);
                 $this->em->flush();
                 return;
             }
@@ -411,7 +412,6 @@ class ScrapCommand extends Command
         $amount = count($tmdbMovieRes['results']);
 
         if ($amount == 0)
-            return null;
 
         foreach ($tmdbMovieRes['results'] as $result){
             //get only year from $result['release_date']
