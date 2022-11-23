@@ -91,7 +91,7 @@ class ScrapCommand extends Command
         if ($providerInput == 0){
             $providers = $this->em->getRepository(Provider::class)->findAll();
         }else{
-            $providers = [$this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput])];
+            $providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
         }
         foreach ($providers as $provider) {
 
