@@ -364,7 +364,7 @@ class ScrapTestCommand extends Command
         $perf['handle'][] = microtime(true) - $start;
         $this->scrapper->setPerformance($perf);
 
-        $io->success('Done '.$movie->getTitle().'('.$movie->getId().')');
+        $io->success('Finished '.$movie->getTitle().'('.$movie->getId().')');
     }
 
     private function slugify($text, string $divider = '-')
