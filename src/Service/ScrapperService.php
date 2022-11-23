@@ -244,7 +244,7 @@ class ScrapperService
                 $torrentExtFile = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
                 //get last part of url
                 $torrentExtFileExt = substr($torrentExtFile, strrpos($torrentExtFile, '/') + 1);
-                var_dump($torrentExtFile);
+                var_dump($torrentExtFileExt);
 
                 $this->io->write('Converting torrent to magnet: '.$torrentExtFile);
                 $file = './george.torrent';
