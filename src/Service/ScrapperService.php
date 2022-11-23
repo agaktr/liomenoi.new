@@ -251,7 +251,8 @@ class ScrapperService
                 file_put_contents($file, $torrentExt);
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
-                var_dump($torrent);
+                var_dump($torrent->hash_info());
+                var_dump($torrent->info);
                 $this->io->text('Result: '.$magnet);
                 $this->io->newLine();
             }
