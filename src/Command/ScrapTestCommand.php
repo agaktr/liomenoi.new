@@ -247,6 +247,13 @@ class ScrapTestCommand extends Command
         }
 
         //Imdb stuff
+        if (null === $movieData[ 'imdb' ]){
+            //try to find imdb with the Search Api
+            $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
+
+            var_dump($tmdbMovieRes);
+        }
+
         $movie->setImdb($movieData[ 'imdb' ]);
 
         $this->objectsMap[ $objectId ]->setValid(true);
