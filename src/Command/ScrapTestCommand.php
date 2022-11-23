@@ -246,7 +246,9 @@ class ScrapTestCommand extends Command
             $magnet->setMovie($movie);
         }
 
-        //Imdb stuff
+        /**
+         * START IMDB TMDB STUFF
+         */
         if (null === $movieData[ 'imdb' ]){
             $io->error('No imdb for '.$movie->getMatchName());
             $io->info('Searching for it.. ');
@@ -254,32 +256,34 @@ class ScrapTestCommand extends Command
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
             $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
             $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
+            $movie->setImdb($tmdbMovie['imdb_id']);
             var_dump($tmdbMovieRes);
             var_dump($tmdbMovie);
+        }else{
+            $movie->setImdb($movieData[ 'imdb' ]);
         }
-
-        $movie->setImdb($movieData[ 'imdb' ]);
 
         $this->objectsMap[ $objectId ]->setValid(true);
 
-        /**
-         * START TMDB STUFF
-         */
         $io->title(': Doing '.$movie->getMatchName());
 
-        //scrap imdb id from imdb url $movie->getImdb
-        $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$movie->getImdb());
+        if (!isset($tmdbMovie)){
+            //scrap imdb id from imdb url $movie->getImdb
+            $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$movie->getImdb());
 
-        //find movie from tmdb based on imdb id
-        $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
-        if (empty($tmdbMovieRes['movie_results'])){
-            $io->error('No TMDB for '.$imdbId);
-die();
-            $movie->setFetched(false);
-            $this->em->flush();
-            return;
+            //find movie from tmdb based on imdb id
+            $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
+            if (empty($tmdbMovieRes['movie_results'])){
+                $io->error('No TMDB for '.$imdbId);
+
+                $movie->setFetched(false);
+                $this->em->flush();
+                return;
+            }
+            $tmdbMovie = $tmdbMovieRes["movie_results"][0];
         }
-        $tmdbMovie = $tmdbMovieRes["movie_results"][0];
+var_dump('hello');
+        die();
 
         //get en/gr version of movie
         /** @var \Tmdb\Model\Movie $modelMovie */
