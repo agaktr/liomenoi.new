@@ -223,8 +223,19 @@ class ScrapperService
             $classname="lnk-dl";
             $spanElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
 
-            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($spanElements->item(2)->nodeValue);
-            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($spanElements->item(2)->nodeValue);
+            $qualitySize = $spanElements->item(2)->nodeValue;
+
+            //check if magnet
+            if (strpos(strtolower($qualitySize), 'magnet') !== false) {
+                continue;
+            } else {
+                $qualityData = explode('.', $qualitySize);
+                $type = $qualityData[0];
+                $quality = $qualityData[1];
+            }
+
+            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
+            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
             $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
         }
