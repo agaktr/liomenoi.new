@@ -136,7 +136,7 @@ class ScrapCommand extends Command
                     $this->objectsMap[ $object->getId() ] = $object;
                     $this->urls[ $object->getId() ] = substr($object->getProvider()->getDomain() , 0 , -1) . $object->getSlug();
                 }
-var_dump($this->urls);
+
                 $io->text('Doing ids '.json_encode(array_keys($this->objectsMap)));
 
                 //Init scrapper
@@ -150,7 +150,7 @@ var_dump($this->urls);
 
 
                 $results = $this->scrapper->getScrappedContent();
-                var_dump($results);
+
                 foreach ($results as $id => $content) {
 
                     $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
@@ -167,7 +167,7 @@ var_dump($this->urls);
                             break;
                     }
                 }
-
+                var_dump($objectId);
                 $this->em->flush();
 
                 $perf = $this->scrapper->getPerformance();
