@@ -415,6 +415,7 @@ class ScrapCommand extends Command
 
                     $io->text('Added new actor ' . $actorModel->getName());
                 } else {
+                    $actor = $this->actorsLocalArray[ $actorModel->getId() ];
                     $io->text('Found actor ' . $actorModel->getName());
                 }
             } else {
