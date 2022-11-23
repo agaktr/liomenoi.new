@@ -214,9 +214,10 @@ class ScrapperService
         $torrentsWrapper = $dom->getElementById('list-dl');
         $newDom = new DomDocument();
         $newDom->appendChild($newDom->importNode($torrentsWrapper, true));
-        $torrentElements = $this->getElementByClass($newDom, 'lnk-dl');
+        $torrentElements = $this->getElementByClass($newDom, 'lnk-lnk');
 
         foreach ($torrentElements as $k=>$torrentDataElement) {
+            var_dump($torrentDataElement->getAttribute('href'));
             var_dump($torrentDataElement->childNodes[0]);
 //            $tmpElFinder = new DomXPath($torrentElement);
 //
@@ -232,7 +233,7 @@ class ScrapperService
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
-            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->parent->getAttribute('href');
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->getAttribute('href');
         }
     }
 
