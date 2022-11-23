@@ -421,10 +421,9 @@ class ScrapTestCommand extends Command
             var_dump($slugResultTitle);
             var_dump($slugMovieTile);
 
-            //remove special chars from title
-
-//            //if similar match in title
-//            similar_text($result['title'],$movie->getMatchName(),$percent);
+            //if similar match in title
+            similar_text($result['title'],$movie->getMatchName(),$percent);
+            var_dump($percent);
 //            if ($percent > 80)
 //                return $result;
         }
