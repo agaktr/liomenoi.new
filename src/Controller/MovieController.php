@@ -23,7 +23,7 @@ class MovieController extends AptoAbstractController
     {
 
 
-        var_dump($request->query->all());
+//        var_dump($request->query->all());
 
         $this->isApi = true;
 
@@ -46,6 +46,7 @@ class MovieController extends AptoAbstractController
 
         return $this->render('movie/index.html.twig', [
             'movies' => $moviesResponse,
+            'resp' =>$request->query->all()
         ]);
     }
 
