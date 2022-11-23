@@ -7,6 +7,7 @@ use DOMDocument;
 use DOMXPath;
 use ErrorException;
 use Exception;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ScrapperService
 {
@@ -17,6 +18,12 @@ class ScrapperService
     private array $performance = [];
     private string $doing = 'Movie';
     private Provider $provider;
+    private SymfonyStyle $io;
+
+    public function setIo($io): void
+    {
+        $this->io = $io;
+    }
 
     /**
      * @return array
@@ -232,12 +239,20 @@ class ScrapperService
                 $qualityData = explode('.', $qualitySize);
                 $type = $qualityData[0];
                 $quality = $qualityData[1];
+                $torrentExtFile = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
+
+                //convert torrent file to magnet using torrent service
+                $this->io->write('Converting torrent to magnet: '.$torrentExtFile);
+                $file = './george.torrent';
+                $torrentExt = file_get_contents($torrentExtFile);
+                file_put_contents($file, $torrentExt);
+                $torrent = new TorrentService( $file );
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
-            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrent->magnet();
         }
     }
 
