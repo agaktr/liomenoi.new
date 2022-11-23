@@ -257,6 +257,8 @@ class ScrapCommand extends Command
 
         //general stuff
         $movie->setTitle($movie->getMatchName());
+        var_dump($movieData[ 'data' ]->getId());
+        var_dump($movieData[ 'data' ]->getYear());
         $movie->setYear($movieData[ 'data' ]->getYear());
         $movie->setSlug('N/A');
 
