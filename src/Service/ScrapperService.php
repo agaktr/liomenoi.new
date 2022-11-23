@@ -250,6 +250,7 @@ class ScrapperService
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
                 $this->io->text('Result: '.$magnet);
+                $this->io->newLine();
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
