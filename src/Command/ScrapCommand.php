@@ -412,6 +412,7 @@ class ScrapCommand extends Command
         $amount = count($tmdbMovieRes['results']);
 
         if ($amount == 0)
+            return null;
 
         foreach ($tmdbMovieRes['results'] as $result){
             //get only year from $result['release_date']
@@ -444,8 +445,6 @@ class ScrapCommand extends Command
             var_dump($slugMovieTile);
             var_dump($percent);
         }
-
-
 
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
