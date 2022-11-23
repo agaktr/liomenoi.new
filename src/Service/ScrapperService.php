@@ -248,12 +248,14 @@ class ScrapperService
                 $torrentExt = file_get_contents($torrentExtFile);
                 file_put_contents($file, $torrentExt);
                 $torrent = new TorrentService( $file );
+                $magnet = $torrent->magnet();
+                $this->io->text('Result: '.$magnet);
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
-            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrent->magnet();
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnet;
         }
     }
 
