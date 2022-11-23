@@ -251,6 +251,7 @@ class ScrapperService
 
                 //calculate size
                 $size = 0;
+                var_dump($torrent->info);
                 foreach ($torrent->info['files'] as $file) {
                     $size += $file['length'];
                 }
