@@ -34,6 +34,7 @@ class ScrapCommand extends Command
     private array $genresLocalArray = [];
     private array $actorsLocalArray = [];
     private array $providers = [];
+    private bool $fast = true;
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
@@ -61,6 +62,7 @@ class ScrapCommand extends Command
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
             ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'the page to start from')
+            ->addOption('slow', null, InputOption::VALUE_REQUIRED, 'the page to start from')
         ;
     }
 
@@ -163,6 +165,9 @@ class ScrapCommand extends Command
         $this->input = $input;
         $this->output = $output;
         $this->io = new SymfonyStyle($input, $output);
+        $this->fast = $input->getOption('slow') ? false : true;
+
+        var_dump($this->fast);
 
         //load genres
         $this->io->title('Loading genres...');
@@ -220,7 +225,6 @@ class ScrapCommand extends Command
 
         /** @var Movie $movie */
         $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
-
         if(!isset($this->objectsLocalArray[$objectKey])){
             $io->note('Creating new Object');
             $movie = new Movie();
