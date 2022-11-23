@@ -136,7 +136,6 @@ class ScrapCommand extends Command
                             break;
                     }
                 }
-//                $this->em->flush();
 
                 $perf = $this->scrapper->getPerformance();
                 $perf['total'] = microtime(true) - $start;

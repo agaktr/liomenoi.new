@@ -246,7 +246,6 @@ class ScrapperService
                 $quality = $qualityData[1];
 
                 $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
-                $this->io->newLine();
 
                 //convert torrent file to magnet using torrent service
                 $file = './george.torrent';
@@ -272,10 +271,7 @@ class ScrapperService
                 }
 
                 $this->io->text('Size: '.$size);
-                $this->io->newLine();
                 $this->io->text('Magnet: '.$magnet);
-                $this->io->newLine();
-                $this->io->newLine();
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
