@@ -256,7 +256,7 @@ class ScrapTestCommand extends Command
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
             $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
             $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
-            $movie->setImdb('https://www.imdb.com/title/'.$tmdbMovie->getImdbId());
+            $movie->setImdb('https://www.imdb.com/title/'.$tmdbMovie['imdb_id']);
         }else{
             $movie->setImdb($movieData[ 'imdb' ]);
         }
