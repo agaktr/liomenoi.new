@@ -446,9 +446,13 @@ class ScrapCommand extends Command
             if ( $slugOriginalResultTitle == $slugMovieTile )
                 return $result;
 
+            //up to this point we check only if year is certain
+            if (!$certainYear)
+                continue;
+
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
-            if ($percent > 70 && $amount == 1 && $certainYear)
+            if ($percent > 70 && $amount == 1)
                 return $result;
 
             //leave only digits to title
@@ -457,7 +461,7 @@ class ScrapCommand extends Command
 
             //if the digit only title match
             //this takes case of movies like 300, 300: Rise of an Empire
-            if ($digitsResultTitle == $digitsMovieTitle && $certainYear)
+            if ($digitsResultTitle == $digitsMovieTitle)
                 return $result;
 
             var_dump($slugOriginalResultTitle);
