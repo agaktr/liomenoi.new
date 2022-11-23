@@ -357,10 +357,10 @@ class Movie
     /**
      * @return Collection<int, Scrap>
      */
-//    public function getScraps(): Collection
-//    {
-//        return $this->scraps;
-//    }
+    public function getScraps(): Collection
+    {
+        return $this->scraps;
+    }
 
     public function addScrap(Scrap $scrap): self
     {
