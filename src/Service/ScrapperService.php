@@ -211,8 +211,10 @@ class ScrapperService
         $this->scrappedContent[$id]['type'] = $this->doing;
 
         //torrents
-        $torrentElements = $this->getElementByClass($dom, 'modal-torrent');
-
+        $torrentsWrapper = $dom->getElementById('list-dl');
+        $torrentElements = $this->getElementByClass($torrentsWrapper, 'lnk-dl');
+var_dump($torrentElements);
+die();
         foreach ($torrentElements as $k=>$torrentElement) {
 
             $tmpElFinder = new DomXPath($torrentElement);
