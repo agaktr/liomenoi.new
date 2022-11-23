@@ -163,7 +163,6 @@ class ScrapperService
                     $this->YTSdoScrap($id,$content);
                     break;
                 case 'ytstv.me':
-                    die('ytstv.me');
                     $this->YTSTVmeScrap($content);
                     break;
             }
