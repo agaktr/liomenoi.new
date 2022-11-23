@@ -243,7 +243,7 @@ class ScrapperService
                 //convert torrent file to magnet using torrent service
                 $torrentExtFile = str_replace(' ','%20',$torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
 
-                $this->io->write('Converting torrent to magnet: '.$torrentExtFile);
+                $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
                 $file = './george.torrent';
                 $torrentExt = file_get_contents($torrentExtFile);
                 file_put_contents($file, $torrentExt);
