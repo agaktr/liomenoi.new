@@ -228,6 +228,7 @@ class ScrapperService
             $qualitySize = $spanElements->item(2)->nodeValue;
 
             //check if magnet
+            var_dump($qualitySize);
             if (strpos(strtolower($qualitySize), 'magnet') !== false) {
                 continue;
             } else {
