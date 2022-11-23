@@ -65,8 +65,6 @@ class ScrapCommand extends Command
 
         ini_set('memory_limit', '2048M');
 
-
-
         $io = new SymfonyStyle($input, $output);
 
         //get genres
@@ -94,7 +92,7 @@ class ScrapCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 1;
+            $pagesNo = 2;
             $doing = 'Movie';
 
             switch ($doing) {
@@ -147,7 +145,6 @@ class ScrapCommand extends Command
                 //Scrap
                 $this->scrapper->getContent();
                 $this->scrapper->getScraps();
-
 
                 $results = $this->scrapper->getScrappedContent();
 
