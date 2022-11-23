@@ -211,9 +211,11 @@ class ScrapperService
 
         //type
         $this->scrappedContent[$id]['type'] = $this->doing;
-var_dump($id);
+
         //torrents
         $torrentsWrapper = $dom->getElementById('list-dl');
+        if (null == $torrentsWrapper)
+            return;
         $newDom = new DomDocument();
         $newDom->appendChild($newDom->importNode($torrentsWrapper, true));
         $torrentElements = $this->getElementByClass($newDom, 'lnk-lnk');
