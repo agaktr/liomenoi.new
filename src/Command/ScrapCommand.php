@@ -56,7 +56,7 @@ class ScrapCommand extends Command
         $this
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
-//            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
+            ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'the page to start from')
         ;
     }
 
@@ -87,7 +87,12 @@ class ScrapCommand extends Command
 
         //Get providers
         $io->title('Loading providers...');
-        $providers = $this->em->getRepository(Provider::class)->findAll();
+        $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
+        if ($providerInput == 0){
+            $providers = $this->em->getRepository(Provider::class)->findAll();
+        }else{
+            $providers = [$this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput])];
+        }
         foreach ($providers as $provider) {
 
             $io->title('Provider: ' . $provider->getName());
@@ -245,29 +250,40 @@ class ScrapCommand extends Command
             $magnet->setMovie($movie);
         }
 
-        //Imdb stuff
-        $movie->setImdb($movieData[ 'imdb' ]);
+        /**
+         * START IMDB TMDB STUFF
+         */
+        if (null === $movieData[ 'imdb' ]){
+            $io->error('No imdb for '.$movie->getMatchName());
+            $io->info('Searching for it.. ');
+            //try to find imdb with the Search Api
+            $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
+            $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
+            $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
+            $movie->setImdb('https://www.imdb.com/title/'.$tmdbMovie['imdb_id']);
+        }else{
+            $movie->setImdb($movieData[ 'imdb' ]);
+        }
 
         $this->objectsMap[ $objectId ]->setValid(true);
 
-        /**
-         * START TMDB STUFF
-         */
         $io->title(': Doing '.$movie->getMatchName());
 
-        //scrap imdb id from imdb url $movie->getImdb
-        $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$movie->getImdb());
+        if (!isset($tmdbMovie)){
+            //scrap imdb id from imdb url $movie->getImdb
+            $imdbId = preg_filter('/^.*\/(tt\d+).*$/','$1',$movie->getImdb());
 
-        //find movie from tmdb based on imdb id
-        $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
-        if (empty($tmdbMovieRes['movie_results'])){
-            $io->error('No TMDB for '.$imdbId);
+            //find movie from tmdb based on imdb id
+            $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
+            if (empty($tmdbMovieRes['movie_results'])){
+                $io->error('No TMDB for '.$imdbId);
 
-            $movie->setFetched(false);
-            $this->em->flush();
-            return;
+                $movie->setFetched(false);
+                $this->em->flush();
+                return;
+            }
+            $tmdbMovie = $tmdbMovieRes["movie_results"][0];
         }
-        $tmdbMovie = $tmdbMovieRes["movie_results"][0];
 
         //get en/gr version of movie
         /** @var \Tmdb\Model\Movie $modelMovie */
@@ -380,6 +396,47 @@ class ScrapCommand extends Command
         }
 
         return $text;
+    }
+
+    private function determineResults(Movie $movie,array $tmdbMovieRes){
+
+        $amount = count($tmdbMovieRes['results']);
+        foreach ($tmdbMovieRes['results'] as $result){
+            //get only year from $result['release_date']
+            $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
+
+            //if not same year continue
+            if ($year != $movie->getYear())
+                continue;
+
+            //slugify titles
+            $slugResultTitle = $this->slugify($result['title']);
+            $slugOriginalResultTitle = $this->slugify($result['original_title']);
+            $slugMovieTile = $this->slugify($movie->getMatchName());
+
+            //if exact match in title
+            if ( $slugResultTitle == $slugMovieTile )
+                return $result;
+
+            //if exact match in original title
+            if ( $slugOriginalResultTitle == $slugMovieTile )
+                return $result;
+
+            //if similar match in title
+            similar_text($result['title'],$movie->getMatchName(),$percent);
+            if ($percent > 70 && $amount == 1)
+                return $result;
+
+            var_dump($slugOriginalResultTitle);
+            var_dump($slugResultTitle);
+            var_dump($slugMovieTile);
+            var_dump($percent);
+        }
+        var_dump($movie->getMatchName());
+        var_dump($movie->getYear());
+        var_dump($tmdbMovieRes);
+
+        die();
     }
 }
 
