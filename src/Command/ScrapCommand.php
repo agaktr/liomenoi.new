@@ -273,6 +273,7 @@ class ScrapCommand extends Command
         /** @var \Tmdb\Model\Movie $modelMovie */
         /** @var \Tmdb\Model\Movie $modelMovieGr */
         $repository = new MovieRepository($this->tmdbService->client);
+        var_dump('hello');
         $modelMovie = $repository->load($tmdbMovie["id"]);
 
         var_dump($modelMovie->getOriginalTitle());
