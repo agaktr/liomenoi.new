@@ -417,6 +417,7 @@ class ScrapTestCommand extends Command
             if ( $slugOriginalResultTitle == $slugMovieTile )
                 return $result;
 
+            var_dump($slugOriginalResultTitle);
             var_dump($slugResultTitle);
             var_dump($slugMovieTile);
 
