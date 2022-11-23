@@ -33,10 +33,14 @@ class ScrapCommand extends Command
     private array $magnetsLocalArray = [];
     private array $genresLocalArray = [];
     private array $actorsLocalArray = [];
+    private array $providers = [];
 
     private EntityManagerInterface $em;
     private ScrapperService $scrapper;
     private TMDBService $tmdbService;
+    private SymfonyStyle $io;
+    private InputInterface $input;
+    private OutputInterface $output;
 
 
     public function __construct(EntityManagerInterface $entityManager,ScrapperService $scrapperService,TMDBService $tmdbService)
@@ -63,37 +67,11 @@ class ScrapCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
 
-        ini_set('memory_limit', '2048M');
+        $this->load($input,$output);
 
-        $io = new SymfonyStyle($input, $output);
+        $io = $this->io;
 
-        //get genres
-        $io->title('Loading genres...');
-        $genresLocal = $this->em->getRepository(Category::class)->findAll();
-        $this->genresLocalArray = [];
-        foreach($genresLocal as $genre){
-            $this->genresLocalArray[$genre->getTmdbId()] = $genre;
-        }
-        unset($genresLocal);
-
-        //get actors
-        $io->title('Loading actors...');
-        $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
-        $this->actorsLocalArray = [];
-        foreach($actorsLocal as $actor){
-            $this->actorsLocalArray[$actor->getTmdbId()] = $actor;
-        }
-        unset($actorsLocal);
-
-        //Get providers
-        $io->title('Loading providers...');
-        $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
-        if ($providerInput == 0){
-            $providers = $this->em->getRepository(Provider::class)->findAll();
-        }else{
-            $providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
-        }
-        foreach ($providers as $provider) {
+        foreach ($this->providers as $provider) {
 
             $io->title('Provider: ' . $provider->getName());
             $io->title('Starting Movie scrapping');
@@ -105,26 +83,7 @@ class ScrapCommand extends Command
 
             switch ($doing) {
                 case 'Movie':
-                    //get local scrap
-                    $io->title('Loading local scrap...');
-                    $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
-                    $this->objectsLocalArray = [];
-                    foreach($objectsLocal as $object){
-                        $objectKey = $object->getMatchName().'-'.$object->getYear();
-                        $this->objectsLocalArray[$objectKey] = $object;
 
-                    }
-                    unset($objectsLocal);
-
-                    //get local magnets
-                    $io->title('Loading local magnets...');
-                    $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
-                    $this->magnetsLocalArray = [];
-                    foreach($objectsLocal as $object){
-                        $objectKey = $object->getMagnet();
-                        $this->magnetsLocalArray[$objectKey] = $object;
-                    }
-                    unset($objectsLocal);
                     break;
                 case 'Serie':
                     die();
@@ -192,6 +151,66 @@ class ScrapCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function load(InputInterface $input, OutputInterface $output)
+    {
+
+        //set memory to big
+        ini_set('memory_limit', '2048M');
+
+        //global vars
+        $this->input = $input;
+        $this->output = $output;
+        $this->io = new SymfonyStyle($input, $output);
+
+        //load genres
+        $this->io->title('Loading genres...');
+        $genresLocal = $this->em->getRepository(Category::class)->findAll();
+        $this->genresLocalArray = [];
+        foreach($genresLocal as $genre){
+            $this->genresLocalArray[$genre->getTmdbId()] = $genre;
+        }
+        unset($genresLocal);
+
+        //load actors
+        $this->io->title('Loading actors...');
+        $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
+        $this->actorsLocalArray = [];
+        foreach($actorsLocal as $actor){
+            $this->actorsLocalArray[$actor->getTmdbId()] = $actor;
+        }
+        unset($actorsLocal);
+
+        //load providers
+        $this->io->title('Loading providers...');
+        $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
+        if ($providerInput == 0){
+            $this->providers = $this->em->getRepository(Provider::class)->findAll();
+        }else{
+            $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
+        }
+
+        //load local movies
+        $this->io->title('Loading local scrap...');
+        $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
+        $this->objectsLocalArray = [];
+        foreach($objectsLocal as $object){
+            $objectKey = $object->getMatchName().'-'.$object->getYear();
+            $this->objectsLocalArray[$objectKey] = $object;
+
+        }
+        unset($objectsLocal);
+
+        //load local magnets
+        $this->io->title('Loading local magnets...');
+        $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
+        $this->magnetsLocalArray = [];
+        foreach($objectsLocal as $object){
+            $objectKey = $object->getMagnet();
+            $this->magnetsLocalArray[$objectKey] = $object;
+        }
+        unset($objectsLocal);
     }
 
     private function handleMovie(int $objectId, array $movieData,$io)
