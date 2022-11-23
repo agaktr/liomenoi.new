@@ -96,7 +96,7 @@ class ScrapTestCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 3;
+            $pagesNo = 1;
             $doing = 'Movie';
 
             switch ($doing) {

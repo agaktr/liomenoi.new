@@ -112,14 +112,6 @@ class ScrapperService
         $this->doing = $doing;
     }
 
-    public function initObjects()
-    {
-        unset($this->urlContent);
-        unset($this->scrappedContent);
-        $this->get();
-        $this->scrapObjects();
-    }
-
     private function get()
     {
 
@@ -205,42 +197,42 @@ class ScrapperService
 
     private function YTSTVmeScrap($content){
 
-        die('not implemented');
+        var_dump($content);
 
-//        $dom = new DomDocument();
-//        @$dom->loadHTML($content);
-//
-//        $finder = new DomXPath($dom);
-//        $classname="ml-item";
-//        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
-//
-//        //foreach element in the node list
-//        foreach ($elements as $k=>$element) {
-//
-//            $tmpDom = new DomDocument();
-//            $tmpDom->appendChild($tmpDom->importNode($element, true));
-//            $tmpFinder = new DomXPath($tmpDom);
-//
-//            $classname="ml-mask";
-//            $linkElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
-//
-//            $classname="mli-info";
-//            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
-//
-//            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
-//            $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
-//
-//            if ($this->doing === 'Serie'){
-//                $year = str_replace('TV Series', '', $year);
-//            }
-//
-//            $this->scrappedContent[] = [
-//                'title' => trim($title),
-//                'year' => trim($year),
-//                'type' => $this->doing,
-//                'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
-//            ];
-//        }
+        $dom = new DomDocument();
+        @$dom->loadHTML($content);
+
+        $finder = new DomXPath($dom);
+        $classname="ml-item";
+        $elements = $finder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+
+        //foreach element in the node list
+        foreach ($elements as $k=>$element) {
+
+            $tmpDom = new DomDocument();
+            $tmpDom->appendChild($tmpDom->importNode($element, true));
+            $tmpFinder = new DomXPath($tmpDom);
+
+            $classname="ml-mask";
+            $linkElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+
+            $classname="mli-info";
+            $titleElement = $tmpFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]")->item(0);
+
+            $year = $this->getStringBetween($titleElement->nodeValue, '(', ')');
+            $title = str_replace(' ('.$year.')', '', $titleElement->nodeValue);
+
+            if ($this->doing === 'Serie'){
+                $year = str_replace('TV Series', '', $year);
+            }
+
+            $this->scrappedContent[] = [
+                'title' => trim($title),
+                'year' => trim($year),
+                'type' => $this->doing,
+                'slug' => str_replace($this->provider->getDomain(),'/',$linkElement->getAttribute('href')),
+            ];
+        }
     }
 
     private function YTSTVmeScrapProvider($content){
