@@ -62,7 +62,7 @@ class ScrapCommand extends Command
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
             ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'the page to start from')
-            ->addOption('slow', null, InputOption::VALUE_REQUIRED, 'the page to start from')
+            ->addOption('slow', null, InputOption::VALUE_NONE, 'the page to start from')
         ;
     }
 
