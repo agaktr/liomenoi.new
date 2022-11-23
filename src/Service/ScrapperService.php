@@ -271,7 +271,7 @@ class ScrapperService
                 }
 
                 $this->io->text('Size: '.$size);
-                $this->io->text('Magnet: '.$magnet);
+//                $this->io->text('Magnet: '.$magnet);
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
