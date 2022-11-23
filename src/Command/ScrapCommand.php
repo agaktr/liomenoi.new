@@ -273,18 +273,16 @@ class ScrapCommand extends Command
         /** @var \Tmdb\Model\Movie $modelMovie */
         /** @var \Tmdb\Model\Movie $modelMovieGr */
         $repository = new MovieRepository($this->tmdbService->client);
-        var_dump('hello');
         try {
             $modelMovie = $repository->load($tmdbMovie['id']);
             $modelMovieGr = $repository->load($tmdbMovie['id'], ['language' => 'el']);
         }catch (\Exception $e){
-            var_dump($e->getCode());
-            var_dump($e->getMessage());
+            $io->error('No TMDB instance for id:'.$tmdbMovie['id']);
+
+            $movie->setFetched(false);
+            $this->em->flush();
+            return;
         }
-        $modelMovie = $repository->load($tmdbMovie["id"]);
-
-
-        $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 
         //set tmdb id
         $movie->setTmdbId($tmdbMovie["id"]);
