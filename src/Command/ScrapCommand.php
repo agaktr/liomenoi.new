@@ -240,7 +240,7 @@ class ScrapCommand extends Command
                 $movie = $this->objectsLocalArray[$objectKey];
             }
         }else{
-            $movie = $this->em->getRepository(Movie::class)->findOneBy(['name'=>$movieData[ 'data' ]->getName(),'year'=>$movieData[ 'data' ]->getYear()]);
+            $movie = $this->em->getRepository(Movie::class)->findOneBy(['matchName'=>$movieData[ 'data' ]->getName(),'year'=>$movieData[ 'data' ]->getYear()]);
             if (!$movie){
                 $io->note('Creating new Object');
                 $movie = new Movie();
