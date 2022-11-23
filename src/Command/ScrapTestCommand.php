@@ -400,13 +400,23 @@ class ScrapTestCommand extends Command
             //get only year from $result['release_date']
             $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
 
-            //if exact match in title and year
-            if ($result['title'] == $movie->getMatchName() && $year == $movie->getYear()){
-                return $result;
-            }
+            //if not same year continue
+            if ($year != $movie->getYear())
+                continue;
 
-            var_dump(similar_text($result['title'],$movie->getMatchName(),$percent));
-            var_dump($percent);
+            //if exact match in title
+            if ( $result['title'] == $movie->getMatchName() )
+                return $result;
+
+            //remove special chars from title
+
+            $titleTmp = $this->slugify($result['title']);
+            $titleTmp = $this->slugify($movie->getMatchName());
+
+            //if similar match in title
+            similar_text($result['title'],$movie->getMatchName(),$percent);
+            if ($percent > 80)
+                return $result;
         }
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
