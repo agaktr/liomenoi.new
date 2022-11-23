@@ -396,6 +396,7 @@ class ScrapTestCommand extends Command
 
     private function determineResults(Movie $movie,array $tmdbMovieRes){
 
+        $amount = count($tmdbMovieRes['results']);
         foreach ($tmdbMovieRes['results'] as $result){
             //get only year from $result['release_date']
             $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
@@ -423,9 +424,9 @@ class ScrapTestCommand extends Command
 
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
+            if ($percent > 70 && $amount == 1)
+                return $result;
             var_dump($percent);
-//            if ($percent > 80)
-//                return $result;
         }
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
