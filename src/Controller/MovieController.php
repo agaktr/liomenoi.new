@@ -25,15 +25,20 @@ class MovieController extends AptoAbstractController
 
 //        var_dump($request->query->all());
 
-        $_per_page = $request->query->get('per_page', 48);
+        $_per_page = $request->query->get('_per_page', 48);
         if ($_per_page > 100) {
             $_per_page = 100;
         }
-        $_page = $request->query->get('per_page', 1);
+        $_page = $request->query->get('_page', 1);
 
         $this->isApi = true;
 
-        $movies = $movieRepository->findBy(['fetched'=>true],[ 'id' => 'ASC'], $_per_page,(($_per_page * $_page) - $_per_page));
+        $movies = $movieRepository->findBy(
+            ['fetched'=>true],
+            [ 'id' => 'ASC'],
+            $_per_page,
+            (($_per_page * $_page) - $_per_page)
+        );
 
         $moviesResponse = [];
         foreach ($movies as $movie) {
