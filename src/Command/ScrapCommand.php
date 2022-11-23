@@ -61,6 +61,7 @@ class ScrapCommand extends Command
         $this
             ->setHelp('The command is run via a cron job once in a while.')
 //            ->addArgument('reportId', InputArgument::OPTIONAL, 'Add reportId')
+            ->addOption('offset', null, InputOption::VALUE_REQUIRED, 'the page to start from')
             ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'the page to start from')
             ->addOption('slow', null, InputOption::VALUE_NONE, 'the page to start from')
         ;
@@ -96,7 +97,8 @@ class ScrapCommand extends Command
 
                 $start = microtime(true);
 
-                $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , 0);
+                $offset = $input->getOption('offset') ? $input->getOption('offset') : 0;
+                $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , $offset);
 
                 $this->objectsMap = [];
                 $this->urls = [];
