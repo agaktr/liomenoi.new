@@ -278,6 +278,7 @@ class ScrapCommand extends Command
             $modelMovie = $repository->load($tmdbMovie['id']);
             $modelMovieGr = $repository->load($tmdbMovie['id'], ['language' => 'el']);
         }catch (\Exception $e){
+            var_dump($e->getCode());
             var_dump($e->getMessage());
         }
         $modelMovie = $repository->load($tmdbMovie["id"]);
