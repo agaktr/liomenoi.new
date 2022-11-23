@@ -406,10 +406,15 @@ class ScrapTestCommand extends Command
 
             //slugify titles
             $slugResultTitle = $this->slugify($result['title']);
+            $slugOriginalResultTitle = $this->slugify($result['original_title']);
             $slugMovieTile = $this->slugify($movie->getMatchName());
 
             //if exact match in title
             if ( $slugResultTitle == $slugMovieTile )
+                return $result;
+
+            //if exact match in original title
+            if ( $slugOriginalResultTitle == $slugMovieTile )
                 return $result;
 
             var_dump($slugResultTitle);
