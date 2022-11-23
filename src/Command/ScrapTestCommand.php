@@ -412,6 +412,9 @@ class ScrapTestCommand extends Command
             if ( $slugResultTitle == $slugMovieTile )
                 return $result;
 
+            var_dump($slugResultTitle);
+            var_dump($slugMovieTile);
+
             //remove special chars from title
 
 //            //if similar match in title
