@@ -68,6 +68,7 @@ class ScrapCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         //get genres
+        $io->title('Loading genres...');
         $genresLocal = $this->em->getRepository(Category::class)->findAll();
         $this->genresLocalArray = [];
         foreach($genresLocal as $genre){
@@ -76,6 +77,7 @@ class ScrapCommand extends Command
         unset($genresLocal);
 
         //get actors
+        $io->title('Loading actors...');
         $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
         $this->actorsLocalArray = [];
         foreach($actorsLocal as $actor){
@@ -84,6 +86,7 @@ class ScrapCommand extends Command
         unset($actorsLocal);
 
         //Get providers
+        $io->title('Loading providers...');
         $providers = $this->em->getRepository(Provider::class)->findAll();
         foreach ($providers as $provider) {
 
@@ -98,6 +101,7 @@ class ScrapCommand extends Command
             switch ($doing) {
                 case 'Movie':
                     //get local scrap
+                    $io->title('Loading local scrap...');
                     $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
                     $this->objectsLocalArray = [];
                     foreach($objectsLocal as $object){
@@ -108,6 +112,7 @@ class ScrapCommand extends Command
                     unset($objectsLocal);
 
                     //get local magnets
+                    $io->title('Loading local magnets...');
                     $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
                     $this->magnetsLocalArray = [];
                     foreach($objectsLocal as $object){
