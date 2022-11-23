@@ -251,8 +251,7 @@ class ScrapperService
                 file_put_contents($file, $torrentExt);
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
-                $this->io->text('Result: '.$magnet);
-                $this->io->newLine();
+
 
                 //calculate size
                 $size = 0;
@@ -265,6 +264,11 @@ class ScrapperService
                 } else {
                     $size = round($size / 1048576, 2) . ' MB';
                 }
+
+                $this->io->text('Size: '.$size);
+                $this->io->newLine();
+                $this->io->text('Magnet: '.$magnet);
+                $this->io->newLine();
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
