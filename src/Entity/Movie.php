@@ -93,6 +93,7 @@ class Movie
 
     /**
      * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="movies")
+     * @Ignore()
      */
     private $actors;
 
