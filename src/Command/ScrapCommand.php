@@ -188,15 +188,6 @@ class ScrapCommand extends Command
             }
             unset($actorsLocal);
 
-            //load providers
-            $this->io->title('Loading providers...');
-            $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
-            if ($providerInput == 0){
-                $this->providers = $this->em->getRepository(Provider::class)->findAll();
-            }else{
-                $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
-            }
-
             //load local movies
             $this->io->title('Loading local scrap...');
             $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
@@ -219,6 +210,15 @@ class ScrapCommand extends Command
             unset($objectsLocal);
         } else {
             $this->io->title('Slow mode');
+        }
+
+        //load providers
+        $this->io->title('Loading providers...');
+        $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
+        if ($providerInput == 0){
+            $this->providers = $this->em->getRepository(Provider::class)->findAll();
+        }else{
+            $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
         }
     }
 
