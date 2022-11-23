@@ -22,9 +22,6 @@ class MovieController extends AptoAbstractController
     public function index(Request $request,MovieRepository $movieRepository): Response
     {
 
-
-//        var_dump($request->query->all());
-
         $_per_page = $request->query->get('_per_page', 48);
         if ($_per_page > 100) {
             $_per_page = 100;
@@ -57,7 +54,6 @@ class MovieController extends AptoAbstractController
 
         return $this->render('movie/index.html.twig', [
             'movies' => $moviesResponse,
-            'resp' =>$request->query->all()
         ]);
     }
 
