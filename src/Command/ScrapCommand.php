@@ -417,8 +417,6 @@ class ScrapCommand extends Command
                 } else {
                     $io->text('Found actor ' . $actorModel->getName());
                 }
-
-                $movie->addActor($this->actorsLocalArray[$actorModel->getId()]);
             } else {
                 $actor = $this->em->getRepository(Actor::class)->findOneBy(['tmdbId'=>$actorModel->getId()]);
                 if (!$actor){
@@ -434,11 +432,9 @@ class ScrapCommand extends Command
                 }else{
                     $io->text('Found actor ' . $actorModel->getName());
                 }
-
-                $movie->addActor($actor);
             }
 
-
+            $movie->addActor($actor);
         }
 
         //set slug
