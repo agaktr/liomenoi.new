@@ -167,7 +167,6 @@ class ScrapCommand extends Command
                             break;
                     }
                 }
-                var_dump($objectId);
                 $this->em->flush();
 
                 $perf = $this->scrapper->getPerformance();
@@ -262,6 +261,7 @@ class ScrapCommand extends Command
         //find movie from tmdb based on imdb id
         $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
 
+        var_dump($tmdbMovieRes);
         if (empty($tmdbMovieRes['movie_results'])){
             $io->error('No TMDB for '.$imdbId);
 
