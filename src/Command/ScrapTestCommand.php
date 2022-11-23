@@ -405,6 +405,8 @@ class ScrapTestCommand extends Command
                 return $result;
             }
         }
+        var_dump($movie->getMatchName());
+        var_dump($movie->getYear());
         var_dump($tmdbMovieRes);
 
         die();
