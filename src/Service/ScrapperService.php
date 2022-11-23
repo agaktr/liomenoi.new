@@ -212,8 +212,12 @@ class ScrapperService
 
         //torrents
         $torrentsWrapper = $dom->getElementById('list-dl');
-        $torrentElements = $this->getElementByClass($torrentsWrapper, 'lnk-dl');
-var_dump($torrentElements);
+        $newDom = new DomDocument();
+        $newDom->appendChild($newDom->importNode($torrentsWrapper, true));
+        $torrentElements = $this->getElementByClass($newDom, 'lnk-dl');
+
+
+        var_dump($torrentElements);
 die();
         foreach ($torrentElements as $k=>$torrentElement) {
 
