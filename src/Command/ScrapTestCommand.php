@@ -253,6 +253,9 @@ class ScrapTestCommand extends Command
             //try to find imdb with the Search Api
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
             $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
+            $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
+            var_dump($tmdbMovieRes);
+            var_dump($tmdbMovie);
         }
 
         $movie->setImdb($movieData[ 'imdb' ]);
@@ -393,6 +396,15 @@ die();
 
     private function determineResults(Movie $movie,array $tmdbMovieRes){
 
+        foreach ($tmdbMovieRes['results'] as $result){
+            //get only year from $result['release_date']
+            $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
+
+            //if exact match in title and year
+            if ($result['title'] == $movie->getMatchName() && $year == $movie->getYear()){
+                return $result;
+            }
+        }
         var_dump($tmdbMovieRes);
 
         die();
