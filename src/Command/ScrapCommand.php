@@ -438,13 +438,15 @@ class ScrapCommand extends Command
             similar_text($result['title'],$movie->getMatchName(),$percent);
             if ($percent > 70 && $amount == 1)
                 return $result;
+
+            var_dump($slugOriginalResultTitle);
+            var_dump($slugResultTitle);
+            var_dump($slugMovieTile);
+            var_dump($percent);
         }
 
 
-        var_dump($slugOriginalResultTitle);
-        var_dump($slugResultTitle);
-        var_dump($slugMovieTile);
-        var_dump($percent);
+
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
         var_dump($tmdbMovieRes);
