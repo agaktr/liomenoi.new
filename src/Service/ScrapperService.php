@@ -244,11 +244,14 @@ class ScrapperService
                 $torrentExtFile = str_replace(' ','%20',$torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
 
                 $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
+                $this->io->newLine();
+
                 $file = './george.torrent';
                 $torrentExt = file_get_contents($torrentExtFile);
                 file_put_contents($file, $torrentExt);
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
+                var_dump($torrent);
                 $this->io->text('Result: '.$magnet);
                 $this->io->newLine();
             }
