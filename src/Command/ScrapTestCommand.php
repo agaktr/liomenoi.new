@@ -404,6 +404,9 @@ class ScrapTestCommand extends Command
             if ($result['title'] == $movie->getMatchName() && $year == $movie->getYear()){
                 return $result;
             }
+
+            var_dump(similar_text($result['title'],$movie->getMatchName(),$percent));
+            var_dump($percent);
         }
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
