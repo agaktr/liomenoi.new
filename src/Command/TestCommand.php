@@ -66,7 +66,7 @@ class TestCommand extends Command
 
         $file = './george.torrent';
 
-        $torrent = file_get_contents(' https://ytsmx.xyz/wp-new/Black+Adam+%282022%29+%5BREPACK%5D+%5B720p%5D+%5BBluRay%5D.torrent');
+        $torrent = file_get_contents('https://ytsmx.xyz/wp-new/Black+Adam+%282022%29+%5BREPACK%5D+%5B720p%5D+%5BBluRay%5D.torrent');
 
         file_put_contents($file, $torrent);
 
