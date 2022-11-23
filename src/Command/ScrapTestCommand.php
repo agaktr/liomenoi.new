@@ -404,21 +404,20 @@ class ScrapTestCommand extends Command
             if ($year != $movie->getYear())
                 continue;
 
+            //slugify titles
+            $slugResultTitle = $this->slugify($result['title']);
+            $slugMovieTile = $this->slugify($movie->getMatchName());
+
             //if exact match in title
-            if ( $result['title'] == $movie->getMatchName() )
+            if ( $slugResultTitle == $slugMovieTile )
                 return $result;
 
             //remove special chars from title
 
-            $titleTmp = $this->slugify($result['title']);
-            var_dump($titleTmp);
-            $titleTmp = $this->slugify($movie->getMatchName());
-            var_dump($titleTmp);
-
-            //if similar match in title
-            similar_text($result['title'],$movie->getMatchName(),$percent);
-            if ($percent > 80)
-                return $result;
+//            //if similar match in title
+//            similar_text($result['title'],$movie->getMatchName(),$percent);
+//            if ($percent > 80)
+//                return $result;
         }
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
