@@ -411,7 +411,9 @@ class ScrapTestCommand extends Command
             //remove special chars from title
 
             $titleTmp = $this->slugify($result['title']);
+            var_dump($titleTmp);
             $titleTmp = $this->slugify($movie->getMatchName());
+            var_dump($titleTmp);
 
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
