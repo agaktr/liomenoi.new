@@ -231,11 +231,11 @@ class ScrapperService
 
             $torrentExtFile = str_replace(' ','%20',$torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
             //check if magnet
-            if (strpos(strtolower($qualitySize), 'magnet') !== false) {
-                continue;
-            }else if (strpos($torrentExtFile, 'magnet') !== false) {
-                continue;
-            }else if (empty($torrentExtFile)) {
+            if (
+                strpos(strtolower($qualitySize), 'magnet') !== false ||
+                strpos($torrentExtFile, 'magnet') !== false ||
+                empty($torrentExtFile)
+            ) {
                 continue;
             } else {
                 $qualityData = explode('.', $qualitySize);
