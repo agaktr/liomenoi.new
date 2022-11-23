@@ -5,6 +5,7 @@ namespace App\Controller\Apto;
 use App\Entity\Apto\User;
 use App\Interfaces\AppInterface;
 use App\Service\AppService;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Predis\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
@@ -12,6 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
@@ -128,7 +131,8 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 return $object->getId();
                 },
             ];
-            $normalizers = [new ObjectNormalizer(null, null, null, null, null, null, $defaultContext)];
+            $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+            $normalizers = [new ObjectNormalizer($classMetadataFactory, null, null, null, null, null, $defaultContext)];
             $serializer = new Serializer($normalizers, $encoders);
 
             $respArray = [];
@@ -140,7 +144,7 @@ class AptoAbstractController extends AbstractController implements AppInterface
                 if (
                     is_array($value) ||
                     is_object($value)){
-                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json',[AbstractNormalizer::IGNORED_ATTRIBUTES=> ['id']]));
+                    $respArray[$key] = json_decode($serializer->serialize($parameters[$key],'json'));
                 }else{
                     if (is_object($value)) {
                         $respArray[ $key ] = json_decode($serializer->serialize($parameters[ $key ] , 'json'));
