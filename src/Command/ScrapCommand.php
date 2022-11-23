@@ -440,6 +440,15 @@ class ScrapCommand extends Command
             if ($percent > 70 && $amount == 1)
                 return $result;
 
+            //leave only digits to title
+            $digitsResultTitle = preg_replace('/[^0-9]/', '', $result['title']);
+            $digitsMovieTitle = preg_replace('/[^0-9]/', '', $movie->getMatchName());
+
+            //if the digit only title match
+            //this takes case of movies like 300, 300: Rise of an Empire
+            if ($digitsResultTitle == $digitsMovieTitle)
+                return $result;
+
             var_dump($slugOriginalResultTitle);
             var_dump($slugResultTitle);
             var_dump($slugMovieTile);
