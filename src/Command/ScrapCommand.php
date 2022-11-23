@@ -259,6 +259,14 @@ class ScrapCommand extends Command
             //try to find imdb with the Search Api
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
             $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
+            if (null === $tmdbMovieRes){
+                $io->error('No TMDB for '.$movie->getMatchName());
+                $movie->setImdb(false);
+                $movie->setFetched(false);
+                $this->em->flush();
+                return;
+            }
+
             $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
             $movie->setImdb('https://www.imdb.com/title/'.$tmdbMovie['imdb_id']);
         }else{
@@ -401,6 +409,10 @@ class ScrapCommand extends Command
     private function determineResults(Movie $movie,array $tmdbMovieRes){
 
         $amount = count($tmdbMovieRes['results']);
+
+        if ($amount == 0)
+            return null;
+
         foreach ($tmdbMovieRes['results'] as $result){
             //get only year from $result['release_date']
             $year = preg_filter('/^(\d{4}).*$/','$1',$result['release_date']);
