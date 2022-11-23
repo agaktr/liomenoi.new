@@ -238,6 +238,7 @@ class ScrapperService
             ) {
                 continue;
             } else {
+                var_dump($qualitySize);
                 $qualityData = explode('.', $qualitySize);
                 $type = $qualityData[0];
                 $quality = $qualityData[1];
