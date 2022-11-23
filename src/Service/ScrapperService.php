@@ -261,18 +261,15 @@ class ScrapperService
                 }
                 //convert to mb or gb
                 if ($size > 1073741824) {
-                    $size = round($size / 1000000000, 2) . ' GB';
+                    $size = round($size / 1073741824, 2) . ' GB';
                 } else {
-                    $size = round($size / 1000000, 2) . ' MB';
+                    $size = round($size / 1048576, 2) . ' MB';
                 }
-
-
-                $size = $size / 1048576;
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
-            $this->scrappedContent[$id]['magnet'][$k]['size'] = round($size,2).' MB';
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = $size;
             $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnet;
         }
     }
