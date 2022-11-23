@@ -227,21 +227,21 @@ class ScrapperService
 
             $qualitySize = $spanElements->item(2)->nodeValue;
 
+            $torrentExtFile = str_replace(' ','%20',$torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
             //check if magnet
-            var_dump($qualitySize);
             if (strpos(strtolower($qualitySize), 'magnet') !== false) {
+                continue;
+            }else if (strpos($torrentExtFile, 'magnet') !== false) {
                 continue;
             } else {
                 $qualityData = explode('.', $qualitySize);
                 $type = $qualityData[0];
                 $quality = $qualityData[1];
 
-                //convert torrent file to magnet using torrent service
-                $torrentExtFile = str_replace(' ','%20',$torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
-
                 $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
                 $this->io->newLine();
 
+                //convert torrent file to magnet using torrent service
                 $file = './george.torrent';
                 $torrentExt = file_get_contents($torrentExtFile);
                 file_put_contents($file, $torrentExt);
