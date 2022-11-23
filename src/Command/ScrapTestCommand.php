@@ -282,8 +282,6 @@ class ScrapTestCommand extends Command
             }
             $tmdbMovie = $tmdbMovieRes["movie_results"][0];
         }
-var_dump('hello');
-        die();
 
         //get en/gr version of movie
         /** @var \Tmdb\Model\Movie $modelMovie */
