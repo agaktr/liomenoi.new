@@ -235,6 +235,8 @@ class ScrapperService
                 continue;
             }else if (strpos($torrentExtFile, 'magnet') !== false) {
                 continue;
+            }else if (empty($torrentExtFile)) {
+                continue;
             } else {
                 $qualityData = explode('.', $qualitySize);
                 $type = $qualityData[0];
