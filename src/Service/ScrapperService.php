@@ -259,7 +259,14 @@ class ScrapperService
                 foreach ($torrent->info['files'] as $file) {
                     $size += $file['length'];
                 }
-                //convert to mb
+                //convert to mb or gb
+                if ($size > 1073741824) {
+                    $size = round($size / 1000000000, 2) . ' GB';
+                } else {
+                    $size = round($size / 1000000, 2) . ' MB';
+                }
+
+
                 $size = $size / 1048576;
             }
 
