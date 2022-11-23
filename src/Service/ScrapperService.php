@@ -260,7 +260,7 @@ class ScrapperService
                     $size += $file['length'];
                 }
                 //convert to mb
-                $size = $size / 1000000;
+                $size = $size / 1048576;
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
