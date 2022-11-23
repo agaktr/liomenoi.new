@@ -217,6 +217,7 @@ class ScrapperService
         $torrentElements = $this->getElementByClass($newDom, 'lnk-lnk');
 
         foreach ($torrentElements as $k=>$torrentDataElement) {
+            var_dump($torrentDataElement);
             var_dump($torrentDataElement->getAttribute('href'));
             var_dump($torrentDataElement->childNodes[0]);
 //            $tmpElFinder = new DomXPath($torrentElement);
