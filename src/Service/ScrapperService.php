@@ -251,15 +251,20 @@ class ScrapperService
                 file_put_contents($file, $torrentExt);
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
-                var_dump($torrent->hash_info());
-                var_dump($torrent->info);
                 $this->io->text('Result: '.$magnet);
                 $this->io->newLine();
+
+                //calculate size
+                foreach ($torrent->info['files'] as $file) {
+                    $size += $file['length'];
+                }
+                //convert to mb
+                $size = $size / 1000000;
             }
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
-            $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = $size.' MB';
             $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnet;
         }
     }
