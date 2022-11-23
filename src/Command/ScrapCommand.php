@@ -343,7 +343,7 @@ class ScrapCommand extends Command
         $this->em->flush();
 
         $perf = $this->scrapper->getPerformance();
-        $perf['handle'] = microtime(true) - $start;
+        $perf['handle'][] = microtime(true) - $start;
         $this->scrapper->setPerformance($perf);
 
         $io->success('Added '.$movie->getTitle().'('.$movie->getId().')');
