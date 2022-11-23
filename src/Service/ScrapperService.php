@@ -217,25 +217,16 @@ class ScrapperService
         $torrentElements = $this->getElementByClass($newDom, 'lnk-lnk');
 
         foreach ($torrentElements as $k=>$torrentDataElement) {
-            var_dump($torrentDataElement);
-            var_dump($torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href'));
-            var_dump($torrentDataElement->childNodes);
-            var_dump($torrentDataElement->childNodes[0]);
-//            $tmpElFinder = new DomXPath($torrentElement);
-//
-//            $qualityClassname="modal-quality";
-//            $qualityElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualityClassname ')]")->item(0);
-//
-//            $qualitySizeClassname="quality-size";
-//            $qualitySizeElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $qualitySizeClassname ')]");
-//
-//            $magnetClassname="magnet-download";
-//            $magnetElement = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $magnetClassname ')]")->item(0);
 
-            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
-            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($torrentDataElement->childNodes->item(2)->nodeValue);
+            $tmpElFinder = new DomXPath($torrentDataElement);
+
+            $classname="lnk-dl";
+            $spanElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+
+            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($spanElements->item(2)->nodeValue);
+            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($spanElements->item(2)->nodeValue);
             $this->scrappedContent[$id]['magnet'][$k]['size'] = trim('$qualitySizeElements->item(1)->nodeValue');
-            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->getAttribute('href');
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
         }
     }
 
