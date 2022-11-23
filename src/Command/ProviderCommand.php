@@ -108,6 +108,11 @@ class ProviderCommand extends Command
                     $objectKey = $scrap['slug'].'-'.$provider->getId();
                     if(!isset($objectsLocalArray[$objectKey])){
                         $object = new Scrap();
+                        $object->setProvider($provider);
+                        $object->setName($scrap['title']);
+                        $object->setYear($scrap['year']);
+                        $object->setType($scrap['type']);
+                        $object->setCreated(new DateTime());
                         $this->em->persist($object);
                         $objectsLocalArray[$objectKey] = $object;
                         ++$added;
@@ -116,12 +121,7 @@ class ProviderCommand extends Command
                         ++$updated;
                     }
 
-                    $object->setProvider($provider);
-                    $object->setName($scrap['title']);
-                    $object->setYear($scrap['year']);
                     $object->setSlug($scrap['slug']);
-                    $object->setType($scrap['type']);
-                    $object->setCreated(new DateTime());
                     $object->setUpdated(new DateTime());
                 }
 
