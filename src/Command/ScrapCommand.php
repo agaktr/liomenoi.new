@@ -167,55 +167,59 @@ class ScrapCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
         $this->fast = $input->getOption('slow') ? false : true;
 
-        var_dump($this->fast);
+        if ($this->fast){
+            $this->io->title('Fast mode');
 
-        //load genres
-        $this->io->title('Loading genres...');
-        $genresLocal = $this->em->getRepository(Category::class)->findAll();
-        $this->genresLocalArray = [];
-        foreach($genresLocal as $genre){
-            $this->genresLocalArray[$genre->getTmdbId()] = $genre;
+            //load genres
+            $this->io->title('Loading genres...');
+            $genresLocal = $this->em->getRepository(Category::class)->findAll();
+            $this->genresLocalArray = [];
+            foreach($genresLocal as $genre){
+                $this->genresLocalArray[$genre->getTmdbId()] = $genre;
+            }
+            unset($genresLocal);
+
+            //load actors
+            $this->io->title('Loading actors...');
+            $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
+            $this->actorsLocalArray = [];
+            foreach($actorsLocal as $actor){
+                $this->actorsLocalArray[$actor->getTmdbId()] = $actor;
+            }
+            unset($actorsLocal);
+
+            //load providers
+            $this->io->title('Loading providers...');
+            $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
+            if ($providerInput == 0){
+                $this->providers = $this->em->getRepository(Provider::class)->findAll();
+            }else{
+                $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
+            }
+
+            //load local movies
+            $this->io->title('Loading local scrap...');
+            $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
+            $this->objectsLocalArray = [];
+            foreach($objectsLocal as $object){
+                $objectKey = $object->getMatchName().'-'.$object->getYear();
+                $this->objectsLocalArray[$objectKey] = $object;
+
+            }
+            unset($objectsLocal);
+
+            //load local magnets
+            $this->io->title('Loading local magnets...');
+            $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
+            $this->magnetsLocalArray = [];
+            foreach($objectsLocal as $object){
+                $objectKey = $object->getMagnet();
+                $this->magnetsLocalArray[$objectKey] = $object;
+            }
+            unset($objectsLocal);
+        } else {
+            $this->io->title('Slow mode');
         }
-        unset($genresLocal);
-
-        //load actors
-        $this->io->title('Loading actors...');
-        $actorsLocal = $this->em->getRepository(Actor::class)->findAll();
-        $this->actorsLocalArray = [];
-        foreach($actorsLocal as $actor){
-            $this->actorsLocalArray[$actor->getTmdbId()] = $actor;
-        }
-        unset($actorsLocal);
-
-        //load providers
-        $this->io->title('Loading providers...');
-        $providerInput = $input->getOption('provider') ? $input->getOption('provider') : 0;
-        if ($providerInput == 0){
-            $this->providers = $this->em->getRepository(Provider::class)->findAll();
-        }else{
-            $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
-        }
-
-        //load local movies
-        $this->io->title('Loading local scrap...');
-        $objectsLocal = $this->em->getRepository(Movie::class)->findAll();
-        $this->objectsLocalArray = [];
-        foreach($objectsLocal as $object){
-            $objectKey = $object->getMatchName().'-'.$object->getYear();
-            $this->objectsLocalArray[$objectKey] = $object;
-
-        }
-        unset($objectsLocal);
-
-        //load local magnets
-        $this->io->title('Loading local magnets...');
-        $objectsLocal = $this->em->getRepository(Magnet::class)->findAll();
-        $this->magnetsLocalArray = [];
-        foreach($objectsLocal as $object){
-            $objectKey = $object->getMagnet();
-            $this->magnetsLocalArray[$objectKey] = $object;
-        }
-        unset($objectsLocal);
     }
 
     private function handleMovie(int $objectId, array $movieData,$io)
@@ -224,15 +228,21 @@ class ScrapCommand extends Command
         $start = microtime(true);
 
         /** @var Movie $movie */
-        $objectKey =$movieData[ 'data' ]->getName().'-'.$movieData[ 'data' ]->getYear();
-        if(!isset($this->objectsLocalArray[$objectKey])){
-            $io->note('Creating new Object');
-            $movie = new Movie();
-            $this->em->persist($movie);
-            $this->objectsLocalArray[$objectKey] = $movie;
+        if ($this->fast){
+
+            $objectKey =$movieData[ 'data' ]->getMatchName().'-'.$movieData[ 'data' ]->getYear();
+            if(!isset($this->objectsLocalArray[$objectKey])){
+                $io->note('Creating new Object');
+                $movie = new Movie();
+                $this->em->persist($movie);
+                $this->objectsLocalArray[$objectKey] = $movie;
+            }else{
+                $io->info('Existing Object');
+                $movie = $this->objectsLocalArray[$objectKey];
+            }
         }else{
-            $io->info('Existing Object');
-            $movie = $this->objectsLocalArray[$objectKey];
+
+            $movie = $this->em->getRepository(Movie::class)->findOneBy(['name'=>$movieData[ 'data' ]->getName(),'year'=>$movieData[ 'data' ]->getYear()]);
         }
 
         //Scrap stuff
