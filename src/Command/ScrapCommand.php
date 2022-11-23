@@ -260,8 +260,6 @@ class ScrapCommand extends Command
 
         //find movie from tmdb based on imdb id
         $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
-
-        var_dump($tmdbMovieRes);
         if (empty($tmdbMovieRes['movie_results'])){
             $io->error('No TMDB for '.$imdbId);
 
@@ -276,6 +274,8 @@ class ScrapCommand extends Command
         /** @var \Tmdb\Model\Movie $modelMovieGr */
         $repository = new MovieRepository($this->tmdbService->client);
         $modelMovie = $repository->load($tmdbMovie["id"]);
+
+        var_dump($modelMovie->getOriginalTitle());
         $modelMovieGr = $repository->load($tmdbMovie["id"],['language' => 'el-GR']);
 
         //set tmdb id
