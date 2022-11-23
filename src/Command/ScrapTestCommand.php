@@ -151,7 +151,7 @@ class ScrapTestCommand extends Command
                 //Scrap
                 $this->scrapper->getContent();
                 $this->scrapper->getScraps();
-
+var_dump($this->scrapper->getScrappedContent());
                 die();
 
                 $results = $this->scrapper->getScrappedContent();
