@@ -252,8 +252,7 @@ class ScrapTestCommand extends Command
             $io->info('Searching for it.. ');
             //try to find imdb with the Search Api
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
-
-            var_dump($tmdbMovieRes);
+            $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
         }
 
         $movie->setImdb($movieData[ 'imdb' ]);
@@ -390,6 +389,13 @@ die();
         }
 
         return $text;
+    }
+
+    private function determineResults(Movie $movie,array $tmdbMovieRes){
+
+        var_dump($tmdbMovieRes);
+
+        die();
     }
 }
 
