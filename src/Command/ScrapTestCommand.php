@@ -256,7 +256,7 @@ class ScrapTestCommand extends Command
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
             $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
             $tmdbMovie = $this->tmdbService->client->getMoviesApi()->getMovie($tmdbMovieRes['id']);
-            $movie->setImdb($tmdbMovie['imdb_id']);
+            $movie->setImdb('https://www.imdb.com/title/'.$tmdbMovie->getImdbId());
         }else{
             $movie->setImdb($movieData[ 'imdb' ]);
         }
@@ -364,7 +364,7 @@ class ScrapTestCommand extends Command
         $perf['handle'][] = microtime(true) - $start;
         $this->scrapper->setPerformance($perf);
 
-        $io->success('Added '.$movie->getTitle().'('.$movie->getId().')');
+        $io->success('Done '.$movie->getTitle().'('.$movie->getId().')');
     }
 
     private function slugify($text, string $divider = '-')
