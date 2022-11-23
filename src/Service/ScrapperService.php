@@ -265,7 +265,7 @@ class ScrapperService
 
             $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
             $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
-            $this->scrappedContent[$id]['magnet'][$k]['size'] = $size.' MB';
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = round($size,2).' MB';
             $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnet;
         }
     }
