@@ -79,6 +79,7 @@ class ScrapperService
 
     public function getContent()
     {
+        $this->performance = [];
         $this->urlContent = [];
         $this->get();
     }
