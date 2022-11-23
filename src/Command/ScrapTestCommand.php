@@ -418,14 +418,14 @@ class ScrapTestCommand extends Command
             if ( $slugOriginalResultTitle == $slugMovieTile )
                 return $result;
 
-            var_dump($slugOriginalResultTitle);
-            var_dump($slugResultTitle);
-            var_dump($slugMovieTile);
-
             //if similar match in title
             similar_text($result['title'],$movie->getMatchName(),$percent);
             if ($percent > 70 && $amount == 1)
                 return $result;
+
+            var_dump($slugOriginalResultTitle);
+            var_dump($slugResultTitle);
+            var_dump($slugMovieTile);
             var_dump($percent);
         }
         var_dump($movie->getMatchName());
