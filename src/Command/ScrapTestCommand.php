@@ -263,7 +263,7 @@ class ScrapTestCommand extends Command
         $tmdbMovieRes = $this->tmdbService->client->getFindApi()->findBy($imdbId,['external_source' => 'imdb_id']);
         if (empty($tmdbMovieRes['movie_results'])){
             $io->error('No TMDB for '.$imdbId);
-
+die();
             $movie->setFetched(false);
             $this->em->flush();
             return;
