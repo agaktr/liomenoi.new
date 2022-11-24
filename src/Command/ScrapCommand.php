@@ -455,7 +455,6 @@ class ScrapCommand extends Command
         $movie->setFetched(true);
 
         $this->em->flush();
-        $this->em->clear();
 
         $perf = $this->scrapper->getPerformance();
         $perf['handle'][] = microtime(true) - $start;
