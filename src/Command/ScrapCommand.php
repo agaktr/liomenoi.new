@@ -318,7 +318,7 @@ class ScrapCommand extends Command
             $io->info('Searching for it.. ');
             //try to find imdb with the Search Api
             $tmdbMovieRes = $this->tmdbService->client->getSearchApi()->searchMovies($movie->getMatchName(),['year'=>$movie->getYear()]);
-            $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes);
+            $tmdbMovieRes = $this->determineResults($movie,$tmdbMovieRes,$movieData[ 'data' ]);
             if (null === $tmdbMovieRes){
                 $io->error('No TMDB for '.$movie->getMatchName());
                 $movie->setImdb(false);
@@ -498,8 +498,8 @@ class ScrapCommand extends Command
         return $text;
     }
 
-    private function determineResults(Movie $movie,array $tmdbMovieRes){
-
+    private function determineResults(Movie $movie,array $tmdbMovieRes,Scrap $scrap)
+    {
         $amount = count($tmdbMovieRes['results']);
 
         if ($amount == 0)
@@ -564,6 +564,7 @@ class ScrapCommand extends Command
         var_dump($movie->getMatchName());
         var_dump($movie->getYear());
         var_dump($tmdbMovieRes);
+        var_dump(substr($scrap->getProvider()->getDomain() , 0 , -1) . $scrap->getSlug());
 
         $helper = $this->getHelper('question');
         $question = new Question('What key to insert: ', 0);
