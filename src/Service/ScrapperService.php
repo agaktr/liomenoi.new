@@ -249,6 +249,9 @@ class ScrapperService
 
                 $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
 
+                //replace hhttps to https
+                $torrentExtFile = str_replace(['hhttps'],'https',$torrentExtFile);
+
                 //convert torrent file to magnet using torrent service
                 $file = './george.torrent';
                 $torrentExt = file_get_contents($torrentExtFile);

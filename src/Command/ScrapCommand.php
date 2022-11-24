@@ -554,8 +554,6 @@ class ScrapCommand extends Command
             if ($digitsResultTitle == $digitsMovieTitle)
                 return $result;
 
-
-
             var_dump($slugOriginalResultTitle);
             var_dump($slugResultTitle);
             var_dump($slugMovieTile);
