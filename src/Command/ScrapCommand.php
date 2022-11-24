@@ -401,14 +401,17 @@ class ScrapCommand extends Command
         foreach($modelMovie->getGenres() as $genre){
             if ($this->fast) {
                 if ( isset($this->genresLocalArray[ $genre->getId() ]) ) {
-                    $movie->addCategory($this->genresLocalArray[ $genre->getId() ]);
+                    $category = $this->genresLocalArray[ $genre->getId() ];
+//                    $movie->addCategory($this->genresLocalArray[ $genre->getId() ]);
                 }
             } else {
                 $category = $this->em->getRepository(Category::class)->findOneBy(['tmdbId'=>$genre->getId()]);
                 if ($category){
-                    $movie->addCategory($category);
+//                    $movie->addCategory($category);
                 }
             }
+            $this->em->persist($category);
+            $movie->addCategory($category);
         }
 
         //set actors
