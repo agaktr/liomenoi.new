@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Tmdb\Repository\MovieRepository;
 
@@ -564,6 +565,12 @@ class ScrapCommand extends Command
         var_dump($movie->getYear());
         var_dump($tmdbMovieRes);
 
+        $helper = $this->getHelper('question');
+        $question = new Question('What key to insert: ', 0);
+
+        $key = $helper->ask($this->input, $this->output, $question);
+
+        var_dump($tmdbMovieRes['results'][$key]);
         die();
     }
 }
