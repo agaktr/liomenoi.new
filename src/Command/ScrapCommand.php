@@ -231,6 +231,8 @@ class ScrapCommand extends Command
         }else{
             $this->providers = $this->em->getRepository(Provider::class)->findBy(['id'=>$providerInput]);
         }
+
+        $this->em->clear();
     }
 
     private function handleMovie(int $objectId, array $movieData,$io)
