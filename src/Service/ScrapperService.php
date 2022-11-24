@@ -271,6 +271,7 @@ class ScrapperService
                     }
                 }
 
+
                 $this->io->text('Size: '.$size);
 //                $this->io->text('Magnet: '.$magnet);
             }
