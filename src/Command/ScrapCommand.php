@@ -98,7 +98,7 @@ class ScrapCommand extends Command
                 $start = microtime(true);
 
                 $offset = $input->getOption('offset') ? $input->getOption('offset') : 0;
-                $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => true , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , $offset);
+                $objects = $this->em->getRepository(Scrap::class)->findBy(['valid' => null , 'type' => $doing,'provider'=>$provider] , ['id' => 'ASC'] , $pagesNo , $offset);
 
                 $this->objectsMap = [];
                 $this->urls = [];
