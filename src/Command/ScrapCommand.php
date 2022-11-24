@@ -456,6 +456,7 @@ class ScrapCommand extends Command
 
         $movie->setFetched(true);
 
+        $this->em->persist($movie);
         $this->em->flush();
 
         $perf = $this->scrapper->getPerformance();
