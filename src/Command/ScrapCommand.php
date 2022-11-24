@@ -570,7 +570,7 @@ class ScrapCommand extends Command
 
         $key = $helper->ask($this->input, $this->output, $question);
 
-        var_dump($tmdbMovieRes['results'][$key]);
+        return $tmdbMovieRes['results'][$key];
         die();
     }
 }
