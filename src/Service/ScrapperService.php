@@ -256,7 +256,6 @@ class ScrapperService
                 $torrent = new TorrentService( $file );
                 $magnet = $torrent->magnet();
 
-
                 //calculate size
                 $size = 0;
                 if (isset($torrent->info['files'])) {
