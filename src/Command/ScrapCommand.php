@@ -448,6 +448,7 @@ class ScrapCommand extends Command
                 }
             }
 
+            $this->em->persist($actor);
             $movie->addActor($actor);
         }
 
