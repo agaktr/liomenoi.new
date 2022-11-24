@@ -147,8 +147,18 @@ class ScrapCommand extends Command
 
                 $io->success($content);
 
+                //If we did not add anything
+                // Check if we did TV, then
+                // we are done
                 if (count($this->objectsMap) < $pagesNo) {
+
                     $hasMore = false;
+                    if ($doing === 'Movie' && $provider->getSeriePath()){
+
+                        $io->title('Starting Serie Provider Scrapping');
+                        $doing = 'Serie';
+                        $hasMore = true;
+                    }
                 }
             }
         }
