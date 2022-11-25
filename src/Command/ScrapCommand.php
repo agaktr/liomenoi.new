@@ -82,7 +82,7 @@ class ScrapCommand extends Command
 
             //init variables
             $hasMore = true;
-            $pagesNo = 3;
+            $pagesNo = 1;
             $doing = 'Movie';
 
             while ($hasMore) {
