@@ -167,6 +167,9 @@
     client.on('error', function (err) {
         console.log(err)
     })
+    client.on('warning', function (err) {
+        console.log(err)
+    })
 
     console.log(client.torrents)
 
