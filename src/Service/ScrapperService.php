@@ -179,6 +179,11 @@ class ScrapperService
                             $this->YTSTVmeTVScrap($id,$content);
                             break;
                     }
+
+
+                    var_dump($this->getScrappedContent());
+                    var_dump($this->getUrlContent());
+                    die();
                     break;
             }
 

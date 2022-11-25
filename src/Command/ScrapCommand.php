@@ -118,9 +118,7 @@ class ScrapCommand extends Command
 
                     $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
                 }
-var_dump($this->scrapper->getScrappedContent());
-var_dump($this->scrapper->getUrlContent());
-                die();
+
                 foreach ($results as $objectId => $objectData) {
 
                     switch ($doing) {
