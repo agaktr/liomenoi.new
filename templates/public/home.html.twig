@@ -116,10 +116,10 @@
     const $remaining = document.querySelector('#remaining')
     const $uploadSpeed = document.querySelector('#uploadSpeed')
     const $downloadSpeed = document.querySelector('#downloadSpeed')
-    console.log(torrentId2);
+
     // Download the torrent
-    client.add(torrentId2, function (torrent) {
-console.log(torrent);
+    client.add(torrentId, function (torrent) {
+
         // Torrents can contain many files. Let's use the .mp4 file
         const file = torrent.files.find(function (file) {
             return file.name.endsWith('.mp4')
