@@ -164,8 +164,9 @@ console.log(torrent)
             onProgress()
         }
     })
-
-    console.log(client)
+    client.on('error', function (err) {
+        console.log(err)
+    })
 
     // Human readable bytes util
     function prettyBytes(num) {
