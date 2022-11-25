@@ -170,7 +170,15 @@ class ScrapperService
                     $this->YTSdoScrap($id,$content);
                     break;
                 case 'ytstv.me':
-                    $this->YTSTVmeScrap($id,$content);
+
+                    switch ($this->doing){
+                        case 'Movie':
+                            $this->YTSTVmeScrap($id,$content);
+                            break;
+                        case 'TV':
+                            $this->YTSTVmeTVScrap($id,$content);
+                            break;
+                    }
                     break;
             }
 
@@ -202,6 +210,99 @@ class ScrapperService
     }
 
     private function YTSTVmeScrap($id,$content){
+
+        $dom = new DomDocument();
+        @$dom->loadHTML($content);
+
+        //imdb
+        $this->scrappedContent[$id]['imdb'] = null;
+
+        //type
+        $this->scrappedContent[$id]['type'] = $this->doing;
+
+        //torrents
+        $torrentsWrapper = $dom->getElementById('list-dl');
+        if (null == $torrentsWrapper)
+            return;
+        $newDom = new DomDocument();
+        $newDom->appendChild($newDom->importNode($torrentsWrapper, true));
+        $torrentElements = $this->getElementByClass($newDom, 'lnk-lnk');
+
+        foreach ($torrentElements as $k=>$torrentDataElement) {
+
+            $tmpElFinder = new DomXPath($torrentDataElement);
+
+            $classname="lnk-dl";
+            $spanElements = $tmpElFinder->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' $classname ')]");
+
+            $qualitySize = $spanElements->item(2)->nodeValue;
+
+            $torrentExtFile = $torrentDataElement->getElementsByTagName('a')[0]->getAttribute('href');
+
+            $torrentExtFile = str_replace(' ','%20',trim($torrentExtFile));
+            //check if magnet
+            if (
+                strpos(strtolower($qualitySize), 'magnet') !== false ||
+                strpos($torrentExtFile, 'magnet') !== false ||
+                empty($torrentExtFile)
+            ) {
+                continue;
+            } else {
+                $qualityData = explode('.', $qualitySize);
+                if (!isset($qualityData[1]))
+                    $qualityData = explode(' ', $qualitySize);
+                if (!isset($qualityData[1]))
+                    $qualityData = ['',$qualityData[0]];
+
+                $type = $qualityData[0];
+                $quality = $qualityData[1];
+
+                $this->io->text('Converting torrent to magnet: '.$torrentExtFile);
+
+                //replace hhttps to https
+                $torrentExtFile = str_replace(
+                    [
+                        'hhttps',
+                    ],
+                    'https',
+                    $torrentExtFile
+                );
+
+                //convert torrent file to magnet using torrent service
+                $file = './george.torrent';
+                $torrentExt = file_get_contents($torrentExtFile);
+                file_put_contents($file, $torrentExt);
+                $torrent = new TorrentService( $file );
+                $magnet = $torrent->magnet();
+
+                //calculate size
+                $size = 0;
+                if (isset($torrent->info['files'])) {
+                    foreach ($torrent->info[ 'files' ] as $file) {
+                        $size += $file[ 'length' ];
+                    }
+
+                    //convert to mb or gb
+                    if ($size > 1073741824) {
+                        $size = round($size / 1073741824, 2) . ' GB';
+                    } else {
+                        $size = round($size / 1048576, 2) . ' MB';
+                    }
+                }
+
+
+                $this->io->text('Size: '.$size);
+//                $this->io->text('Magnet: '.$magnet);
+            }
+
+            $this->scrappedContent[$id]['magnet'][$k]['quality'] = trim($quality);
+            $this->scrappedContent[$id]['magnet'][$k]['type'] = trim($type);
+            $this->scrappedContent[$id]['magnet'][$k]['size'] = $size;
+            $this->scrappedContent[$id]['magnet'][$k]['magnet'] = $magnet;
+        }
+    }
+
+    private function YTSTVmeTVScrap($id,$content){
 
         $dom = new DomDocument();
         @$dom->loadHTML($content);

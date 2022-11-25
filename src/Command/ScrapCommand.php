@@ -85,15 +85,6 @@ class ScrapCommand extends Command
             $pagesNo = 3;
             $doing = 'Movie';
 
-            switch ($doing) {
-                case 'Movie':
-
-                    break;
-                case 'Serie':
-                    die();
-                    break;
-            }
-
             while ($hasMore) {
 
                 $start = microtime(true);
@@ -127,7 +118,9 @@ class ScrapCommand extends Command
 
                     $results[ $id ][ 'data' ] = $this->objectsMap[ $id ];
                 }
-
+var_dump($this->scrapper->getScrappedContent());
+var_dump($this->scrapper->getUrlContent());
+                die();
                 foreach ($results as $objectId => $objectData) {
 
                     switch ($doing) {
