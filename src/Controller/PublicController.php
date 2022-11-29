@@ -56,14 +56,14 @@ class PublicController extends AptoAbstractController
 
 
 
-
+        $url = '2y4nothing.xyz';
 
         //make a curl request
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL,
-            "https://api.themoviedb.org/3/movie/550?api_key=6f9b9c8d6e2");
+            $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
         $output = curl_exec($ch);
         curl_close($ch);
 
