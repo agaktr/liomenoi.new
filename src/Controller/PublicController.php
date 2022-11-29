@@ -162,7 +162,6 @@ public array $urls = [
         }
 
 
-var_dump($this->urls);
         foreach ($this->urls as $url){
 
             //make a curl request
@@ -174,6 +173,7 @@ var_dump($this->urls);
             $output = curl_exec($ch);
             curl_close($ch);
 //            $output=ob_get_contents();
+            var_dump($url);
             var_dump($output);
         }
 
