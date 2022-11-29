@@ -24,7 +24,7 @@ class PublicController extends AptoAbstractController
 
 public array $urls = [
     '2y4nothing[.]xyz',
-//    "5m5[.]io",
+    "5m5[.]io",
 //"addons[.]news",
 //"adibjan[.]net",
 //"adservices[.]gr[.]com",
