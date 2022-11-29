@@ -135,7 +135,7 @@ class ScrapperService
         foreach ($this->urls as $id => $url) {
             $multiCurl[$id] = curl_init();
             curl_setopt($multiCurl[$id], CURLOPT_URL, $url);
-            curl_setopt($multiCurl[$id], CURLOPT_HEADER, 0);
+            curl_setopt($multiCurl[$id], CURLOPT_HEADER, 1);
             curl_setopt($multiCurl[$id], CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($multiCurl[$id], CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($multiCurl[$id], CURLOPT_USERAGENT, $config['useragent']);
