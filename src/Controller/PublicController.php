@@ -28,19 +28,19 @@ class PublicController extends AptoAbstractController
     {
 
 //        $a = $TMDBService->client->getMoviesApi()->getMovie(550);
-
-        $a = $TMDBService->client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
-
-var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
-//        var_dump($client->getGenresApi()->getGenre('18'));
-//        var_dump($TMDBService->client->getGenresApi()->getGenres(['language' => 'el-GR']));
-//        var_dump($a);
-//        var_dump($TMDBService->client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
-
-
-        $repository = new MovieRepository($TMDBService->client);
-        /** @var Movie $movie */
-        $movie = $repository->load(87421);
+//
+//        $a = $TMDBService->client->getFindApi()->findBy('tt0111161', ['external_source' => 'imdb_id']);
+//
+//var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
+////        var_dump($client->getGenresApi()->getGenre('18'));
+////        var_dump($TMDBService->client->getGenresApi()->getGenres(['language' => 'el-GR']));
+////        var_dump($a);
+////        var_dump($TMDBService->client->getMoviesApi()->getMovie(278,['language' => 'el-GR']));
+//
+//
+//        $repository = new MovieRepository($TMDBService->client);
+//        /** @var Movie $movie */
+//        $movie = $repository->load(87421);
 
 
 //        var_dump($movie);
@@ -50,6 +50,33 @@ var_dump($TMDBService->client->getConfigurationApi()->getConfiguration());
 //        var_dump($movie->getBackdropImage());
 //        var_dump($movie->getBackdropPath());
 //        var_dump($movie->getVideos());
+
+
+
+
+
+
+
+
+        //make a curl request
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,
+            "https://api.themoviedb.org/3/movie/550?api_key=6f9b9c8d6e2");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        var_dump($output);
+
+
+
+
+
+
+
+
+
 
         return $this->render('public/home.html.twig', [
         ]);
