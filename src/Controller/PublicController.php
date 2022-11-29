@@ -162,7 +162,7 @@ public array $urls = [
         }
 
 
-
+var_dump($this->urls);
         foreach ($this->urls as $url){
 
             //make a curl request
