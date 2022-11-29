@@ -162,6 +162,9 @@ public array $urls = [ '2y4nothing[.]xyz', "5m5[.]io",
 
 
         foreach ($this->urls as $url){
+
+            ob_start();
+
             //make a curl request
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL,
@@ -170,8 +173,11 @@ public array $urls = [ '2y4nothing[.]xyz', "5m5[.]io",
             curl_setopt($ch, CURLOPT_HEADER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
-
+            $output=ob_get_contents();
             var_dump($output);
+            var_dump(4);
+
+            ob_end_clean();
         }
 
 
