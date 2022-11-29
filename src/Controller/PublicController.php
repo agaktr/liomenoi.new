@@ -159,20 +159,24 @@ public array $urls = [ '2y4nothing[.]xyz', "5m5[.]io",
             $this->urls[$k] = preg_replace('/\[(.*?)\]/', '$1', $url);
         }
 
-var_dump($this->urls);
+
+
+        foreach ($this->urls as $url){
+            //make a curl request
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,
+                $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HEADER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+
+            var_dump($output);
+        }
 
 
 
-//        //make a curl request
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL,
-//            $url);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//        curl_setopt($ch, CURLOPT_HEADER, 1);
-//        $output = curl_exec($ch);
-//        curl_close($ch);
-//
-//        var_dump($output);
+
 
 
 
