@@ -148,6 +148,8 @@ class ScrapperService
         } while($index > 0);
 
         foreach($multiCurl as $id => $ch) {
+            var_dump(4);
+            var_dump($id);
             $this->urlContent[$id]['body'] = curl_multi_getcontent($ch);
             $this->urlContent[$id]['header'] = curl_getinfo($ch);
             curl_multi_remove_handle($mh, $ch);
