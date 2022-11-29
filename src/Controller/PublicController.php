@@ -175,7 +175,7 @@ public array $urls = [
             curl_setopt($ch, CURLOPT_HEADER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
-            $output=ob_get_contents();
+//            $output=ob_get_contents();
             var_dump($output);
             var_dump(4);
 
