@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Apto\AptoAbstractController;
+use App\Service\ScrapperService;
 use App\Service\TMDBService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,8 +25,8 @@ class PublicController extends AptoAbstractController
 
 public array $urls = [
     '2y4nothing[.]xyz',
-    "5m5[.]io",
-//"addons[.]news",
+//    "5m5[.]io",
+"addons[.]news",
 //"adibjan[.]net",
 //"adservices[.]gr[.]com",
 //"adultpcz[.]xyz",
@@ -129,7 +130,7 @@ public array $urls = [
     /**
      * @Route("/", name="app_home")
      */
-    public function index(TMDBService $TMDBService): Response
+    public function index(TMDBService $TMDBService,ScrapperService $scrapperService): Response
     {
 
 //        $a = $TMDBService->client->getMoviesApi()->getMovie(550);
@@ -161,21 +162,25 @@ public array $urls = [
             $this->urls[$k] = preg_replace('/\[(.*?)\]/', '$1', $url);
         }
 
+        $scrapperService->setUrls($this->urls);
+        $scrapperService->getContent();
 
-        foreach ($this->urls as $url){
+        var_dump($scrapperService->getScrappedContent());
 
-            //make a curl request
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,
-                $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HEADER, 1);
-            $output = curl_exec($ch);
-            curl_close($ch);
-//            $output=ob_get_contents();
-            var_dump($url);
-            var_dump($output);
-        }
+//        foreach ($this->urls as $url){
+//
+//            //make a curl request
+//            $ch = curl_init();
+//            curl_setopt($ch, CURLOPT_URL,
+//                $url);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//            curl_setopt($ch, CURLOPT_HEADER, 1);
+//            $output = curl_exec($ch);
+//            curl_close($ch);
+////            $output=ob_get_contents();
+//            var_dump($url);
+//            var_dump($output);
+//        }
 
 
 
