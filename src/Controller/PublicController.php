@@ -156,7 +156,7 @@ public array $urls = [ '2y4nothing[.]xyz', "5m5[.]io",
 
 
         foreach ($this->urls as $k=>$url){
-            $this->urls[$k] = preg_replace('/\[(.*?)\]/', '.$1', $url);
+            $this->urls[$k] = preg_replace('/\[(.*?)\]/', '$1', $url);
         }
 
 var_dump($this->urls);
