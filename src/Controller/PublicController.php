@@ -165,7 +165,7 @@ public array $urls = [
         $scrapperService->setUrls($this->urls);
         $scrapperService->getContent();
 
-        var_dump($scrapperService->getScrappedContent());
+        var_dump($scrapperService->getUrlContent());
 
 //        foreach ($this->urls as $url){
 //
