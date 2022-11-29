@@ -165,8 +165,6 @@ public array $urls = [
 
         foreach ($this->urls as $url){
 
-            ob_start();
-
             //make a curl request
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL,
@@ -177,9 +175,6 @@ public array $urls = [
             curl_close($ch);
 //            $output=ob_get_contents();
             var_dump($output);
-            var_dump(4);
-
-            ob_end_clean();
         }
 
 
